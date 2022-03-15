@@ -71,19 +71,20 @@ void InputParser::ParseQosFile(){
 
   while (ifs_ >> normal_line) {
     SplitString(normal_line, ',', splitted_normal_line);
-    assert(normal_line.size() == splitted_header_line.size());
+    assert(splitted_normal_line.size() == splitted_header_line.size());
 
-    std::string clientnode_name = splitted_normal_line[0];
-    assert(clientnode_map_.find(clientnode_name) != clientnode_map_.end());
-    ClientNode *clientnode = clientnode_map_[clientnode_name];
+    std::string edgenode_name = splitted_normal_line[0];
+    assert(edgenode_map_.find(edgenode_name) != edgenode_map_.end());
+    EdgeNode *edgenode = edgenode_map_[edgenode_name];
 
     for(int i = 1; i < splitted_normal_line.size(); ++i){
+      std::string clientnode_name = splitted_header_line[i];
+      assert(clientnode_map_.find(clientnode_name) != clientnode_map_.end());
+      ClientNode *clientnode = clientnode_map_[clientnode_name];
       int current_qos = stoi(splitted_normal_line[i]);
       if(current_qos <= clientnode->GetQos()){
-        std::string edgenode_name = splitted_header_line[i];
-        assert(edgenode_map_.find(edgenode_name) != edgenode_map_.end());
-        EdgeNode *edgenode = edgenode_map_[edgenode_name];
-        clientnode->AddAvailableEdgeNode(edgenode);
+        clientnode->AddAvailableEdgeNode(edgenode->GetName(), edgenode);
+        edgenode->AddServingClientNode(clientnode->GetName(), clientnode);
       }
     }
 
