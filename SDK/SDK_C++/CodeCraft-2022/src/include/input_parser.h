@@ -1,11 +1,11 @@
+#pragma once
 #include <fstream>
 #include <map>
 #include <string>
 #include <vector>
 #include <cassert>
-
-class EdgeNode;
-class ClientNode;
+#include "client_node.h"
+#include "edge_node.h"
 
 class InputParser {
  public:
@@ -38,8 +38,8 @@ class InputParser {
 
   void SplitString(std::string &, char, std::vector<std::string> &);
 
-  std::string demand_;
   std::string config_;
+  std::string demand_;
   std::string qos_;
   std::string site_bandwidth_;
 

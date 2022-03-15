@@ -1,15 +1,15 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <cassert>
-
-class EdgeNode;
+#include "edge_node.h"
 class ClientNode {
  public:
   ClientNode(std::string name) : name_(name) {}
 
   int GetDemand(int k) { return demand_[k]; }
 
-  int AddDemand(int demand) { demand_.push_back(demand); }
+  void AddDemand(int demand) { demand_.push_back(demand); }
 
   std::string GetName(){
     return name_;

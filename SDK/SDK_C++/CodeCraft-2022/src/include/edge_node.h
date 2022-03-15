@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 class EdgeNode {
@@ -7,6 +8,7 @@ class EdgeNode {
   std::string GetName(){
     return name_;
   }
+
  private:
   std::string name_;
   int bandwidth_;

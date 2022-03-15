@@ -1,7 +1,7 @@
-#include <cassert>
 #include "input_parser.h"
 #include "client_node.h"
 #include "edge_node.h"
+#include <iostream>
 
 std::map<std::string, EdgeNode *>& InputParser::GetEdgeNodeMap() {
   return edgenode_map_;
