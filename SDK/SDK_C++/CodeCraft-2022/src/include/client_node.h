@@ -1,8 +1,8 @@
 #pragma once
-#include <string>
-#include <vector>
 #include <cassert>
 #include <sstream>
+#include <string>
+#include <vector>
 
 class EdgeNode;
 class ClientNode {
@@ -13,41 +13,37 @@ class ClientNode {
 
   void AddDemand(int demand) { demand_.push_back(demand); }
 
-  std::string GetName(){
-    return name_;
-  }
+  std::string GetName() { return name_; }
 
-  void set_qos(int qos){
-    qos_ = qos;
-  }
+  void set_qos(int qos) { qos_ = qos; }
 
-  int GetQos(){
-    return qos_;
-  }
+  int GetQos() { return qos_; }
 
-  void AddAvailableEdgeNode(std::string name, EdgeNode* edgenode){
+  void AddAvailableEdgeNode(std::string name, EdgeNode *edgenode) {
     available_edgenode_map_[name] = edgenode;
   }
 
-  EdgeNode* GetEdgeNode(const std::string &name){
+  EdgeNode *GetEdgeNode(const std::string &name) {
     assert(available_edgenode_map_.find(name) != available_edgenode_map_.end());
-    return available_edgenode_map_[name]; 
+    return available_edgenode_map_[name];
   }
 
-  std::string ToString(){
+  std::string ToString() {
     std::ostringstream oss;
-    oss << "{\n" << "ClientNode: " << name_ << ",\n";
+    oss << "{\n"
+        << "ClientNode: " << name_ << ",\n";
     oss << "demands: " << demand_.size() << " [\n";
-    for(int i = 0; i < demand_.size(); ++i){
-      if(i > 0 && i % 20 == 0) oss << "\n";
+    for (int i = 0; i < demand_.size(); ++i) {
+      if (i > 0 && i % 20 == 0) oss << "\n";
       oss << demand_[i] << ", ";
     }
     oss << "\n], \n";
     oss << "available EdgeNodes: [\n";
 
     int count = 0;
-    for(auto it = available_edgenode_map_.begin(); it != available_edgenode_map_.end(); ++it){
-      if(count > 0 && count % 20 == 0) oss << "\n";
+    for (auto it = available_edgenode_map_.begin();
+         it != available_edgenode_map_.end(); ++it) {
+      if (count > 0 && count % 20 == 0) oss << "\n";
       oss << it->first << ", ";
       ++count;
     }
@@ -58,6 +54,6 @@ class ClientNode {
  private:
   std::string name_;
   std::vector<int> demand_;
-  std::map<std::string, EdgeNode*> available_edgenode_map_;
+  std::map<std::string, EdgeNode *> available_edgenode_map_;
   int qos_;
 };

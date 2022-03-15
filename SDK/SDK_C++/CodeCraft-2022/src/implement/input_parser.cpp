@@ -1,13 +1,13 @@
 #include "input_parser.h"
+#include <iostream>
 #include "client_node.h"
 #include "edge_node.h"
-#include <iostream>
 
-std::map<std::string, EdgeNode *>& InputParser::GetEdgeNodeMap() {
+std::map<std::string, EdgeNode *> &InputParser::GetEdgeNodeMap() {
   return edgenode_map_;
 }
 
-std::map<std::string, ClientNode *>& InputParser::GetClientNodeMap() {
+std::map<std::string, ClientNode *> &InputParser::GetClientNodeMap() {
   return clientnode_map_;
 }
 
@@ -38,7 +38,7 @@ void InputParser::ParseDemandFile() {
     splitted_normal_line.clear();
   }
 
-  for(auto &node : clientnode_){
+  for (auto &node : clientnode_) {
     clientnode_map_[node->GetName()] = node;
   }
 
@@ -55,13 +55,13 @@ void InputParser::ParseConfigFile() {
   SplitString(second_line, '=', splitted_second_line);
 
   int qos = stoi(splitted_second_line[1]);
-  for(auto &node : clientnode_){
+  for (auto &node : clientnode_) {
     node->set_qos(qos);
   }
   ifs_.close();
 }
 
-void InputParser::ParseQosFile(){
+void InputParser::ParseQosFile() {
   ifs_.open(qos_, std::ios::in);
   std::string header_line, normal_line;
   std::vector<std::string> splitted_header_line, splitted_normal_line;
@@ -77,12 +77,12 @@ void InputParser::ParseQosFile(){
     assert(edgenode_map_.find(edgenode_name) != edgenode_map_.end());
     EdgeNode *edgenode = edgenode_map_[edgenode_name];
 
-    for(int i = 1; i < splitted_normal_line.size(); ++i){
+    for (int i = 1; i < splitted_normal_line.size(); ++i) {
       std::string clientnode_name = splitted_header_line[i];
       assert(clientnode_map_.find(clientnode_name) != clientnode_map_.end());
       ClientNode *clientnode = clientnode_map_[clientnode_name];
       int current_qos = stoi(splitted_normal_line[i]);
-      if(current_qos <= clientnode->GetQos()){
+      if (current_qos <= clientnode->GetQos()) {
         clientnode->AddAvailableEdgeNode(edgenode->GetName(), edgenode);
         edgenode->AddServingClientNode(clientnode->GetName(), clientnode);
       }
@@ -103,11 +103,12 @@ void InputParser::ParseSiteBandWidthFile() {
 
   while (ifs_ >> normal_line) {
     SplitString(normal_line, ',', splitted_normal_line);
-    edgenode_.push_back(new EdgeNode(splitted_normal_line[0], stoi(splitted_normal_line[1])));
+    edgenode_.push_back(
+        new EdgeNode(splitted_normal_line[0], stoi(splitted_normal_line[1])));
     splitted_normal_line.clear();
   }
 
-  for(auto &node : edgenode_){
+  for (auto &node : edgenode_) {
     edgenode_map_[node->GetName()] = node;
   }
 
