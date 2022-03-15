@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cassert>
 
 class EdgeNode;
 class ClientNode;
@@ -27,7 +28,7 @@ class InputParser {
   void Parse();
 
  private:
-  void ReadConfigFile();
+  void ParseConfigFile();
 
   void ParseDemandFile();
 
