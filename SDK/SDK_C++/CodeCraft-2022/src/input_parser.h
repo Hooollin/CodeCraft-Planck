@@ -20,9 +20,9 @@ class InputParser {
   InputParser(InputParser &) = delete;
   InputParser(InputParser &&) = delete;
 
-  std::map<std::string, EdgeNode *> GetEdgeNodeMap();
+  std::map<std::string, EdgeNode *>& GetEdgeNodeMap();
 
-  std::map<std::string, ClientNode *> GetClientNodeMap();
+  std::map<std::string, ClientNode *>& GetClientNodeMap();
 
   void Parse();
 

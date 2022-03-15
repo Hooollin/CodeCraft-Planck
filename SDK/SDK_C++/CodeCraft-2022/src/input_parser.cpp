@@ -2,11 +2,11 @@
 #include "client_node.h"
 #include "edge_node.h"
 
-std::map<std::string, EdgeNode *> InputParser::GetEdgeNodeMap() {
+std::map<std::string, EdgeNode *>& InputParser::GetEdgeNodeMap() {
   return edgenode_map_;
 }
 
-std::map<std::string, ClientNode *> InputParser::GetClientNodeMap() {
+std::map<std::string, ClientNode *>& InputParser::GetClientNodeMap() {
   return clientnode_map_;
 }
 
