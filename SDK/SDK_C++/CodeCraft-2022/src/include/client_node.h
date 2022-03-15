@@ -32,6 +32,10 @@ class ClientNode {
     return available_edgenode_map_[name]; 
   }
 
+  std::string ToString(){
+    return "{ClientNode:" + name_ + "}";
+  }
+
  private:
   std::string name_;
   std::vector<int> demand_;

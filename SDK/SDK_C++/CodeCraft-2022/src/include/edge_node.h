@@ -9,6 +9,10 @@ class EdgeNode {
     return name_;
   }
 
+  std::string ToString(){
+    return "{EdgeNode:" + name_ + "}";
+  }
+
  private:
   std::string name_;
   int bandwidth_;
