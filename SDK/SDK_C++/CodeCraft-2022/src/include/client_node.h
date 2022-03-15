@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 #include <cassert>
-#include "edge_node.h"
+#include <sstream>
+
+class EdgeNode;
 class ClientNode {
  public:
   ClientNode(std::string name) : name_(name) {}
@@ -23,8 +25,8 @@ class ClientNode {
     return qos_;
   }
 
-  void AddAvailableEdgeNode(EdgeNode* edgenode){
-    available_edgenode_map_[edgenode->GetName()] = edgenode;
+  void AddAvailableEdgeNode(std::string name, EdgeNode* edgenode){
+    available_edgenode_map_[name] = edgenode;
   }
 
   EdgeNode* GetEdgeNode(const std::string &name){
@@ -33,7 +35,24 @@ class ClientNode {
   }
 
   std::string ToString(){
-    return "{ClientNode:" + name_ + "}";
+    std::ostringstream oss;
+    oss << "{\n" << "ClientNode: " << name_ << ",\n";
+    oss << "demands: " << demand_.size() << " [\n";
+    for(int i = 0; i < demand_.size(); ++i){
+      if(i > 0 && i % 20 == 0) oss << "\n";
+      oss << demand_[i] << ", ";
+    }
+    oss << "\n], \n";
+    oss << "available EdgeNodes: [\n";
+
+    int count = 0;
+    for(auto it = available_edgenode_map_.begin(); it != available_edgenode_map_.end(); ++it){
+      if(count > 0 && count % 20 == 0) oss << "\n";
+      oss << it->first << ", ";
+      ++count;
+    }
+    oss << "\n], \n}";
+    return oss.str();
   }
 
  private:
