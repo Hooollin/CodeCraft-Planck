@@ -25,7 +25,7 @@ void AllocResourceT::MakeOutput() {
             if(custom_site_band[custom][sitenames[i]] > 0)
                 alloced.push_back(sitenames[i]);
         for(int i = 0; i < alloced.size(); i ++) {
-            std::cout << "<" << alloced[i] << "," << custom_site_band[custom][sitenames[i]] << ">";
+            std::cout << "<" << alloced[i] << "," << custom_site_band[custom][alloced[i]] << ">";
             if(i < alloced.size()-1) std::cout << ",";
         }
         std::cout << std::endl;
