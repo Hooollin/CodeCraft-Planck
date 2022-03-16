@@ -35,6 +35,6 @@ void AllocResourceT::MakeOutput() {
 void OutputParser::MakeOutput() {
     for(auto& art: custom_site_bands){
         art->MakeOutput();
-        std::cout << std::endl;
+        // std::cout << std::endl;
     }
 }
