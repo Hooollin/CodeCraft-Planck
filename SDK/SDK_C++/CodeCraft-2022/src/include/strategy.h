@@ -25,7 +25,7 @@ public:
     InputParser* GetInputParser() {return inputParser;}
     OutputParser* GetOutputParser() {return outputParser;}
 
-    virtual void HandleAllTimes();
+    virtual void HandleAllTimes() = 0;
     void MakeOutput() {
         outputParser->MakeOutput();
     }
