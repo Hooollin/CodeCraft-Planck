@@ -3,6 +3,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include<vector>
 
 class ClientNode;
 class EdgeNode {
@@ -25,9 +26,9 @@ class EdgeNode {
   int GetServingClientNodeCount() {
     return serving_clientnode_map_.size();
   }
-  std::vector<ClientNode*>& GetServingClientNode() {
+  std::vector<ClientNode*> GetServingClientNode() {
     std::vector<ClientNode*> clients;
-    for(auto& [k, v]: serving_clientnode_map_)
+    for(auto [k, v]: serving_clientnode_map_)
       clients.push_back(v);
     return clients;
   }

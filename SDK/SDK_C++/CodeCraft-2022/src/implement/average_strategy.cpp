@@ -13,7 +13,7 @@ std::vector<std::string> AverageStrategy::GetCustomRank() {
 }
 
 std::vector<std::string> AverageStrategy::GetSiteRank() {
-    auto sitenames = GetInputParser()->GetEdgeNameList();
+    std::vector<std::string> sitenames = GetInputParser()->GetEdgeNameList();
     auto cmp = [&](std::string&site1, std::string&site2) {
         auto& edgemap = GetInputParser()->GetEdgeNodeMap();
         if(edgemap[site1]->GetLimitCnt() == edgemap[site2]->GetLimitCnt())
@@ -26,12 +26,12 @@ std::vector<std::string> AverageStrategy::GetSiteRank() {
 
 void AverageStrategy::HandleOneSite(const std::string&sitename, int T) {
     EdgeNode* site = GetInputParser()->GetEdgeNodeMap()[sitename];
-    auto customes = site->GetServingClientNode();
+    std::vector<ClientNode*> customes = site->GetServingClientNode();
     auto cmp = [&](ClientNode* c1, ClientNode* c2) {
         return c1->GetAvailableEdgeNodeCount() < c2->GetAvailableEdgeNodeCount();
     };
     std::sort(customes.begin(), customes.end(), cmp);
-    for(auto& cust: customes) {
+    for(auto cust: customes) {
         HandleOneCustome(site, cust, T);
         site->IncLimitCnt();
     }
