@@ -50,10 +50,10 @@ class ClientNode {
     oss << "\n], \n}";
     return oss.str();
   }
-
+  /
  private:
-  std::string name_;
-  std::vector<int> demand_;
-  std::map<std::string, EdgeNode *> available_edgenode_map_;
-  int qos_;
+  std::string name_;//客户节点名
+  std::vector<int> demand_;//每天带宽需求
+  std::map<std::string, EdgeNode *> available_edgenode_map_;//可用边缘节点集
+  int qos_;//延迟上限
 };

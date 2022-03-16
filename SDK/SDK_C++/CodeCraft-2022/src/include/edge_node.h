@@ -35,8 +35,8 @@ class EdgeNode {
   }
 
  private:
-  std::string name_;
-  int bandwidth_;
+  std::string name_;//边缘节点名
+  int bandwidth_;//边缘节点带宽上限
   int remain_;
 
   std::map<std::string, ClientNode *> serving_clientnode_map_;
