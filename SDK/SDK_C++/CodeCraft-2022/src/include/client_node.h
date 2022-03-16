@@ -10,9 +10,11 @@ class ClientNode {
   ClientNode(std::string name) : name_(name) {}
 
   int GetDemand(int k) { return demand_[k]; }
+  int GetDemandSize() {return demand_.size();}
 
   void AddDemand(int demand) { demand_.push_back(demand); }
-
+  void DecDemand(int demand, int T) {demand_[T] -= demand;}
+  void IncDemand(int demand, int T) {demand_[T] += demand;}
   std::string GetName() { return name_; }
 
   void set_qos(int qos) { qos_ = qos; }
@@ -27,7 +29,9 @@ class ClientNode {
     assert(available_edgenode_map_.find(name) != available_edgenode_map_.end());
     return available_edgenode_map_[name];
   }
-
+  int GetAvailableEdgeNodeCount() {
+    return available_edgenode_map_.size();
+  }
   std::string ToString() {
     std::ostringstream oss;
     oss << "{\n"

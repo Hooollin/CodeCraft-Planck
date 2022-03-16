@@ -16,7 +16,9 @@ class InputParser {
       : config_(config),
         demand_(demand),
         qos_(qos),
-        site_bandwidth_(site_bandwidth) {}
+        site_bandwidth_(site_bandwidth) {
+          Parse();
+        }
 
   InputParser(InputParser &) = delete;
   InputParser(InputParser &&) = delete;
@@ -24,6 +26,11 @@ class InputParser {
   std::map<std::string, EdgeNode *> &GetEdgeNodeMap();
 
   std::map<std::string, ClientNode *> &GetClientNodeMap();
+
+  std::vector<std::string> GetEdgeNameList();
+  std::vector<std::string> GetClientNameList();
+  int GetT();
+  void ResetEdgeNode();//重置edge的remain
 
   void Parse();
 

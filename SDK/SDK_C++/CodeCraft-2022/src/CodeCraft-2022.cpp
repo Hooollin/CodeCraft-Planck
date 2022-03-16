@@ -1,25 +1,19 @@
 #include <iostream>
 #include "input_parser.h"
+#include "strategy.h"
+#include "average_strategy.h"
 
 static bool local = true;
 
 int main() {
-  InputParser *parser;
+  Strategy *st;
   if (local) {
-    parser = new InputParser("../data/config.ini", "../data/demand.csv",
+    st = new AverageStrategy("../data/config.ini", "../data/demand.csv",
                              "../data/qos.csv", "../data/site_bandwidth.csv");
   } else {
-    parser = new InputParser();
+    st = new AverageStrategy();
   }
-  parser->Parse();
-  auto cnm = parser->GetClientNodeMap();
-  auto enm = parser->GetEdgeNodeMap();
-  for (auto &[name, node] : cnm) {
-    std::cout << node->ToString() << std::endl;
-  }
-
-  for (auto &[name, node] : enm) {
-    std::cout << node->ToString() << std::endl;
-  }
+  st->HandleAllTimes();
+  st->MakeOutput();
   return 0;
 }

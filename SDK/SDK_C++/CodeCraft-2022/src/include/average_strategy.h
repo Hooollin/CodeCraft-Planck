@@ -1,0 +1,30 @@
+#pragma once
+
+#include "strategy.h"
+#include <vector>
+#include <map>
+#include <iostream>
+
+
+class AverageStrategy: public Strategy {
+public:
+    AverageStrategy(
+        std::string config = "/data/config.ini",
+        std::string demand = "/data/demand.csv",
+        std::string qos = "/data/qos.csv",
+        std::string site_bandwidth = "/data/site_bandwidth.csv"): Strategy(config, demand, qos, site_bandwidth) {
+        }
+    void HandleAllTimes() {
+        for(int T = 0; T < GetInputParser()->GetT(); T ++) {
+            GetInputParser()->ResetEdgeNode();
+            HandleOneTimes(T);
+        }
+    }
+    
+private:
+    std::vector<std::string> GetCustomRank();//得到用户的处理顺序
+    std::vector<std::string> GetSiteRank();//得到处理节点的顺序,被使用最大限制贷款次数最少且服务用户最多
+    void HandleOneSite(const std::string& site, int T);
+    void HandleOneCustome(EdgeNode* site, ClientNode* custome, int T);
+    void HandleOneTimes(int T); //处理T时刻
+};
