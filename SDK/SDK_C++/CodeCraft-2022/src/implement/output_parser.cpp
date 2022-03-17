@@ -19,7 +19,7 @@ OutputParser::OutputParser(int T, const std::vector<std::string>& customnames, c
 }
 
 void AllocResourceT::MakeOutput() {
-    ofs.open(filename);
+    ofs.open(filename, std::ios::app | std::ios::out);
     for(auto& custom: customnames) {
         ofs << custom << ":";
         std::vector<std::string> alloced;
@@ -52,7 +52,7 @@ void AllocResourceT::LocalDisplay() {
 
 void OutputParser::LocalDisplay() {
     for(auto& art: custom_site_bands){
-        art->MakeOutput();
+        art->LocalDisplay();
         std::cout << std::endl;
     }
 }

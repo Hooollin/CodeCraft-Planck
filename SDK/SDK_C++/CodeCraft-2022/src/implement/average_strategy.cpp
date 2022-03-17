@@ -32,26 +32,50 @@ void AverageStrategy::HandleOneSite(const std::string&sitename, int T) {
     };
     std::sort(customes.begin(), customes.end(), cmp);
     for(auto cust: customes) {
-        HandleOneCustome(site, cust, T);
+        // HandleOneCustomeAndCustom(site, cust, T);
         site->IncLimitCnt();
     }
 }
 
-void AverageStrategy::HandleOneCustome(EdgeNode* site, ClientNode* custome, int T) {
-    int demand = custome->GetDemand(T);
+void AverageStrategy::HandleOneCustomeAndCustom(EdgeNode* site, ClientNode* custome, int T, int demand) {
     auto outputParser = GetOutputParser();
-    if(site->GetRemain() < demand) {
-        demand = site->GetRemain();
-        assert (demand >= 0);
-    } 
     site->DecRemain(demand);
     custome->DecDemand(demand, T);
     outputParser->AllocT(T, custome->GetName(), site->GetName(), demand);
 }
 
+void AverageStrategy::HandleOneCustome(const std::string& custome, int T) {
+    ClientNode* client = GetInputParser()->GetClientNodeMap()[custome];
+    std::vector<EdgeNode*> sites = client->GetEdgeNodeList();
+    auto cmp = [&](EdgeNode* site1, EdgeNode* site2) {
+        if(site1->GetRemain() == site2->GetRemain())
+            return site1->GetLimitCnt() < site2->GetLimitCnt();    
+        return site1->GetRemain() < site2->GetRemain();
+        
+    };
+    sort(sites.begin(), sites.end(), cmp);
+    int used_cnt = 0;
+    for(auto site: sites) {
+        if(client->GetDemand(T) == 0) break;
+        int demand = 0;
+        if (client->GetDemand(T) < site->GetRemain()) {
+            demand = client->GetDemand(T) / (sites.size() - used_cnt);
+        } else {
+            int tmp = client->GetDemand(T) / (sites.size() - used_cnt) + 1;
+            demand = std::min(tmp, site->GetRemain());
+        }
+        HandleOneCustomeAndCustom(site, client, T, demand);
+        if(site->GetRemain() == 0) site->IncLimitCnt();
+        assert (site->GetRemain() >= 0);
+        used_cnt += 1;
+    }
+    assert (client->GetDemand(T) == 0);
+}
+
 void AverageStrategy::HandleOneTimes(int T) {
-    auto sites = GetSiteRank();
-    for(int i = 0; i < sites.size(); i ++) {
-        HandleOneSite(sites[i], T);
+    // auto sites = GetSiteRank();
+    auto customes = GetCustomRank();
+    for(int i = 0; i < customes.size(); i ++) {
+        HandleOneCustome(customes[i], T);
     }
 }

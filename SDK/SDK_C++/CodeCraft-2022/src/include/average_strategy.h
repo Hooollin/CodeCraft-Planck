@@ -26,6 +26,7 @@ private:
     std::vector<std::string> GetCustomRank();//得到用户的处理顺序
     std::vector<std::string> GetSiteRank();//得到处理节点的顺序,被使用最大限制贷款次数最少且服务用户最多
     void HandleOneSite(const std::string& site, int T);
-    void HandleOneCustome(EdgeNode* site, ClientNode* custome, int T);
+    void HandleOneCustome(const std::string& custome, int T);
+    void HandleOneCustomeAndCustom(EdgeNode* site, ClientNode* custome, int T, int demand);
     void HandleOneTimes(int T); //处理T时刻
 };
