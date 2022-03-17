@@ -21,7 +21,7 @@ class AllocResourceT {
  private:
   std::map<std::string, std::map<std::string, int>>
       custom_site_band;  //每个时刻的分配矩阵，custom_site_band[custom][site],
-                         //site 分配给custom的带宽
+                         // site 分配给custom的带宽
   std::vector<std::string> customnames, sitenames;
   std::ofstream ofs;
   std::string filename;

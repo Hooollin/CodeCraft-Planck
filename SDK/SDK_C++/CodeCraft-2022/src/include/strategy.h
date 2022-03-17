@@ -9,34 +9,20 @@
 #include <vector>
 class Strategy {
  public:
-  Strategy(std::string config = "/data/config.ini",
-           std::string demand = "/data/demand.csv",
-           std::string qos = "/data/qos.csv",
-           std::string site_bandwidth = "/data/site_bandwidth.csv",
-           std::string outputfile = "/output/solution.txt") {
-    inputParser = new InputParser(config, demand, qos, site_bandwidth);
-    outputParser =
-        new OutputParser(inputParser->GetT(), inputParser->GetClientNameList(),
-                         inputParser->GetEdgeNameList(), outputfile);
-  }
-  ~Strategy() {
-    delete inputParser;
-    delete outputParser;
-    inputParser = nullptr;
-    outputParser = nullptr;
-  }
-  InputParser *GetInputParser() { return inputParser; }
-  OutputParser *GetOutputParser() { return outputParser; }
+  Strategy(InputParser *input_parser, OutputParser *output_parser)
+      : input_parser_(input_parser), output_parser_(output_parser) {}
+  InputParser *GetInputParser() { return input_parser_; }
+  OutputParser *GetOutputParser() { return output_parser_; }
 
   virtual void HandleAllTimes() = 0;
   void MakeOutput(bool local = true) {
     if (local)
-      outputParser->LocalDisplay();
+      output_parser_->LocalDisplay();
     else
-      outputParser->MakeOutput();
+      output_parser_->MakeOutput();
   }
 
- private:
-  InputParser *inputParser;
-  OutputParser *outputParser;
+ protected:
+  InputParser *input_parser_;
+  OutputParser *output_parser_;
 };
