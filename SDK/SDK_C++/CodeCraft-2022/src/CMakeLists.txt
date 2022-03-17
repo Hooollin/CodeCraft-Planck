@@ -8,7 +8,7 @@ project("CodeCraft-2022")
 include_directories(${PROJECT_SOURCE_DIR}/lib ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include)
 
 # 设置可执行文件生成路径
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin )
 
 # 生成debug版本
 SET(CMAKE_BUILD_TYPE "release")

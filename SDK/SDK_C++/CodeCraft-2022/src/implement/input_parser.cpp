@@ -1,13 +1,12 @@
 #include "input_parser.h"
-#include <iostream>
 #include "client_node.h"
 #include "edge_node.h"
 
-std::map<std::string, EdgeNode *> &InputParser::GetEdgeNodeMap() {
+std::unordered_map<std::string, EdgeNode *> &InputParser::GetEdgeNodeMap() {
   return edgenode_map_;
 }
 
-std::map<std::string, ClientNode *> &InputParser::GetClientNodeMap() {
+std::unordered_map<std::string, ClientNode *> &InputParser::GetClientNodeMap() {
   return clientnode_map_;
 }
 
@@ -19,7 +18,9 @@ void InputParser::Parse() {
 }
 
 void InputParser::ParseDemandFile() {
+  ifs_.clear();
   ifs_.open(demand_, std::ios::in);
+  assert(ifs_.is_open());
   std::string header_line, normal_line;
   std::vector<std::string> splitted_header_line, splitted_normal_line;
 
@@ -46,11 +47,12 @@ void InputParser::ParseDemandFile() {
 }
 
 void InputParser::ParseConfigFile() {
+  ifs_.clear();
   ifs_.open(config_, std::ios::in);
+  assert(ifs_.is_open());
   std::string first_line, second_line;
-
-  ifs_ >> first_line >> second_line;
-
+  ifs_ >> first_line;
+  ifs_ >> second_line;
   std::vector<std::string> splitted_second_line;
   SplitString(second_line, '=', splitted_second_line);
 
@@ -62,7 +64,9 @@ void InputParser::ParseConfigFile() {
 }
 
 void InputParser::ParseQosFile() {
+  ifs_.clear();
   ifs_.open(qos_, std::ios::in);
+  assert(ifs_.is_open());
   std::string header_line, normal_line;
   std::vector<std::string> splitted_header_line, splitted_normal_line;
 
@@ -83,8 +87,8 @@ void InputParser::ParseQosFile() {
       ClientNode *clientnode = clientnode_map_[clientnode_name];
       int current_qos = stoi(splitted_normal_line[i]);
       if (current_qos <= clientnode->GetQos()) {
-        clientnode->AddAvailableEdgeNode(edgenode->GetName(), edgenode);
-        edgenode->AddServingClientNode(clientnode->GetName(), clientnode);
+        clientnode->AddAvailableEdgeNode(edgenode->GetName());
+        edgenode->AddServingClientNode(clientnode->GetName());
       }
     }
 
@@ -94,7 +98,9 @@ void InputParser::ParseQosFile() {
 }
 
 void InputParser::ParseSiteBandWidthFile() {
+  ifs_.clear();
   ifs_.open(site_bandwidth_, std::ios::in);
+  assert(ifs_.is_open());
   std::string header_line, normal_line;
   std::vector<std::string> splitted_header_line, splitted_normal_line;
 

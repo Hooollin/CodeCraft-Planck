@@ -1,9 +1,5 @@
 #pragma once
-#include <cassert>
-#include <fstream>
-#include <map>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 #include "client_node.h"
 #include "edge_node.h"
 
@@ -21,9 +17,9 @@ class InputParser {
   InputParser(InputParser &) = delete;
   InputParser(InputParser &&) = delete;
 
-  std::map<std::string, EdgeNode *> &GetEdgeNodeMap();
+  std::unordered_map<std::string, EdgeNode *> &GetEdgeNodeMap();
 
-  std::map<std::string, ClientNode *> &GetClientNodeMap();
+  std::unordered_map<std::string, ClientNode *> &GetClientNodeMap();
 
   void Parse();
 
@@ -46,8 +42,8 @@ class InputParser {
   std::vector<EdgeNode *> edgenode_;
   std::vector<ClientNode *> clientnode_;
 
-  std::map<std::string, EdgeNode *> edgenode_map_;
-  std::map<std::string, ClientNode *> clientnode_map_;
+  std::unordered_map<std::string, EdgeNode *> edgenode_map_;
+  std::unordered_map<std::string, ClientNode *> clientnode_map_;
 
-  std::ifstream ifs_;
+  std::fstream ifs_;
 };
