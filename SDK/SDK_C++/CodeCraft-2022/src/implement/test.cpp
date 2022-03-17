@@ -1,5 +1,6 @@
 #include "test.h"
 #include <bits/stdc++.h>
+#include <cassert>
 
 void Test::TestInputParser() {
   InputParser *parser;
@@ -41,17 +42,26 @@ void Test::TestSimplyDayDistribution() {
                                           empty_distribution, availale_edge);
     dayDistribution.distribute();
     auto p = dayDistribution.GetDistribution();
-    std::cout<<"day:"<<i<<std::endl;
-    for(auto &pp : p){
-      std::cout<<"client<"<<pp.first<<","<<client_hash[pp.first]->GetDemand(i)<<">:";
+    std::cout << "day:" << i << std::endl;
+    std::unordered_map<std::string, int> edge_bandwidth;
+    for (auto &pp : p) {
+      std::cout << "client<" << pp.first << ","
+                << client_hash[pp.first]->GetDemand(i) << ">:";
       int count = 0;
-        for(auto &ppp : pp.second){
-          std::cout<<"<"<<ppp.first<<","<<ppp.second<<">,";
-          count += ppp.second;
-        }
-        std::cout<<count;
-        if(count != client_hash[pp.first]->GetDemand(i)) std::cout<<" count false!";
-      std::cout<<std::endl;
+      for (auto &ppp : pp.second) {
+        std::cout << "<" << ppp.first << "," << ppp.second << ">,";
+        assert(ppp.second != 0);
+        edge_bandwidth[ppp.first] += ppp.second;
+        count += ppp.second;
+      }
+      std::cout << count;
+      assert(count == client_hash[pp.first]->GetDemand(i));
+      std::cout << std::endl;
+    }
+    for (auto p : edge_bandwidth) {
+      std::string edge = p.first;
+      int bandwidths = p.second;
+      assert(bandwidths <= edge_hash[edge]->GetBandwidth());
     }
   }
 }
