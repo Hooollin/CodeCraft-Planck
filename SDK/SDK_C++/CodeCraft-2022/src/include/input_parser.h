@@ -17,22 +17,27 @@ class InputParser {
         demand_(demand),
         qos_(qos),
         site_bandwidth_(site_bandwidth) {
-    Parse();
   }
 
-  InputParser(InputParser &) = delete;
-  InputParser(InputParser &&) = delete;
 
   std::map<std::string, EdgeNode *> &GetEdgeNodeMap();
 
   std::map<std::string, ClientNode *> &GetClientNodeMap();
 
   std::vector<std::string> GetEdgeNameList();
+
   std::vector<std::string> GetClientNameList();
+
   int GetT();
+
   void ResetEdgeNode();  //重置edge的remain
 
-  void Parse();
+  void Init(){ 
+    Parse(); 
+    assert(clientnode_.size() > 0);
+    static int T_ = clientnode_[0]->GetDemandSize();
+  }
+
 
  private:
   void ParseConfigFile();
@@ -44,6 +49,8 @@ class InputParser {
   void ParseSiteBandWidthFile();
 
   void SplitString(std::string &, char, std::vector<std::string> &);
+
+  void Parse();
 
   std::string config_;
   std::string demand_;

@@ -148,8 +148,9 @@ std::vector<std::string> InputParser::GetEdgeNameList() {
 }
 
 int InputParser::GetT() {
-  if (clientnode_.size() == 0) return 0;
-  return clientnode_[0]->GetDemandSize();
+  assert(!clientnode_.empty());
+  static int T_ = clientnode_[0]->GetDemandSize();
+  return T_;
 }
 
 void InputParser::ResetEdgeNode() {
