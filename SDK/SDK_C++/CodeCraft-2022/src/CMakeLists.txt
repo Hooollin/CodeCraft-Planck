@@ -24,4 +24,4 @@ aux_source_directory(. DIR_SRCS)
 aux_source_directory(./implement IMPL_DIR_SRCS)
 
 # 指定生成目标
-add_executable(CodeCraft-2022 ${DIR_SRCS} ${IMPL_DIR_SRCS} implement/output_parser.cpp include/output_parser.h)
+add_executable(CodeCraft-2022 ${DIR_SRCS} ${IMPL_DIR_SRCS})
