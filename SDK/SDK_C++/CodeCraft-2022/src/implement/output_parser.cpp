@@ -18,9 +18,10 @@ OutputParser::OutputParser(int T, const std::vector<std::string>& customnames, c
     }
 }
 
-void AllocResourceT::MakeOutput() {
+void AllocResourceT::MakeOutput(bool tail) {
     ofs.open(filename, std::ios::app | std::ios::out);
-    for(auto& custom: customnames) {
+    for(int i = 0; i < customnames.size(); i ++) {
+        std::string custom = customnames[i];
         ofs << custom << ":";
         std::vector<std::string> alloced;
         for(int i = 0; i < sitenames.size(); i ++)
@@ -30,7 +31,10 @@ void AllocResourceT::MakeOutput() {
             ofs << "<" << alloced[i] << "," << custom_site_band[custom][alloced[i]] << ">";
             if(i < alloced.size()-1) ofs << ",";
         }
-        ofs << std::endl;
+        if (i < customnames.size() - 1)
+            ofs << std::endl;
+        if (i == customnames.size() - 1 && tail)
+            ofs << std::endl;
     }
     ofs.close();
 }
@@ -58,7 +62,9 @@ void OutputParser::LocalDisplay() {
 }
 
 void OutputParser::MakeOutput() {
-    for(auto& art: custom_site_bands){
-        art->MakeOutput();
+    bool tail = true;
+    for(int i = 0; i < custom_site_bands.size(); i ++){
+        if(i == custom_site_bands.size() - 1) tail = false;
+        custom_site_bands[i]->MakeOutput(tail);
     }
 }

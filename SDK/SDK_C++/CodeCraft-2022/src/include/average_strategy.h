@@ -16,6 +16,7 @@ public:
         std::string outputfile = "/output/solution.txt"): Strategy(config, demand, qos, site_bandwidth, outputfile) {
         }
     void HandleAllTimes() {
+        
         for(int T = 0; T < GetInputParser()->GetT(); T ++) {
             GetInputParser()->ResetEdgeNode();
             HandleOneTimes(T);

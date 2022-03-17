@@ -14,7 +14,7 @@ public:
     int GetBand(const std::string custome, const std::string site) {
         return custom_site_band[custome][site];
     }
-    void MakeOutput();
+    void MakeOutput(bool tail);
     void LocalDisplay();
 private:
     std::map<std::string, std::map<std::string, int>> custom_site_band;//每个时刻的分配矩阵，custom_site_band[custom][site], site 分配给custom的带宽

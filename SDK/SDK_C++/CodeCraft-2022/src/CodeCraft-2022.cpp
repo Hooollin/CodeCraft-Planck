@@ -3,7 +3,7 @@
 #include "strategy.h"
 #include "average_strategy.h"
 
-static bool local = 1;
+static bool local = 0;
 
 int main() {
   Strategy *st;
@@ -15,6 +15,6 @@ int main() {
   }
   st->HandleAllTimes();
   st->MakeOutput(local);
-  st->CheckResult();
+  // st->CheckResult();
   return 0;
 }
