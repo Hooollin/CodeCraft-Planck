@@ -1,5 +1,4 @@
 #include "distrubution_strategy.h"
-#include <bits/stdc++.h>
 
 DayDistribution::DayDistribution(
     int day, std::unordered_map<std::string, EdgeNode *> &edge_node,

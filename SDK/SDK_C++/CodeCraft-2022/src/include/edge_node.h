@@ -1,6 +1,10 @@
 #pragma once
-#include <bits/stdc++.h>
-
+#include <map>
+#include <vector>
+#include <string>
+#include <cassert>
+#include <unordered_map>
+#include <unordered_set>
 class EdgeNode {
  public:
   EdgeNode(std::string name, int bandwidth)

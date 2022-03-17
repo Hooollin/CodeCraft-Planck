@@ -1,4 +1,5 @@
 #include "client_node.h"
+#include <sstream>
 
 std::string ClientNode::ToString() {
   std::ostringstream oss;

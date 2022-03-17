@@ -1,5 +1,4 @@
 #include "test.h"
-#include <bits/stdc++.h>
 #include <cassert>
 
 void Test::TestInputParser() {
