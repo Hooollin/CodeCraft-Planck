@@ -3,7 +3,7 @@
 #include "input_parser.h"
 #include "strategy.h"
 
-static bool local = false;
+static bool local = true;
 
 int main() {
   InputParser *input_parser;

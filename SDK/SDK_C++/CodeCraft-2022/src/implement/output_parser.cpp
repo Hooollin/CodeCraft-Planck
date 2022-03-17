@@ -58,8 +58,7 @@ void AllocResourceT::LocalDisplay() {
 
 void OutputParser::LocalDisplay() {
   for (auto &art : custom_site_bands) {
-    art->MakeOutput();
-    std::cout << std::endl;
+    art->LocalDisplay();
   }
 }
 
