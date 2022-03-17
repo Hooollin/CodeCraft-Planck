@@ -34,8 +34,6 @@ class InputParser {
 
   void Init(){ 
     Parse(); 
-    assert(clientnode_.size() > 0);
-    static int T_ = clientnode_[0]->GetDemandSize();
   }
 
 
