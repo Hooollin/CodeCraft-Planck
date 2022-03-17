@@ -17,8 +17,8 @@ class InputParser {
         demand_(demand),
         qos_(qos),
         site_bandwidth_(site_bandwidth) {
-          Parse();
-        }
+    Parse();
+  }
 
   InputParser(InputParser &) = delete;
   InputParser(InputParser &&) = delete;
@@ -30,7 +30,7 @@ class InputParser {
   std::vector<std::string> GetEdgeNameList();
   std::vector<std::string> GetClientNameList();
   int GetT();
-  void ResetEdgeNode();//重置edge的remain
+  void ResetEdgeNode();  //重置edge的remain
 
   void Parse();
 

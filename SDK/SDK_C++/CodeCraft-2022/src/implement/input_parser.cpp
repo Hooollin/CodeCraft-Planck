@@ -133,7 +133,7 @@ void InputParser::SplitString(std::string &str, char splitter,
 
 std::vector<std::string> InputParser::GetClientNameList() {
   std::vector<std::string> clientnames;
-  for(auto& client: clientnode_) {
+  for (auto &client : clientnode_) {
     clientnames.push_back(client->GetName());
   }
   return clientnames;
@@ -141,19 +141,19 @@ std::vector<std::string> InputParser::GetClientNameList() {
 
 std::vector<std::string> InputParser::GetEdgeNameList() {
   std::vector<std::string> edgenames;
-  for(auto& edge: edgenode_) {
+  for (auto &edge : edgenode_) {
     edgenames.push_back(edge->GetName());
   }
   return edgenames;
 }
 
 int InputParser::GetT() {
-  if(clientnode_.size() == 0) return 0;
+  if (clientnode_.size() == 0) return 0;
   return clientnode_[0]->GetDemandSize();
 }
 
 void InputParser::ResetEdgeNode() {
-  for(auto& edgenode: edgenode_) {
+  for (auto &edgenode : edgenode_) {
     edgenode->ResetRemain();
   }
 }

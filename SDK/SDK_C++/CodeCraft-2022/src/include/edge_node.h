@@ -3,33 +3,32 @@
 #include <map>
 #include <sstream>
 #include <string>
-#include<vector>
+#include <vector>
 
 class ClientNode;
 class EdgeNode {
  public:
   EdgeNode(std::string name, int bandwidth)
-      : name_(name), bandwidth_(bandwidth), remain_(bandwidth) {limit_cnt_ = 0;}
+      : name_(name), bandwidth_(bandwidth), remain_(bandwidth) {
+    limit_cnt_ = 0;
+  }
 
   std::string GetName() { return name_; }
-  void ResetRemain() {remain_ = bandwidth_;}
-  int GetRemain() {return remain_;}
-  int GetLimitCnt() {return limit_cnt_;}
-  void IncLimitCnt() {limit_cnt_ ++;}
-  void DecLimitCnt() {limit_cnt_ --;}
-  void IncRemain(int band) {remain_ += band;}
-  void DecRemain(int band) {remain_ -= band;}
+  void ResetRemain() { remain_ = bandwidth_; }
+  int GetRemain() { return remain_; }
+  int GetLimitCnt() { return limit_cnt_; }
+  void IncLimitCnt() { limit_cnt_++; }
+  void DecLimitCnt() { limit_cnt_--; }
+  void IncRemain(int band) { remain_ += band; }
+  void DecRemain(int band) { remain_ -= band; }
   void AddServingClientNode(std::string name, ClientNode *clientnode) {
     serving_clientnode_map_[name] = clientnode;
   }
 
-  int GetServingClientNodeCount() {
-    return serving_clientnode_map_.size();
-  }
-  std::vector<ClientNode*> GetServingClientNode() {
-    std::vector<ClientNode*> clients;
-    for(auto [k, v]: serving_clientnode_map_)
-      clients.push_back(v);
+  int GetServingClientNodeCount() { return serving_clientnode_map_.size(); }
+  std::vector<ClientNode *> GetServingClientNode() {
+    std::vector<ClientNode *> clients;
+    for (auto [k, v] : serving_clientnode_map_) clients.push_back(v);
     return clients;
   }
   std::string ToString() {
