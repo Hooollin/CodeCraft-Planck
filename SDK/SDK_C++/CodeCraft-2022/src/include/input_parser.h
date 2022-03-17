@@ -1,10 +1,10 @@
 #pragma once
-#include <unordered_map>
+#include <fstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "client_node.h"
 #include "edge_node.h"
-#include <fstream>
 class InputParser {
  public:
   InputParser(int model);

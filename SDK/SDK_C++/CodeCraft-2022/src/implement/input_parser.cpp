@@ -2,13 +2,13 @@
 #include "client_node.h"
 #include "edge_node.h"
 
-InputParser::InputParser(int model){
+InputParser::InputParser(int model) {
   assert(model >= 1 && model <= 3);
-  if(model == 1){
+  if (model == 1) {
     config_ = demand_ = qos_ = site_bandwidth_ = online_pre_;
-  }else if(model == 2){
+  } else if (model == 2) {
     config_ = demand_ = qos_ = site_bandwidth_ = linux_pre_;
-  }else{
+  } else {
     config_ = demand_ = qos_ = site_bandwidth_ = windows_pre_;
   }
   config_ += config_suf_;

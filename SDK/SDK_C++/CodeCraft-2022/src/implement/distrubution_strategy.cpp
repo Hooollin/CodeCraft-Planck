@@ -106,13 +106,13 @@ void SimplyDayDistribution::distribute() {
       std::string edge = connect_edge[i];
       distribution_[client][edge] += all_bandwidth - edge_bandwidth_[edge];
       edge_bandwidth_[edge] = all_bandwidth;
-      if(distribution_[client][edge] == 0) distribution_[client].erase(edge);
+      if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
     }
     for (int i = less_num; i < m; i++) {
       std::string edge = connect_edge[i];
       distribution_[client][edge] += all_bandwidth + 1 - edge_bandwidth_[edge];
       edge_bandwidth_[edge] = all_bandwidth + 1;
-      if(distribution_[client][edge] == 0) distribution_[client].erase(edge);
+      if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
     }
 
     client_bandwidth_[client] = 0;

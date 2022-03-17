@@ -1,7 +1,7 @@
 #include "test.h"
 
 int main() {
-  Test test_example(3);
+  Test test_example(2);
   test_example.TestSimplyDayDistribution();
 
 //  InputParser *parser;

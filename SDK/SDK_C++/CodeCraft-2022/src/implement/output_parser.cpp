@@ -40,19 +40,19 @@ void OutputParser::StandradOutput() {
   ofs_.clear();
   ofs_.open(solution_, std::ios::out);
   assert(ofs_.is_open());
-  for(auto &day_distribution : output_data_){
-    for(auto &client : client_list_){
-      ofs_<<client<<":";
+  for (auto &day_distribution : output_data_) {
+    for (auto &client : client_list_) {
+      ofs_ << client << ":";
       bool flag = false;
-      for(auto &distribution : day_distribution[client]){
+      for (auto &distribution : day_distribution[client]) {
         std::string edge = distribution.first;
         int distri = distribution.second;
-        if(distri == 0) continue;
-        if(flag) ofs_<<",";
-        ofs_<<"<"<<edge<<","<<distri<<">";
+        if (distri == 0) continue;
+        if (flag) ofs_ << ",";
+        ofs_ << "<" << edge << "," << distri << ">";
         flag = true;
       }
-      ofs_<<std::endl;
+      ofs_ << std::endl;
     }
   }
 }

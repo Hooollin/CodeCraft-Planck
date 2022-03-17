@@ -35,7 +35,7 @@ void Test::TestSimplyDayDistribution() {
   for (auto &p : edge_hash) {
     availale_edge.insert(p.first);
   }
-  std::unordered_map<std::string,int> max_bandwidth;
+  std::unordered_map<std::string, int> max_bandwidth;
   for (int i = 0; i < day; i++) {
     SimplyDayDistribution dayDistribution(i, edge_hash, client_hash,
                                           empty_distribution, availale_edge);
@@ -61,17 +61,17 @@ void Test::TestSimplyDayDistribution() {
       std::string edge = p.first;
       int bandwidths = p.second;
       assert(bandwidths <= edge_hash[edge]->GetBandwidth());
-      max_bandwidth[edge] = std::max(max_bandwidth[edge],bandwidths);
+      max_bandwidth[edge] = std::max(max_bandwidth[edge], bandwidths);
     }
   }
   int ans = 0;
-  for(auto p : max_bandwidth){
+  for (auto p : max_bandwidth) {
     std::string edge = p.first;
     int mv = p.second;
-    std::cout<<"<"<<edge<<","<<mv<<">";
+    std::cout << "<" << edge << "," << mv << ">";
     ans += mv;
   }
-  std::cout<<"total:"<<ans<<std::endl;
+  std::cout << "total:" << ans << std::endl;
 
-  std::cout<<client_hash.begin()->second->GetQos()<<std::endl;
+  std::cout << client_hash.begin()->second->GetQos() << std::endl;
 }
