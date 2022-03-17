@@ -22,6 +22,20 @@ public:
         }
     }
     
+    void CheckResult() {
+        for(int T = 0; T < GetInputParser()->GetT(); T ++) {
+            for(auto custome: GetInputParser()->GetClientNameList()) {
+                int alloc_band = 0;
+                for(auto site: GetInputParser()->GetEdgeNameList()) {
+                    alloc_band += GetOutputParser()->GetAllocedBand(T, custome, site);
+                }
+                std::cout << T << ": " << "<" << custome << ", " << alloc_band << ">, ";
+            }
+            std::cout << std::endl;
+        }
+        
+    }
+
 private:
     std::vector<std::string> GetCustomRank();//得到用户的处理顺序
     std::vector<std::string> GetSiteRank();//得到处理节点的顺序,被使用最大限制贷款次数最少且服务用户最多

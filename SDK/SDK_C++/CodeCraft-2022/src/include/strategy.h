@@ -27,6 +27,7 @@ public:
     OutputParser* GetOutputParser() {return outputParser;}
 
     virtual void HandleAllTimes() = 0;
+    virtual void CheckResult() = 0;
     void MakeOutput(bool local = 0) {
         if (local)
             outputParser->LocalDisplay();
