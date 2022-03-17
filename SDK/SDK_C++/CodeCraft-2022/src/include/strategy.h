@@ -11,10 +11,9 @@ class Strategy {
  public:
   Strategy(InputParser *input_parser, OutputParser *output_parser)
       : input_parser_(input_parser), output_parser_(output_parser) {}
-  InputParser *GetInputParser() { return input_parser_; }
-  OutputParser *GetOutputParser() { return output_parser_; }
 
   virtual void HandleAllTimes() = 0;
+
   void MakeOutput(bool local = true) {
     if (local)
       output_parser_->LocalDisplay();
@@ -23,6 +22,10 @@ class Strategy {
   }
 
  protected:
+  InputParser *GetInputParser() { return input_parser_; }
+
+  OutputParser *GetOutputParser() { return output_parser_; }
+
   InputParser *input_parser_;
   OutputParser *output_parser_;
 };

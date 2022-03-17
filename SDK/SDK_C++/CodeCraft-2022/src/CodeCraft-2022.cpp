@@ -24,7 +24,7 @@ int main() {
 
     output_parser = new OutputParser(
         input_parser->GetT(), input_parser->GetClientNameList(),
-        input_parser->GetEdgeNameList(), "/output/solution.txt");
+        input_parser->GetEdgeNameList(), "output/solution.txt");
   }
 
   st = new AverageStrategy(input_parser, output_parser);
