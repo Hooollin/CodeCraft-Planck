@@ -3,13 +3,13 @@
 #include "strategy.h"
 #include "average_strategy.h"
 
-static bool local = true;
+static bool local = false;
 
 int main() {
   Strategy *st;
   if (local) {
     st = new AverageStrategy("../data/config.ini", "../data/demand.csv",
-                             "../data/qos.csv", "../data/site_bandwidth.csv");
+                             "../data/qos.csv", "../data/site_bandwidth.csv", "../output/solution.txt");
   } else {
     st = new AverageStrategy();
   }

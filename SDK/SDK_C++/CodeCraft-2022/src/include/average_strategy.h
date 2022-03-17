@@ -12,7 +12,8 @@ public:
         std::string config = "/data/config.ini",
         std::string demand = "/data/demand.csv",
         std::string qos = "/data/qos.csv",
-        std::string site_bandwidth = "/data/site_bandwidth.csv"): Strategy(config, demand, qos, site_bandwidth) {
+        std::string site_bandwidth = "/data/site_bandwidth.csv",
+        std::string outputfile = "/output/solution.txt"): Strategy(config, demand, qos, site_bandwidth, outputfile) {
         }
     void HandleAllTimes() {
         for(int T = 0; T < GetInputParser()->GetT(); T ++) {

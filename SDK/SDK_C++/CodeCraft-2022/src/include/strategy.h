@@ -12,9 +12,10 @@ public:
     Strategy(std::string config = "/data/config.ini",
             std::string demand = "/data/demand.csv",
             std::string qos = "/data/qos.csv",
-            std::string site_bandwidth = "/data/site_bandwidth.csv") {
+            std::string site_bandwidth = "/data/site_bandwidth.csv",
+            std::string outputfile = "/output/solution.txt") {
                         inputParser = new InputParser(config, demand, qos, site_bandwidth);
-                        outputParser = new OutputParser(inputParser->GetT(), inputParser->GetClientNameList(), inputParser->GetEdgeNameList());
+                        outputParser = new OutputParser(inputParser->GetT(), inputParser->GetClientNameList(), inputParser->GetEdgeNameList(), outputfile);
                     }
     ~Strategy() {
         delete inputParser;
@@ -26,8 +27,11 @@ public:
     OutputParser* GetOutputParser() {return outputParser;}
 
     virtual void HandleAllTimes() = 0;
-    void MakeOutput() {
-        outputParser->MakeOutput();
+    void MakeOutput(bool local = true) {
+        if (local)
+            outputParser->LocalDisplay();
+        else
+            outputParser->MakeOutput();
     }
 private:
     InputParser* inputParser;

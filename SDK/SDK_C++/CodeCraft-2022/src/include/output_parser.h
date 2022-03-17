@@ -1,11 +1,12 @@
 #pragma once
-#include<iostream>
+#include <iostream>
+#include <fstream>
 #include <vector>
 #include <map>
 
 class AllocResourceT {
 public:
-    AllocResourceT(const std::vector<std::string>&, const std::vector<std::string>&);
+    AllocResourceT(const std::vector<std::string>&, const std::vector<std::string>&, const std::string&);
     ~AllocResourceT();
     void Alloc(std::string custom, std::string site, int band) {
         custom_site_band[custom][site] = band;
@@ -14,15 +15,18 @@ public:
         return custom_site_band[custome][site];
     }
     void MakeOutput();
+    void LocalDisplay();
 private:
     std::map<std::string, std::map<std::string, int>> custom_site_band;//每个时刻的分配矩阵，custom_site_band[custom][site], site 分配给custom的带宽
     std::vector<std::string> customnames, sitenames;
+    std::ofstream ofs;
+    std::string filename;
 };
 
 class OutputParser
 {
 public:
-    OutputParser(int T, const std::vector<std::string>&, const std::vector<std::string>&);
+    OutputParser(int T, const std::vector<std::string>&, const std::vector<std::string>&, const std::string&);
     ~OutputParser() {}
     void AllocT(int T, std::string custom, std::string site, int band){
         custom_site_bands[T]->Alloc(custom, site, band);
@@ -31,6 +35,7 @@ public:
         return custom_site_bands[T]->GetBand(custome, site);
     }
     void MakeOutput();
+    void LocalDisplay();
 
 private:
     std::vector<AllocResourceT*> custom_site_bands;
