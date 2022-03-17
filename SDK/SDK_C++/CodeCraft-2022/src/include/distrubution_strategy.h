@@ -16,7 +16,7 @@ class DayDistribution {
   std::unordered_map<std::string, std::unordered_set<std::string> >
       edge_client_node_;  //边缘节点连接的客户端节点
   std::unordered_map<std::string, std::unordered_set<std::string> >
-      client_client_node_;  //客户端端节点连接的边缘节点
+      client_edge_node_;  //客户端端节点连接的边缘节点
   std::unordered_map<std::string, std::unordered_map<std::string, int> >
       distribution_;  //当日分配情况，key1为客户节点，key2为边缘节点
   std::unordered_map<std::string, int> edge_bandwidth_;  //已分配边缘节点流量
