@@ -57,13 +57,9 @@ void AverageStrategy::HandleOneCustome(const std::string& custome, int T) {
     int used_cnt = 0;
     for(auto site: sites) {
         if(client->GetDemand(T) == 0) break;
-        int demand = 0;
-        if (client->GetDemand(T) < site->GetRemain()) {
-            demand = client->GetDemand(T) / (sites.size() - used_cnt);
-        } else {
-            int tmp = client->GetDemand(T) / (sites.size() - used_cnt) + 1;
-            demand = std::min(tmp, site->GetRemain());
-        }
+        int demand = (client->GetDemand(T)) / (sites.size() - used_cnt) + 1;
+        demand = std::min(demand, site->GetRemain());
+        demand = std::min(demand, client->GetDemand(T));
         HandleOneCustomeAndCustom(site, client, T, demand);
         if(site->GetRemain() == 0) site->IncLimitCnt();
         assert (site->GetRemain() >= 0);
