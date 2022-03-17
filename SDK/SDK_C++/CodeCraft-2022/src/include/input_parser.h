@@ -2,19 +2,12 @@
 #include <bits/stdc++.h>
 #include "client_node.h"
 #include "edge_node.h"
-
 class InputParser {
  public:
-  InputParser(std::string config = "/data/config.ini",
-              std::string demand = "/data/demand.csv",
-              std::string qos = "/data/qos.csv",
-              std::string site_bandwidth = "/data/site_bandwidth.csv")
-      : config_(config),
-        demand_(demand),
-        qos_(qos),
-        site_bandwidth_(site_bandwidth) {}
+  InputParser(int model);
 
   InputParser(InputParser &) = delete;
+
   InputParser(InputParser &&) = delete;
 
   std::unordered_map<std::string, EdgeNode *> &GetEdgeNodeMap();
@@ -34,6 +27,14 @@ class InputParser {
 
   void SplitString(std::string &, char, std::vector<std::string> &);
 
+  std::string linux_pre_ = "..";
+  std::string windows_pre_ = "../../..";
+  std::string online_pre_ = "";
+  std::string config_suf_ = "/data/config.ini";
+  std::string demand_suf_ = "/data/demand.csv";
+  std::string qos_suf_ = "/data/qos.csv";
+  std::string site_bandwidth_suf_ = "/data/site_bandwidth.csv";
+
   std::string config_;
   std::string demand_;
   std::string qos_;
@@ -45,5 +46,5 @@ class InputParser {
   std::unordered_map<std::string, EdgeNode *> edgenode_map_;
   std::unordered_map<std::string, ClientNode *> clientnode_map_;
 
-  std::fstream ifs_;
+  std::ifstream ifs_;
 };

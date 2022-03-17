@@ -32,10 +32,28 @@ DayDistribution::DayDistribution(
     for (auto &pp : distribution[name]) {
       std::string edge_name = pp.first;
       int value = pp.second;
-      client_bandwidth_[name] -= value;
+      client_bandwidth_[name] = -value;
     }
     client_bandwidth_[name] += client->GetDemand(day);
   }
+}
+
+SimplyDayDistribution::SimplyDayDistribution(
+    int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
+    std::unordered_map<std::string, ClientNode *> &client_node,
+    std::unordered_map<std::string, std::unordered_map<std::string, int> >
+        &distribution,
+    std::unordered_set<std::string> &avaliable_edge_node)
+    : DayDistribution(day, edge_node, client_node, distribution,
+                      avaliable_edge_node) {
+  client_order_.clear();
+  for (auto &p : client_node) {
+    client_order_.emplace_back(p.first);
+  }
+  sort(client_order_.begin(), client_order_.end(),
+       [&](const std::string a, const std::string b) {
+         return client_client_node_[a].size() < client_client_node_[b].size();
+       });
 }
 
 void SimplyDayDistribution::distribute() {
@@ -47,11 +65,24 @@ void SimplyDayDistribution::distribute() {
       connect_edge.emplace_back(p);
     }
     int n = connect_edge.size();
+
+    //特判单节点情况
+    if(n == 1){
+      std::string edge = connect_edge[0];
+      if (distribution_[client].find(edge) != distribution_[client].end()) {
+        distribution_[client][edge] += client_bandwidth;
+      } else {
+        distribution_[client][edge] = client_bandwidth;
+      }
+      edge_bandwidth_[edge] += client_bandwidth;
+      client_bandwidth_[client] = 0;
+      continue;
+    }
+
     sort(connect_edge.begin(), connect_edge.end(),
          [&](const std::string a, const std::string b) {
            return edge_bandwidth_[a] < edge_bandwidth_[b];
          });
-
     //找寻一个m下标，可以使得流量分配后第1~m个边缘节点的流量分配情况尽可能相等，但流量不超过第m+1个边缘节点
     int max_bandwidth = edge_bandwidth_[connect_edge[n - 1]];
     int all_dif = 0;
@@ -71,12 +102,22 @@ void SimplyDayDistribution::distribute() {
     int less_num = m - (max_bandwidth + (client_bandwidth - all_dif)) % m;
     for (int i = 0; i < less_num; i++) {
       std::string edge = connect_edge[i];
-      distribution_[client][edge] += all_bandwidth - edge_bandwidth_[edge];
+      if (distribution_[client].find(edge) != distribution_[client].end()) {
+        distribution_[client][edge] += all_bandwidth - edge_bandwidth_[edge];
+      } else {
+        distribution_[client][edge] = all_bandwidth - edge_bandwidth_[edge];
+      }
       edge_bandwidth_[edge] = all_bandwidth;
     }
     for (int i = less_num; i < m; i++) {
       std::string edge = connect_edge[i];
-      distribution_[client][edge] += all_bandwidth + 1 - edge_bandwidth_[edge];
+      if (distribution_[client].find(edge) != distribution_[client].end()) {
+        distribution_[client][edge] +=
+            all_bandwidth + 1 - edge_bandwidth_[edge];
+      } else {
+        distribution_[client][edge] = all_bandwidth + 1 - edge_bandwidth_[edge];
+      }
+
       edge_bandwidth_[edge] = all_bandwidth + 1;
     }
 

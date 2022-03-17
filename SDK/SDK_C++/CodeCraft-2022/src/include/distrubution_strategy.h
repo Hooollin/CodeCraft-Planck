@@ -11,6 +11,7 @@ class DayDistribution {
       std::unordered_map<std::string, std::unordered_map<std::string, int> >
           &distribution,
       std::unordered_set<std::string> &avaliable_edge_node);
+
  protected:
   std::unordered_map<std::string, std::unordered_set<std::string> >
       edge_client_node_;  //边缘节点连接的客户端节点
@@ -32,18 +33,7 @@ class SimplyDayDistribution : DayDistribution {
       std::unordered_map<std::string, ClientNode *> &client_node,
       std::unordered_map<std::string, std::unordered_map<std::string, int> >
           &distribution,
-      std::unordered_set<std::string> &avaliable_edge_node)
-      : DayDistribution(day, edge_node, client_node, distribution,
-                        avaliable_edge_node) {
-    client_order_.clear();
-    for (auto &p : client_node) {
-      client_order_.emplace_back(p.first);
-    }
-    sort(client_order_.begin(), client_order_.end(),
-         [&](const std::string a, const std::string b) {
-           return client_client_node_[a].size() < client_client_node_[b].size();
-         });
-  }
+      std::unordered_set<std::string> &avaliable_edge_node);
 
   std::unordered_map<std::string, std::unordered_map<std::string, int> >
   GetDistribution() {

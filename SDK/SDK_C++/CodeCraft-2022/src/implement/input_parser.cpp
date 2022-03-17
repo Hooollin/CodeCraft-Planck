@@ -2,6 +2,21 @@
 #include "client_node.h"
 #include "edge_node.h"
 
+InputParser::InputParser(int model){
+  assert(model >= 1 && model <= 3);
+  if(model == 1){
+    config_ = demand_ = qos_ = site_bandwidth_ = online_pre_;
+  }else if(model == 2){
+    config_ = demand_ = qos_ = site_bandwidth_ = linux_pre_;
+  }else{
+    config_ = demand_ = qos_ = site_bandwidth_ = windows_pre_;
+  }
+  config_ += config_suf_;
+  demand_ += demand_suf_;
+  qos_ += qos_suf_;
+  site_bandwidth_ += site_bandwidth_suf_;
+}
+
 std::unordered_map<std::string, EdgeNode *> &InputParser::GetEdgeNodeMap() {
   return edgenode_map_;
 }

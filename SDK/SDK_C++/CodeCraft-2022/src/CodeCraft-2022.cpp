@@ -3,7 +3,7 @@
 
 int main() {
 
-  Test testExample;
-  testExample.TestInputParser();
+  Test testExample(3);
+  testExample.TestSimplyDayDistribution();
   return 0;
 }

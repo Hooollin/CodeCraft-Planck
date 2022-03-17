@@ -248,6 +248,30 @@ implement/input_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.s
 .PHONY : implement/input_parser.cpp.s
 
+implement/output_parser.obj: implement/output_parser.cpp.obj
+.PHONY : implement/output_parser.obj
+
+# target to build an object file
+implement/output_parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj
+.PHONY : implement/output_parser.cpp.obj
+
+implement/output_parser.i: implement/output_parser.cpp.i
+.PHONY : implement/output_parser.i
+
+# target to preprocess a source file
+implement/output_parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.i
+.PHONY : implement/output_parser.cpp.i
+
+implement/output_parser.s: implement/output_parser.cpp.s
+.PHONY : implement/output_parser.s
+
+# target to generate assembly for a file
+implement/output_parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.s
+.PHONY : implement/output_parser.cpp.s
+
 implement/test.obj: implement/test.cpp.obj
 .PHONY : implement/test.obj
 
@@ -296,6 +320,9 @@ help:
 	@echo ... implement/input_parser.obj
 	@echo ... implement/input_parser.i
 	@echo ... implement/input_parser.s
+	@echo ... implement/output_parser.obj
+	@echo ... implement/output_parser.i
+	@echo ... implement/output_parser.s
 	@echo ... implement/test.obj
 	@echo ... implement/test.i
 	@echo ... implement/test.s

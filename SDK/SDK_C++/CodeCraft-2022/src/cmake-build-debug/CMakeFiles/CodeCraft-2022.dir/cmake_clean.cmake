@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj"
+  "CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj"
 )
 

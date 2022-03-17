@@ -15,6 +15,8 @@ class ClientNode {
 
   int GetDemand(int day) { return demand_[day]; }
 
+  int GetDays() { return demand_.size(); }
+
   void AddAvailableEdgeNode(std::string name) {
     available_edgenode.insert(name);
   }
