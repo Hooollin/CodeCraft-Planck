@@ -19,8 +19,8 @@ class ClientNode {
     available_edgenode.insert(name);
   }
 
-  std::unordered_set<std::string> GetAvailableEdgeNode(){
-      return available_edgenode;
+  std::unordered_set<std::string> GetAvailableEdgeNode() {
+    return available_edgenode;
   };
 
   std::string ToString();

@@ -48,11 +48,27 @@ bits/stdc++.h
 test.h
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/test.h
 
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.cpp
+client_node.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.h
+
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distrubution_strategy.cpp
 distrubution_strategy.h
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distrubution_strategy.h
 bits/stdc++.h
 -
+
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/edge_node.cpp
+edge_node.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/edge_node.h
+
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/input_parser.cpp
+input_parser.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/input_parser.h
+client_node.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.h
+edge_node.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/edge_node.h
 
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp
 test.h
