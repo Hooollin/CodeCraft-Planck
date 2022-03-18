@@ -140,17 +140,17 @@ void Test::TestPreDeal() {
     auto x = p.second->GetAvailableEdgeNode();
     for(auto &pp : x) std::cout<<pp<<",";
   }
-
-  std::unordered_map<std::string, int> max_bandwidth;
+  std::vector<std::unordered_map<std::string,int> > every_day_bandwidth(day);
   std::cout<<"========================everyday_status==================="<<std::endl;
   for (int i = 0; i < day; i++) {
+    std::cout << "day:" << i << std::endl;
+    std::unordered_map<std::string, int> edge_bandwidth;
+    auto p = pre_distribution[i];
     SimplyDayDistribution dayDistribution(
         i, edge_hash, client_hash, pre_distribution[i], available_edge_node[i]);
     dayDistribution.distribute();
-    auto p = dayDistribution.GetDistribution();
+    p = dayDistribution.GetDistribution();
     out_parser->SetOutput(i, p);
-    std::cout << "day:" << i << std::endl;
-    std::unordered_map<std::string, int> edge_bandwidth;
     for (auto &pp : p) {
       std::cout << "client<" << pp.first << ","
                 << client_hash[pp.first]->GetDemand(i) << ">:";
@@ -169,20 +169,27 @@ void Test::TestPreDeal() {
       std::string edge = p.first;
       int bandwidths = p.second;
       assert(bandwidths <= edge_hash[edge]->GetBandwidth());
-      max_bandwidth[edge] = std::max(max_bandwidth[edge], bandwidths);
+    }
+    for(auto p : edge_bandwidth){
+      std::string name = p.first;
+      int val = p.second;
+      every_day_bandwidth[i][name] = val;
     }
   }
-  std::cout<<"========================final_test==================="<<std::endl;
+  std::cout<<"========================final_cost==================="<<std::endl;
   int ans = 0;
-  for (auto p : max_bandwidth) {
-    std::string edge = p.first;
-    int mv = p.second;
-    std::cout << "<" << edge << "," << mv << ">";
-    ans += mv;
+  int percent_95 = (0.95 * day) - (int) (0.95 * day) > 1e-6? (0.95 * day + 1) : (0.95 * day);
+  for(auto p : edge_hash){
+    std::string  name = p.first;
+    std::vector<int> bandwidth;
+    for(int i=0;i<day;i++) bandwidth.emplace_back(every_day_bandwidth[i][name]);
+    sort(bandwidth.begin(),bandwidth.end());
+    int cost = bandwidth[percent_95 - 1];
+    std::cout<<"<"<<name<<","<<cost<<">";
+    ans += cost;
   }
+  std::cout<<std::endl;
   std::cout << "total:" << ans << std::endl;
-
-  std::cout << client_hash.begin()->second->GetQos() << std::endl;
 
   out_parser->StandradOutput();
 }
