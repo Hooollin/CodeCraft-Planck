@@ -10,8 +10,8 @@
 #include <vector>
 class Strategy {
  public:
-  Strategy(InputParser *input_parser, OutputParser *output_parser)
-      : input_parser_(input_parser), output_parser_(output_parser) {}
+  Strategy(InputParser *input_parser, OutputParser *output_parser, Advisor* advisor)
+      : input_parser_(input_parser), output_parser_(output_parser), advisor_(advisor) {}
 
   virtual void HandleAllTimes() = 0;
 
