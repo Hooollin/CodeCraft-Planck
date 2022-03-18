@@ -3,14 +3,14 @@
 
 int main() {
   Test test_example(3);
-  test_example.TestSimplyDayDistribution();
+  test_example.TestPreDeal();
 
 //  InputParser *parser;
-//  parser = new InputParser(3);
+//  parser = new InputParser(1);
 //  parser->Parse();
 //
 //  OutputParser *out_parser;
-//  out_parser = new OutputParser(3);
+//  out_parser = new OutputParser(1);
 //
 //  auto client_hash = parser->GetClientNodeMap();
 //  auto edge_hash = parser->GetEdgeNodeMap();

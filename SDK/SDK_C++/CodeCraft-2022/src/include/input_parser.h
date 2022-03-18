@@ -1,7 +1,11 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <fstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 #include "client_node.h"
 #include "edge_node.h"
+
 class InputParser {
  public:
   InputParser(int model);

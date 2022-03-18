@@ -7,6 +7,7 @@ CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj: \
  ../include/edge_node.h \
  ../include/input_parser.h \
  ../include/output_parser.h \
+ ../include/pre_deal.h \
  ../include/test.h \
  ../CodeCraft-2022.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.obj: \
@@ -28,11 +29,17 @@ CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj: \
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj: \
  ../include/output_parser.h \
  ../implement/output_parser.cpp
+CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.obj: \
+ ../include/client_node.h \
+ ../include/edge_node.h \
+ ../include/pre_deal.h \
+ ../implement/pre_deal.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: \
  ../include/client_node.h \
  ../include/distrubution_strategy.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
  ../include/output_parser.h \
+ ../include/pre_deal.h \
  ../include/test.h \
  ../implement/test.cpp

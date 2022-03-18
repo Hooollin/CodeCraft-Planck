@@ -38,10 +38,11 @@ void OutputParser::SetOutput(int day, std::string client, std::string edge,
 
 void OutputParser::StandradOutput() {
   ofs_.clear();
-  ofs_.open(solution_, std::ios::out);
+  ofs_.open(solution_, std::ios::out | std::ios::app);
   assert(ofs_.is_open());
-  for(auto &day_distribution : output_data_){
-    for(auto &client : client_list_){
+  for(int i=0;i<output_data_.size();i++){
+    auto day_distribution = output_data_[i];
+    for(auto client : client_list_){
       ofs_<<client<<":";
       bool flag = false;
       for(auto &distribution : day_distribution[client]){

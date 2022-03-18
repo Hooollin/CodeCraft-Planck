@@ -7,11 +7,25 @@
 #IncludeRegexTransform: 
 
 ../include/client_node.h
-bits/stdc++.h
+string
+-
+unordered_map
+-
+unordered_set
+-
+vector
+-
+iostream
+-
+sstream
 -
 
 ../include/distrubution_strategy.h
-bits/stdc++.h
+string
+-
+unordered_map
+-
+unordered_set
 -
 client_node.h
 ../include/client_node.h
@@ -19,11 +33,31 @@ edge_node.h
 ../include/edge_node.h
 
 ../include/edge_node.h
-bits/stdc++.h
+cassert
+-
+map
+-
+string
+-
+unordered_map
+-
+unordered_set
+-
+vector
+-
+iostream
+-
+sstream
 -
 
 ../include/input_parser.h
-bits/stdc++.h
+fstream
+-
+string
+-
+unordered_map
+-
+vector
 -
 client_node.h
 ../include/client_node.h
@@ -48,8 +82,16 @@ iostream
 set
 -
 
+../include/pre_deal.h
+algorithm
+-
+client_node.h
+../include/client_node.h
+edge_node.h
+../include/edge_node.h
+
 ../include/test.h
-bits/stdc++.h
+map
 -
 client_node.h
 ../include/client_node.h
@@ -61,12 +103,10 @@ input_parser.h
 ../include/input_parser.h
 output_parser.h
 ../include/output_parser.h
+pre_deal.h
+../include/pre_deal.h
 
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp
 test.h
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.h
-bits/stdc++.h
--
-cassert
--
 

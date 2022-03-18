@@ -1,6 +1,4 @@
 #include "test.h"
-#include <bits/stdc++.h>
-#include <cassert>
 
 void Test::TestInputParser() {
   InputParser *parser;
@@ -24,10 +22,14 @@ void Test::TestSimplyDayDistribution() {
   parser = new InputParser(model_);
   parser->Parse();
 
+  OutputParser *out_parser;
+  out_parser = new OutputParser(model_);
+
   auto client_hash = parser->GetClientNodeMap();
   auto edge_hash = parser->GetEdgeNodeMap();
   int day = client_hash.begin()->second->GetDays();
 
+  out_parser->SetAllDay(day);
   std::unordered_map<std::string, std::unordered_map<std::string, int> >
       empty_distribution;
   std::unordered_set<std::string> availale_edge;
@@ -36,12 +38,18 @@ void Test::TestSimplyDayDistribution() {
   for (auto &p : edge_hash) {
     availale_edge.insert(p.first);
   }
-  std::unordered_map<std::string,int> max_bandwidth;
+
+  for (auto &p : client_hash) {
+    out_parser->AddClient(p.first);
+  }
+
+  std::unordered_map<std::string, int> max_bandwidth;
   for (int i = 0; i < day; i++) {
     SimplyDayDistribution dayDistribution(i, edge_hash, client_hash,
                                           empty_distribution, availale_edge);
     dayDistribution.distribute();
     auto p = dayDistribution.GetDistribution();
+    out_parser->SetOutput(i, p);
     std::cout << "day:" << i << std::endl;
     std::unordered_map<std::string, int> edge_bandwidth;
     for (auto &pp : p) {
@@ -62,17 +70,93 @@ void Test::TestSimplyDayDistribution() {
       std::string edge = p.first;
       int bandwidths = p.second;
       assert(bandwidths <= edge_hash[edge]->GetBandwidth());
-      max_bandwidth[edge] = std::max(max_bandwidth[edge],bandwidths);
+      max_bandwidth[edge] = std::max(max_bandwidth[edge], bandwidths);
     }
   }
   int ans = 0;
-  for(auto p : max_bandwidth){
+  for (auto p : max_bandwidth) {
     std::string edge = p.first;
     int mv = p.second;
-    std::cout<<"<"<<edge<<","<<mv<<">";
+    std::cout << "<" << edge << "," << mv << ">";
     ans += mv;
   }
-  std::cout<<"total:"<<ans<<std::endl;
+  std::cout << "total:" << ans << std::endl;
 
-  std::cout<<client_hash.begin()->second->GetQos()<<std::endl;
+  std::cout << client_hash.begin()->second->GetQos() << std::endl;
+
+  out_parser->StandradOutput();
+}
+
+void Test::TestPreDeal() {
+  InputParser *parser;
+  parser = new InputParser(model_);
+  parser->Parse();
+
+  OutputParser *out_parser;
+  out_parser = new OutputParser(model_);
+
+  auto client_hash = parser->GetClientNodeMap();
+  auto edge_hash = parser->GetEdgeNodeMap();
+  int day = client_hash.begin()->second->GetDays();
+
+  for (auto &p : client_hash) {
+    out_parser->AddClient(p.first);
+  }
+
+  out_parser->SetAllDay(day);
+
+  PreDistribution pre_deal(edge_hash, client_hash);
+
+  pre_deal.Distribute();
+
+  std::vector<
+      std::unordered_map<std::string, std::unordered_map<std::string, int> > >
+      pre_distribution = pre_deal.GetDistribution();
+
+  std::vector<std::unordered_set<std::string> >
+      available_edge_node = pre_deal.GetAvailableEdgeNode();
+
+  std::unordered_map<std::string, int> max_bandwidth;
+  for (int i = 0; i < day; i++) {
+    SimplyDayDistribution dayDistribution(i, edge_hash, client_hash,
+                                          pre_distribution[i], available_edge_node[i]);
+    dayDistribution.distribute();
+    auto p = dayDistribution.GetDistribution();
+    out_parser->SetOutput(i, p);
+    std::cout << "day:" << i << std::endl;
+    std::unordered_map<std::string, int> edge_bandwidth;
+    for (auto &pp : p) {
+      std::cout << "client<" << pp.first << ","
+                << client_hash[pp.first]->GetDemand(i) << ">:";
+      int count = 0;
+      for (auto &ppp : pp.second) {
+        std::cout << "<" << ppp.first << "," << ppp.second << ">,";
+        assert(ppp.second != 0);
+        edge_bandwidth[ppp.first] += ppp.second;
+        count += ppp.second;
+      }
+      std::cout << count;
+      assert(count == client_hash[pp.first]->GetDemand(i));
+      std::cout << std::endl;
+    }
+    for (auto p : edge_bandwidth) {
+      std::string edge = p.first;
+      int bandwidths = p.second;
+      assert(bandwidths <= edge_hash[edge]->GetBandwidth());
+      max_bandwidth[edge] = std::max(max_bandwidth[edge], bandwidths);
+    }
+  }
+  int ans = 0;
+  for (auto p : max_bandwidth) {
+    std::string edge = p.first;
+    int mv = p.second;
+    std::cout << "<" << edge << "," << mv << ">";
+    ans += mv;
+  }
+  std::cout << "total:" << ans << std::endl;
+
+  std::cout << client_hash.begin()->second->GetQos() << std::endl;
+
+  out_parser->StandradOutput();
+
 }

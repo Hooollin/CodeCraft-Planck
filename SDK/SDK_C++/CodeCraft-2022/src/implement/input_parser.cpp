@@ -101,7 +101,7 @@ void InputParser::ParseQosFile() {
       assert(clientnode_map_.find(clientnode_name) != clientnode_map_.end());
       ClientNode *clientnode = clientnode_map_[clientnode_name];
       int current_qos = stoi(splitted_normal_line[i]);
-      if (current_qos <= clientnode->GetQos()) {
+      if (current_qos < clientnode->GetQos()) {
         clientnode->AddAvailableEdgeNode(edgenode->GetName());
         edgenode->AddServingClientNode(clientnode->GetName());
       }

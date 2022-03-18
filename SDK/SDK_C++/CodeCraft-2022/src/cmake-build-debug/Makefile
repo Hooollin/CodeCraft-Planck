@@ -272,6 +272,30 @@ implement/output_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.s
 .PHONY : implement/output_parser.cpp.s
 
+implement/pre_deal.obj: implement/pre_deal.cpp.obj
+.PHONY : implement/pre_deal.obj
+
+# target to build an object file
+implement/pre_deal.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.obj
+.PHONY : implement/pre_deal.cpp.obj
+
+implement/pre_deal.i: implement/pre_deal.cpp.i
+.PHONY : implement/pre_deal.i
+
+# target to preprocess a source file
+implement/pre_deal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.i
+.PHONY : implement/pre_deal.cpp.i
+
+implement/pre_deal.s: implement/pre_deal.cpp.s
+.PHONY : implement/pre_deal.s
+
+# target to generate assembly for a file
+implement/pre_deal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.s
+.PHONY : implement/pre_deal.cpp.s
+
 implement/test.obj: implement/test.cpp.obj
 .PHONY : implement/test.obj
 
@@ -323,6 +347,9 @@ help:
 	@echo ... implement/output_parser.obj
 	@echo ... implement/output_parser.i
 	@echo ... implement/output_parser.s
+	@echo ... implement/pre_deal.obj
+	@echo ... implement/pre_deal.i
+	@echo ... implement/pre_deal.s
 	@echo ... implement/test.obj
 	@echo ... implement/test.i
 	@echo ... implement/test.s
