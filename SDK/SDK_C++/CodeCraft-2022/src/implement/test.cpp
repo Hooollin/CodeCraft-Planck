@@ -120,6 +120,7 @@ void Test::TestPreDeal() {
   std::vector<two_string_key_int> pre_distribution = pre_deal.GetDistribution();
   std::vector<std::unordered_set<std::string> > available_edge_node =
       pre_deal.GetAvailableEdgeNode();
+  std::cout<<"========================pre_deal==================="<<std::endl;
   for(int i=0;i<day;i++){
     std::cout<<"day"<<i<<":"<<std::endl;
     OutputTwoStringKeyInt(pre_distribution[i]);
@@ -133,7 +134,7 @@ void Test::TestPreDeal() {
     }
     std::cout<<std::endl;
   }
-
+  std::cout<<"========================client_edge==================="<<std::endl;
   for(auto &p :  client_hash){
     std::cout<<p.first<<":";
     auto x = p.second->GetAvailableEdgeNode();
@@ -141,6 +142,7 @@ void Test::TestPreDeal() {
   }
 
   std::unordered_map<std::string, int> max_bandwidth;
+  std::cout<<"========================everyday_status==================="<<std::endl;
   for (int i = 0; i < day; i++) {
     SimplyDayDistribution dayDistribution(
         i, edge_hash, client_hash, pre_distribution[i], available_edge_node[i]);
@@ -170,6 +172,7 @@ void Test::TestPreDeal() {
       max_bandwidth[edge] = std::max(max_bandwidth[edge], bandwidths);
     }
   }
+  std::cout<<"========================final_test==================="<<std::endl;
   int ans = 0;
   for (auto p : max_bandwidth) {
     std::string edge = p.first;
