@@ -46,11 +46,19 @@ int main() {
   for(int i = 0; i < input_parser->GetT(); ++i){
     std::cout << "day: " << i << std::endl;
     for(auto edgenode : edges){
-      std::cout << edgenode->GetName() << ": " << std::endl;
+      std::vector<std::string> o;
+      o.push_back("  " + edgenode->GetName() + ": \n");
+      //std::cout << edgenode->GetName() << ": " << std::endl;
       for(auto clientnode : clients){
         int val = advisor->Predict(i, edgenode->GetName(), clientnode->GetName());
         if(val > 0){
-          std::cout << "----"<< "->" << clientnode->GetName() << ": " << val << std::endl;
+          o.push_back("    -->" + clientnode->GetName() + ": " + std::to_string(val) + "\n");
+          //std::cout << << "->" << clientnode->GetName() << ": " << val << std::endl;
+        }
+      }
+      if(o.size() > 1){
+        for(auto &str : o){
+          std::cout << str;
         }
       }
     }
