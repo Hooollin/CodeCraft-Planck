@@ -16,6 +16,8 @@ public:
     }
     void MakeOutput(bool tail);
     void LocalDisplay();
+    std::vector<std::string> GetCustomNames() {return customnames;}
+    std::vector<std::string> GetSiteNames() {return sitenames;}
 private:
     std::map<std::string, std::map<std::string, int>> custom_site_band;//每个时刻的分配矩阵，custom_site_band[custom][site], site 分配给custom的带宽
     std::vector<std::string> customnames, sitenames;
@@ -39,5 +41,6 @@ public:
 
 private:
     std::vector<AllocResourceT*> custom_site_bands;
+    void CalCost();
 };
 

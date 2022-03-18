@@ -6,7 +6,7 @@ std::vector<std::string> AverageStrategy::GetCustomRank() {
     
     auto cmp = [&](std::string& cust1, std::string& cust2) {
         auto& clientmap =  GetInputParser()->GetClientNodeMap();
-        return clientmap[cust1]->GetAvailableEdgeNodeCount() > clientmap[cust2]->GetAvailableEdgeNodeCount();
+        return clientmap[cust1]->GetAvailableEdgeNodeCount() < clientmap[cust2]->GetAvailableEdgeNodeCount();
     };
     std::sort(customnames.begin(), customnames.end(), cmp);
     return customnames;
@@ -49,19 +49,19 @@ void AverageStrategy::HandleOneCustome(const std::string& custome, int T) {
     std::vector<EdgeNode*> sites = client->GetEdgeNodeList();
     auto cmp = [&](EdgeNode* site1, EdgeNode* site2) {
         if(site1->GetRemain() == site2->GetRemain())
-            return site1->GetLimitCnt() < site2->GetLimitCnt();    
-        return site1->GetRemain() > site2->GetRemain();
-        
+            return site1->GetLimitCnt() < site2->GetLimitCnt();        
+        return site1->GetRemain() > site2->GetRemain();    
     };
     sort(sites.begin(), sites.end(), cmp);
     int used_cnt = 0;
     for(auto site: sites) {
         if(client->GetDemand(T) == 0) break;
-        int demand = (client->GetDemand(T)) / (sites.size() - used_cnt) + 1;
-        demand = std::min(demand, site->GetRemain());
-        demand = std::min(demand, client->GetDemand(T));
+        int demand = client->GetDemand(T);
+        demand = std::min(site->GetRemain(), demand);
+        if(site->GetLimitCnt() >= GetInputParser()->GetT() * 0.05) {
+            demand = (demand + sites.size() - used_cnt - 1) / (sites.size() - used_cnt);
+        }
         HandleOneCustomeAndCustom(site, client, T, demand);
-        if(site->GetRemain() == 0) site->IncLimitCnt();
         assert (site->GetRemain() >= 0);
         used_cnt += 1;
     }
@@ -73,5 +73,9 @@ void AverageStrategy::HandleOneTimes(int T) {
     auto customes = GetCustomRank();
     for(int i = 0; i < customes.size(); i ++) {
         HandleOneCustome(customes[i], T);
+        for(auto site: GetInputParser()->GetEdgeNameList()) {
+            EdgeNode* edge = GetInputParser()->GetEdgeNodeMap()[site];
+            if(edge->GetRemain() == 0) edge->IncLimitCnt();
+        }    
     }
 }
