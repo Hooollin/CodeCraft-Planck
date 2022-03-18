@@ -14,7 +14,7 @@ typedef std::unordered_map<std::string, std::unordered_set<std::string> >
 
 class OutputParser {
  public:
-  OutputParser(int model);
+  OutputParser(int model,int day);
 
   void SetClientList(std::unordered_set<std::string> client_list) {
     client_list_ = client_list;

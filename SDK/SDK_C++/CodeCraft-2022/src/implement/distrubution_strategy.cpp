@@ -1,5 +1,5 @@
+
 #include "distrubution_strategy.h"
-#include <bits/stdc++.h>
 
 DayDistribution::DayDistribution(
     int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
@@ -53,7 +53,7 @@ SimplyDayDistribution::SimplyDayDistribution(
   for (auto &p : client_node) {
     client_order_.emplace_back(p.first);
   }
-  sort(client_order_.begin(), client_order_.end(),
+  std::sort(client_order_.begin(), client_order_.end(),
        [&](const std::string a, const std::string b) {
          return client_edge_node_[a].size() < client_edge_node_[b].size();
        });
@@ -98,30 +98,30 @@ void SimplyDayDistribution::distribute() {
     int less_num = m - (client_bandwidth - all_dif) % m;
     for (int i = 0; i < less_num; i++) {
       std::string edge = connect_edge[i];
-      if (all_bandwidth < edge_up_[edge]) {
+      if (all_bandwidth <= edge_up_[edge]) {
         distribution_[client][edge] += all_bandwidth - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = all_bandwidth;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       } else {
         distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge] - 1;
-        edge_bandwidth_[edge] = edge_up_[edge] - 1;
-        leave_bandwidth += all_bandwidth - edge_up_[edge] + 1;
+            edge_up_[edge] - edge_bandwidth_[edge];
+        edge_bandwidth_[edge] = edge_up_[edge];
+        leave_bandwidth += all_bandwidth - edge_up_[edge];
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       }
     }
     for (int i = less_num; i < m; i++) {
       std::string edge = connect_edge[i];
-      if (all_bandwidth + 1 < edge_up_[edge]) {
+      if (all_bandwidth + 1 <= edge_up_[edge]) {
         distribution_[client][edge] +=
             all_bandwidth + 1 - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = all_bandwidth + 1;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       } else {
         distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge] - 1;
-        edge_bandwidth_[edge] = edge_up_[edge] - 1;
-        leave_bandwidth += all_bandwidth - edge_up_[edge] + 2;
+            edge_up_[edge] - edge_bandwidth_[edge];
+        edge_bandwidth_[edge] = edge_up_[edge];
+        leave_bandwidth += all_bandwidth - edge_up_[edge] + 1;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       }
     }
@@ -132,7 +132,8 @@ void SimplyDayDistribution::distribute() {
          });
     for (int i = 0; i < n; i++) {
       std::string edge = connect_edge[i];
-      if (edge_up_[edge] - edge_bandwidth_[edge] - 1 >= leave_bandwidth) {
+      if(leave_bandwidth == 0) break;
+      if (edge_up_[edge] - edge_bandwidth_[edge] >= leave_bandwidth) {
         edge_bandwidth_[edge] += leave_bandwidth;
         distribution_[client][edge] += leave_bandwidth;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
@@ -140,12 +141,48 @@ void SimplyDayDistribution::distribute() {
         break;
       } else {
         distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge] - 1;
-        leave_bandwidth -= edge_up_[edge] - edge_bandwidth_[edge] - 1;
-        edge_bandwidth_[edge] = edge_up_[edge] - 1;
+            edge_up_[edge] - edge_bandwidth_[edge];
+        leave_bandwidth -= edge_up_[edge] - edge_bandwidth_[edge];
+        edge_bandwidth_[edge] = edge_up_[edge];
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       }
     }
     client_bandwidth_[client] = 0;
+  }
+}
+void SimplyDayDistribution::distributeeazy() {
+  for (std::string client : client_order_) {
+    if (client_bandwidth_[client] == 0) continue;
+    //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
+    std::vector<std::string> connect_edge;
+    int client_bandwidth = client_bandwidth_[client];
+    for (auto &p : client_edge_node_[client]) {
+      connect_edge.emplace_back(p);
+    }
+    int n = connect_edge.size();
+    sort(connect_edge.begin(), connect_edge.end(),
+         [&](const std::string a, const std::string b) {
+           return edge_bandwidth_[a] < edge_bandwidth_[b];
+         });
+
+    //尽力而为分配
+    int leave_bandwidth = client_bandwidth;
+    for (std::string &edge : connect_edge) {
+      if (leave_bandwidth == 0) break;
+      if (edge_up_[edge] - edge_bandwidth_[edge] >= leave_bandwidth) {
+        edge_bandwidth_[edge] += leave_bandwidth;
+        distribution_[client][edge] += leave_bandwidth;
+        if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
+        leave_bandwidth = 0;
+        break;
+      } else {
+        distribution_[client][edge] +=
+            edge_up_[edge] - edge_bandwidth_[edge];
+        leave_bandwidth -= edge_up_[edge] - edge_bandwidth_[edge];
+        edge_bandwidth_[edge] = edge_up_[edge];
+        if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
+      }
+    }
+    leave_bandwidth = 0;
   }
 }

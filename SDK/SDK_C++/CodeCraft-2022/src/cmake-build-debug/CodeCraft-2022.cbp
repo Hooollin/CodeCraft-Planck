@@ -90,6 +90,9 @@
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.cpp">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distributor.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distrubution_strategy.cpp">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
@@ -106,9 +109,6 @@
 			<Option target="CodeCraft-2022"/>
 		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp">
-			<Option target="CodeCraft-2022"/>
-		</Unit>
-		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/include/pre_deal.h">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CMakeLists.txt">

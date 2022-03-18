@@ -1,3 +1,4 @@
+
 #include "edge_node.h"
 #include <sstream>
 

@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "../bin/libCodeCraft-2022.dll.a"
   "CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.obj"
+  "CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj"

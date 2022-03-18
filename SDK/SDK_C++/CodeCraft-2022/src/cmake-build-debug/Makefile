@@ -176,6 +176,30 @@ implement/client_node.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.s
 .PHONY : implement/client_node.cpp.s
 
+implement/distributor.obj: implement/distributor.cpp.obj
+.PHONY : implement/distributor.obj
+
+# target to build an object file
+implement/distributor.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj
+.PHONY : implement/distributor.cpp.obj
+
+implement/distributor.i: implement/distributor.cpp.i
+.PHONY : implement/distributor.i
+
+# target to preprocess a source file
+implement/distributor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.i
+.PHONY : implement/distributor.cpp.i
+
+implement/distributor.s: implement/distributor.cpp.s
+.PHONY : implement/distributor.s
+
+# target to generate assembly for a file
+implement/distributor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.s
+.PHONY : implement/distributor.cpp.s
+
 implement/distrubution_strategy.obj: implement/distrubution_strategy.cpp.obj
 .PHONY : implement/distrubution_strategy.obj
 
@@ -335,6 +359,9 @@ help:
 	@echo ... implement/client_node.obj
 	@echo ... implement/client_node.i
 	@echo ... implement/client_node.s
+	@echo ... implement/distributor.obj
+	@echo ... implement/distributor.i
+	@echo ... implement/distributor.s
 	@echo ... implement/distrubution_strategy.obj
 	@echo ... implement/distrubution_strategy.i
 	@echo ... implement/distrubution_strategy.s

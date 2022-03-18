@@ -3,6 +3,7 @@
 
 CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj: \
  ../include/client_node.h \
+ ../include/distributor.h \
  ../include/distrubution_strategy.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
@@ -13,6 +14,15 @@ CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj: \
 CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.obj: \
  ../include/client_node.h \
  ../implement/client_node.cpp
+CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj: \
+ ../include/client_node.h \
+ ../include/distributor.h \
+ ../include/distrubution_strategy.h \
+ ../include/edge_node.h \
+ ../include/input_parser.h \
+ ../include/output_parser.h \
+ ../include/pre_deal.h \
+ ../implement/distributor.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj: \
  ../include/client_node.h \
  ../include/distrubution_strategy.h \

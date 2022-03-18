@@ -1,6 +1,7 @@
+
 #include "output_parser.h"
 
-OutputParser::OutputParser(int model) {
+OutputParser::OutputParser(int model,int day) {
   assert(model >= 1 && model <= 3);
   if (model == 1) {
     solution_ = online_pre_ + solution_suf_;
@@ -10,6 +11,9 @@ OutputParser::OutputParser(int model) {
     solution_ = windows_pre_ + solution_suf_;
   }
   client_list_.clear();
+  day_ = day;
+  output_data_.clear();
+  output_data_.resize(day);
 }
 
 void OutputParser::SetAllDay(int day) {

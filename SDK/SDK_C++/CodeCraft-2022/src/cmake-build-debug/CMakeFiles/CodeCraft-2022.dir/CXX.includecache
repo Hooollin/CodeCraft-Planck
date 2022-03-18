@@ -20,12 +20,24 @@ unordered_set
 vector
 -
 
+../include/distributor.h
+distrubution_strategy.h
+../include/distrubution_strategy.h
+input_parser.h
+../include/input_parser.h
+output_parser.h
+../include/output_parser.h
+pre_deal.h
+../include/pre_deal.h
+
 ../include/distrubution_strategy.h
 string
 -
 unordered_map
 -
 unordered_set
+-
+algorithm
 -
 client_node.h
 ../include/client_node.h
@@ -93,6 +105,8 @@ cassert
 -
 cmath
 -
+math.h
+-
 
 ../include/test.h
 map
@@ -110,7 +124,9 @@ output_parser.h
 pre_deal.h
 ../include/pre_deal.h
 
-F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CodeCraft-2022.cpp
 test.h
-F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/test.h
+distributor.h
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/distributor.h
 

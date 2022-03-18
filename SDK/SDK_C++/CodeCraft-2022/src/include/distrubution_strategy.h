@@ -1,6 +1,8 @@
+#pragma once
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 #include "client_node.h"
 #include "edge_node.h"
 
@@ -35,7 +37,7 @@ class SimplyDayDistribution : DayDistribution {
   two_string_key_int GetDistribution() { return distribution_; }
 
   void distribute();
-
+  void distributeeazy();
  private:
   std::vector<std::string>
       client_order_;  //按照连接边缘节点数量进行的客户机排序
