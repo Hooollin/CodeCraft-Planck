@@ -3,6 +3,8 @@
 #include "edge_node.h"
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <unordered_map>
 
 struct LoadingNode{
   long long loading;
@@ -24,17 +26,21 @@ class Advisor{
     void MakeOverallSuggestion();
 
     int Predict(int day, std::string edge_name, std::string client_name);
-    
+  
+  private:
+    void Optimal();
+    void FastOptimal();
 
   private:
     int T_;
     std::vector<ClientNode*> clientnodes_;
     std::vector<EdgeNode*> edgenodes_;
 
-    std::map<std::string, std::map<int, int>> client_day_specified_demand_;
-    std::map<std::string, int> max_loading_change_;
-    std::map<std::string, std::map<int, std::vector<LoadingNode*>>> client_to_day_specified_loading_node_;
+    int total_chance_;
+    std::map<std::string, std::unordered_map<int, int>> client_day_specified_demand_;
+    std::unordered_map<std::string, int> max_loading_change_;
+    std::map<std::string, std::unordered_map<int, std::vector<LoadingNode*>>> client_to_day_specified_loading_node_;
     std::vector<LoadingNode*> max_loadings_;
 
-    std::map<int, std::map<std::string, std::map<std::string, int>>> hint_;
+    std::map<int, std::map<std::string, std::unordered_map<std::string, int>>> hint_;
 };
