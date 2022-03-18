@@ -18,13 +18,12 @@ void Advisor::Init(){
 }
 
 void Advisor::MakeOverallSuggestion(){
-  // max_loadings_最后一个是需要处理的
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
-    return a->loading > b->loading;
+    return a->loading < b->loading;
   };
-  while(!max_loadings_.empty()){
-    std::make_heap(max_loadings_.begin(), max_loadings_.end(), heap_comparator);
-    LoadingNode *to_handle = max_loadings_.back();
+  for(int i = 0; i < max_loadings_.size(); ++i){
+    std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
+    LoadingNode *to_handle = max_loadings_[i];
     int curr_day = to_handle->which_day;
     EdgeNode *curr_edge = to_handle->which_edge;
     std::string edge_name = curr_edge->GetName();
@@ -53,7 +52,6 @@ void Advisor::MakeOverallSuggestion(){
       assert(remain >= 0);
       --max_loading_change_[edge_name];
     }
-    max_loadings_.pop_back();
   }
 }
 
