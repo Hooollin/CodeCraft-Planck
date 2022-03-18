@@ -13,9 +13,10 @@ class AverageStrategy : public Strategy {
   void Init() {}
 
   void HandleAllTimes() {
-    AdvisorProcess();
+    
     for (int T = 0; T < GetInputParser()->GetT(); T++) {
       GetInputParser()->ResetEdgeNode();
+      AdvisorProcess(T);
       HandleOneTimes(T);
     }
   }
@@ -38,7 +39,7 @@ class AverageStrategy : public Strategy {
   //得到用户的处理顺序
   std::vector<std::string> GetCustomRank();
 
-  void AdvisorProcess();//先处理预先分配的节点
+  void AdvisorProcess(int T);//先处理T时刻预先分配的节点
 
   void HandleOneCustome(const std::string &custome, int T);
 

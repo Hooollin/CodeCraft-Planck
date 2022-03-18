@@ -42,31 +42,31 @@ int main() {
   advisor->Init();
   advisor->MakeOverallSuggestion();
 
-  // 下面循环是测试用
-  for(int i = 0; i < input_parser->GetT(); ++i){
-    std::cout << "day: " << i << std::endl;
-    for(auto edgenode : edges){
-      std::vector<std::string> o;
-      o.push_back("  " + edgenode->GetName() + ": \n");
-      //std::cout << edgenode->GetName() << ": " << std::endl;
-      for(auto clientnode : clients){
-        int val = advisor->Predict(i, edgenode->GetName(), clientnode->GetName());
-        if(val > 0){
-          o.push_back("    -->" + clientnode->GetName() + ": " + std::to_string(val) + "\n");
-          //std::cout << << "->" << clientnode->GetName() << ": " << val << std::endl;
-        }
-      }
-      if(o.size() > 1){
-        for(auto &str : o){
-          std::cout << str;
-        }
-      }
-    }
-  }
+  // // 下面循环是测试用
+  // for(int i = 0; i < input_parser->GetT(); ++i){
+  //   std::cout << "day: " << i << std::endl;
+  //   for(auto edgenode : edges){
+  //     std::vector<std::string> o;
+  //     o.push_back("  " + edgenode->GetName() + ": \n");
+  //     //std::cout << edgenode->GetName() << ": " << std::endl;
+  //     for(auto clientnode : clients){
+  //       int val = advisor->Predict(i, edgenode->GetName(), clientnode->GetName());
+  //       if(val > 0){
+  //         o.push_back("    -->" + clientnode->GetName() + ": " + std::to_string(val) + "\n");
+  //         //std::cout << << "->" << clientnode->GetName() << ": " << val << std::endl;
+  //       }
+  //     }
+  //     if(o.size() > 1){
+  //       for(auto &str : o){
+  //         std::cout << str;
+  //       }
+  //     }
+  //   }
+  // }
 
   st = new AverageStrategy(input_parser, output_parser);
   st->HandleAllTimes();
-  st->MakeOutput();
+  st->MakeOutput(1);
   // st->CheckResult();
   return 0;
 }

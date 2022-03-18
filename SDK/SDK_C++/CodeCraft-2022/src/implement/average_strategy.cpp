@@ -13,17 +13,18 @@ std::vector<std::string> AverageStrategy::GetCustomRank() {
   return customnames;
 }
 
-void AverageStrategy::AdvisorProcess() {
+void AverageStrategy::AdvisorProcess(int T) {
   auto customnames = GetInputParser()->GetClientNameList();
   auto sitenames = GetInputParser()->GetEdgeNameList();
-  for (int T = 0; T < GetInputParser()->GetT(); T ++) {
-    for (const std::string& cust: customnames) {
-      for (const std::string& site: sitenames) {
-        int prealloc = GetAdvisor()->Predict(T, site, cust);
-        GetOutputParser()->AllocT(T, cust, site, prealloc);
-      }
+  for (const std::string& cust: customnames) {
+    for (const std::string& site: sitenames) {
+      int prealloc = GetAdvisor()->Predict(T, site, cust);
+      GetOutputParser()->AllocT(T, cust, site, prealloc);
+      GetInputParser()->GetClientNodeMap()[cust]->DecDemand(prealloc, T);
+      GetInputParser()->GetEdgeNodeMap()[site]->DecRemain(prealloc);
     }
   }
+  
 }
 
 
