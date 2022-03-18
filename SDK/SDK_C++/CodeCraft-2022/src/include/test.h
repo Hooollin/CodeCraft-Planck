@@ -14,6 +14,7 @@ class Test {
   void TestInputParser();
   void TestSimplyDayDistribution();
   void TestPreDeal();
+  void OutputTwoStringKeyInt(two_string_key_int &data);
  private:
   int model_;
 };

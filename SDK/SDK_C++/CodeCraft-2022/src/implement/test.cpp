@@ -1,5 +1,15 @@
 #include "test.h"
-
+void Test::OutputTwoStringKeyInt(two_string_key_int &data){
+  for(auto &p : data){
+    std::string  fistkey = p.first;
+    std::cout<<fistkey<<":";
+    auto &sucmap = p.second;
+    for(auto &pp : sucmap){
+      std::cout<<"<"<<pp.first<<","<<pp.second<<">,";
+    }
+    std::cout<<std::endl;
+  }
+}
 void Test::TestInputParser() {
   InputParser *parser;
   parser = new InputParser(model_);
@@ -30,8 +40,7 @@ void Test::TestSimplyDayDistribution() {
   int day = client_hash.begin()->second->GetDays();
 
   out_parser->SetAllDay(day);
-  std::unordered_map<std::string, std::unordered_map<std::string, int> >
-      empty_distribution;
+  two_string_key_int empty_distribution;
   std::unordered_set<std::string> availale_edge;
   availale_edge.clear();
   empty_distribution.clear();
@@ -108,18 +117,33 @@ void Test::TestPreDeal() {
   PreDistribution pre_deal(edge_hash, client_hash);
 
   pre_deal.Distribute();
+  std::vector<two_string_key_int> pre_distribution = pre_deal.GetDistribution();
+  std::vector<std::unordered_set<std::string> > available_edge_node =
+      pre_deal.GetAvailableEdgeNode();
+  for(int i=0;i<day;i++){
+    std::cout<<"day"<<i<<":"<<std::endl;
+    OutputTwoStringKeyInt(pre_distribution[i]);
+    for(auto p : available_edge_node[i])
+      std::cout<<p<<" ";
+    for(auto &p : pre_distribution[i]){
+      for(auto &pp : p.second){
+        std::string name = pp.first;
+        assert(available_edge_node[i].find(name) == available_edge_node[i].end());
+      }
+    }
+    std::cout<<std::endl;
+  }
 
-  std::vector<
-      std::unordered_map<std::string, std::unordered_map<std::string, int> > >
-      pre_distribution = pre_deal.GetDistribution();
-
-  std::vector<std::unordered_set<std::string> >
-      available_edge_node = pre_deal.GetAvailableEdgeNode();
+  for(auto &p :  client_hash){
+    std::cout<<p.first<<":";
+    auto x = p.second->GetAvailableEdgeNode();
+    for(auto &pp : x) std::cout<<pp<<",";
+  }
 
   std::unordered_map<std::string, int> max_bandwidth;
   for (int i = 0; i < day; i++) {
-    SimplyDayDistribution dayDistribution(i, edge_hash, client_hash,
-                                          pre_distribution[i], available_edge_node[i]);
+    SimplyDayDistribution dayDistribution(
+        i, edge_hash, client_hash, pre_distribution[i], available_edge_node[i]);
     dayDistribution.distribute();
     auto p = dayDistribution.GetDistribution();
     out_parser->SetOutput(i, p);
@@ -158,5 +182,4 @@ void Test::TestPreDeal() {
   std::cout << client_hash.begin()->second->GetQos() << std::endl;
 
   out_parser->StandradOutput();
-
 }

@@ -6,19 +6,16 @@
 
 class DayDistribution {
  public:
-  DayDistribution(
-      int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
-      std::unordered_map<std::string, ClientNode *> &client_node,
-      std::unordered_map<std::string, std::unordered_map<std::string, int> >
-          &distribution,
-      std::unordered_set<std::string> &avaliable_edge_node);
+  DayDistribution(int day,
+                  std::unordered_map<std::string, EdgeNode *> &edge_node,
+                  std::unordered_map<std::string, ClientNode *> &client_node,
+                  two_string_key_int &distribution,
+                  std::unordered_set<std::string> &avaliable_edge_node);
 
  protected:
-  std::unordered_map<std::string, std::unordered_set<std::string> >
-      edge_client_node_;  //边缘节点连接的客户端节点
-  std::unordered_map<std::string, std::unordered_set<std::string> >
-      client_edge_node_;  //客户端端节点连接的边缘节点
-  std::unordered_map<std::string, std::unordered_map<std::string, int> >
+  one_string_key_set edge_client_node_;  //边缘节点连接的客户端节点
+  one_string_key_set client_edge_node_;  //客户端端节点连接的边缘节点
+  two_string_key_int
       distribution_;  //当日分配情况，key1为客户节点，key2为边缘节点
   std::unordered_map<std::string, int> edge_bandwidth_;  //已分配边缘节点流量
   std::unordered_map<std::string, int> edge_up_;    //边缘节点上限流量
@@ -32,14 +29,10 @@ class SimplyDayDistribution : DayDistribution {
   SimplyDayDistribution(
       int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
       std::unordered_map<std::string, ClientNode *> &client_node,
-      std::unordered_map<std::string, std::unordered_map<std::string, int> >
-          &distribution,
+      two_string_key_int &distribution,
       std::unordered_set<std::string> &avaliable_edge_node);
 
-  std::unordered_map<std::string, std::unordered_map<std::string, int> >
-  GetDistribution() {
-    return distribution_;
-  }
+  two_string_key_int GetDistribution() { return distribution_; }
 
   void distribute();
 

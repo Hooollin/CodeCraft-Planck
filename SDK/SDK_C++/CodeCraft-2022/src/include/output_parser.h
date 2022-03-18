@@ -7,6 +7,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
+    two_string_key_int;
+typedef std::unordered_map<std::string, std::unordered_set<std::string> >
+    one_string_key_set;
 
 class OutputParser {
  public:
@@ -20,10 +24,7 @@ class OutputParser {
 
   void SetAllDay(int day);
 
-  void SetOutput(
-      int day,
-      std::unordered_map<std::string, std::unordered_map<std::string, int> >
-          day_distribution);
+  void SetOutput(int day, two_string_key_int day_distribution);
 
   void SetOutput(int day, std::string client,
                  std::unordered_map<std::string, int> day_client_distribution);
@@ -46,7 +47,5 @@ class OutputParser {
 
   std::ofstream ofs_;
 
-  std::vector<
-      std::unordered_map<std::string, std::unordered_map<std::string, int> > >
-      output_data_;
+  std::vector<two_string_key_int> output_data_;
 };

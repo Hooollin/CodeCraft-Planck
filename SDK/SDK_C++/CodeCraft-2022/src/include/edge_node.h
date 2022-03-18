@@ -1,12 +1,17 @@
 #pragma once
 #include <cassert>
+#include <iostream>
 #include <map>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <iostream>
-#include <sstream>
+
+typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
+    two_string_key_int;
+typedef std::unordered_map<std::string, std::unordered_set<std::string> >
+    one_string_key_set;
 
 class EdgeNode {
  public:

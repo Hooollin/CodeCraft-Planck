@@ -18,10 +18,7 @@ void OutputParser::SetAllDay(int day) {
   output_data_.resize(day);
 }
 
-void OutputParser::SetOutput(
-    int day,
-    std::unordered_map<std::string, std::unordered_map<std::string, int> >
-        day_distribution) {
+void OutputParser::SetOutput(int day, two_string_key_int day_distribution) {
   output_data_[day] = day_distribution;
 }
 
@@ -40,20 +37,20 @@ void OutputParser::StandradOutput() {
   ofs_.clear();
   ofs_.open(solution_, std::ios::out | std::ios::app);
   assert(ofs_.is_open());
-  for(int i=0;i<output_data_.size();i++){
+  for (int i = 0; i < output_data_.size(); i++) {
     auto day_distribution = output_data_[i];
-    for(auto client : client_list_){
-      ofs_<<client<<":";
+    for (auto client : client_list_) {
+      ofs_ << client << ":";
       bool flag = false;
-      for(auto &distribution : day_distribution[client]){
+      for (auto &distribution : day_distribution[client]) {
         std::string edge = distribution.first;
         int distri = distribution.second;
-        if(distri == 0) continue;
-        if(flag) ofs_<<",";
-        ofs_<<"<"<<edge<<","<<distri<<">";
+        if (distri == 0) continue;
+        if (flag) ofs_ << ",";
+        ofs_ << "<" << edge << "," << distri << ">";
         flag = true;
       }
-      ofs_<<std::endl;
+      ofs_ << std::endl;
     }
   }
 }
