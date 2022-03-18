@@ -9,7 +9,6 @@
 
 class Test {
  public:
-
   Test(int model) : model_(model) {}
 
   void TestInputParser();

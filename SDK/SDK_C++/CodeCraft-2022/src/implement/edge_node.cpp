@@ -1,4 +1,5 @@
 #include "edge_node.h"
+#include <sstream>
 
 std::string EdgeNode::ToString() {
   std::ostringstream oss;
