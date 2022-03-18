@@ -24,6 +24,7 @@ class Advisor{
     void MakeOverallSuggestion();
 
     int Predict(int day, std::string edge_name, std::string client_name);
+    
 
   private:
     int T_;

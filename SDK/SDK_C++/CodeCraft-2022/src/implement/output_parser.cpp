@@ -59,20 +59,21 @@ void AllocResourceT::LocalDisplay() {
 }
 
 void OutputParser::CalCost() {
-  std::map<std::string, std::vector<int>> site_cost;
+  std::map<std::string, std::vector<int>> site_costs;
   for (auto &art : custom_site_bands) {
     for (std::string site : art->GetSiteNames()) {
       int cost = 0;
-      if (!site_cost.count(site)) site_cost[site] = {};
+      if (!site_costs.count(site)) site_costs[site] = {};
       for (std::string cust : art->GetCustomNames()) {
         cost += art->GetBand(cust, site);
       }
-      site_cost[site].emplace_back(cost);
+      site_costs[site].emplace_back(cost);
     }
   }
   int total_cost = 0;
-  int percent95_idx = int((site_cost.size() - 1) * 0.95);
-  for (auto [site, costs] : site_cost) {
+  int percent95_idx = int((site_costs.size() - 1) * 0.95);
+  for (auto site_cost : site_costs) {
+    std::vector<int> costs = site_cost.second;
     std::sort(costs.begin(), costs.end());
     total_cost += costs[percent95_idx];
   }

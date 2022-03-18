@@ -13,31 +13,19 @@ std::vector<std::string> AverageStrategy::GetCustomRank() {
   return customnames;
 }
 
-std::vector<std::string> AverageStrategy::GetSiteRank() {
-  std::vector<std::string> sitenames = GetInputParser()->GetEdgeNameList();
-  auto cmp = [&](std::string &site1, std::string &site2) {
-    auto &edgemap = GetInputParser()->GetEdgeNodeMap();
-    if (edgemap[site1]->GetLimitCnt() == edgemap[site2]->GetLimitCnt())
-      return edgemap[site1]->GetServingClientNodeCount() >
-             edgemap[site2]->GetServingClientNodeCount();
-    return edgemap[site1]->GetLimitCnt() < edgemap[site2]->GetLimitCnt();
-  };
-  std::sort(sitenames.begin(), sitenames.end(), cmp);
-  return sitenames;
-}
-
-void AverageStrategy::HandleOneSite(const std::string &sitename, int T) {
-  EdgeNode *site = GetInputParser()->GetEdgeNodeMap()[sitename];
-  std::vector<ClientNode *> customes = site->GetServingClientNode();
-  auto cmp = [&](ClientNode *c1, ClientNode *c2) {
-    return c1->GetAvailableEdgeNodeCount() < c2->GetAvailableEdgeNodeCount();
-  };
-  std::sort(customes.begin(), customes.end(), cmp);
-  for (auto cust : customes) {
-    // HandleOneCustomeAndCustom(site, cust, T);
-    site->IncLimitCnt();
+void AverageStrategy::AdvisorProcess() {
+  auto customnames = GetInputParser()->GetClientNameList();
+  auto sitenames = GetInputParser()->GetEdgeNameList();
+  for (int T = 0; T < GetInputParser()->GetT(); T ++) {
+    for (const std::string& cust: customnames) {
+      for (const std::string& site: sitenames) {
+        int prealloc = GetAdvisor()->Predict(T, site, cust);
+        GetOutputParser()->AllocT(T, cust, site, prealloc);
+      }
+    }
   }
 }
+
 
 void AverageStrategy::HandleOneCustomeAndCustom(EdgeNode *site,
                                                 ClientNode *custome, int T,
