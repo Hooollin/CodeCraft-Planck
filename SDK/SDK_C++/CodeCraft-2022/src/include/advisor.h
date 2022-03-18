@@ -31,6 +31,7 @@ class Advisor{
     std::vector<ClientNode*> clientnodes_;
     std::vector<EdgeNode*> edgenodes_;
 
+    std::map<std::string, std::map<int, int>> client_day_specified_demand_;
     std::map<std::string, int> max_loading_change_;
     std::map<std::string, std::map<int, std::vector<LoadingNode*>>> client_to_day_specified_loading_node_;
     std::vector<LoadingNode*> max_loadings_;
