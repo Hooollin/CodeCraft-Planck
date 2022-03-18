@@ -63,7 +63,6 @@ int main() {
   //     }
   //   }
   // }
-
   st = new AverageStrategy(input_parser, output_parser, advisor);
   st->HandleAllTimes();
   st->MakeOutput(1);
