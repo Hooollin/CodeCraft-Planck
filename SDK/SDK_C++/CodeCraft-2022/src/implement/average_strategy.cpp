@@ -50,7 +50,7 @@ void AverageStrategy::HandleOneCustome(const std::string& custome, int T) {
     auto cmp = [&](EdgeNode* site1, EdgeNode* site2) {
         if(site1->GetRemain() == site2->GetRemain())
             return site1->GetLimitCnt() < site2->GetLimitCnt();    
-        return site1->GetRemain() < site2->GetRemain();
+        return site1->GetRemain() > site2->GetRemain();
         
     };
     sort(sites.begin(), sites.end(), cmp);
