@@ -30,6 +30,7 @@ class Advisor{
   private:
     void Optimal();
     void FastOptimal();
+    void KHeapifyOptimal(int k);
 
   private:
     int T_;

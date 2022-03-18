@@ -19,9 +19,12 @@ void AverageStrategy::AdvisorProcess(int T) {
   for (const std::string& cust: customnames) {
     for (const std::string& site: sitenames) {
       int prealloc = GetAdvisor()->Predict(T, site, cust);
-      GetOutputParser()->AllocT(T, cust, site, prealloc);
-      GetInputParser()->GetClientNodeMap()[cust]->DecDemand(prealloc, T);
-      GetInputParser()->GetEdgeNodeMap()[site]->DecRemain(prealloc);
+      if(prealloc > 0){
+        GetOutputParser()->AllocT(T, cust, site, prealloc);
+        GetInputParser()->GetClientNodeMap()[cust]->DecDemand(prealloc, T);
+        GetInputParser()->GetEdgeNodeMap()[site]->DecRemain(prealloc);
+        GetInputParser()->GetEdgeNodeMap()[site]->DecLimitCnt();
+      }
     }
   }
   
@@ -51,7 +54,7 @@ void AverageStrategy::HandleOneCustome(const std::string &custome, int T) {
     if (client->GetDemand(T) == 0) break;
     int demand = client->GetDemand(T);
     demand = std::min(site->GetRemain(), demand);
-    if (site->GetLimitCnt() >= GetInputParser()->GetT() * 0.05) {
+    if (site->GetLimitCnt() >= (int)(GetInputParser()->GetT() * 0.05)) {
       demand =
           (demand + sites.size() - used_cnt - 1) / (sites.size() - used_cnt);
     }

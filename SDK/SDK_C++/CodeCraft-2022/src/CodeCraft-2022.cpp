@@ -4,7 +4,7 @@
 #include "strategy.h"
 #include "advisor.h"
 
-static bool local = false;
+static bool local = true;
 
 int main() {
   InputParser *input_parser;
@@ -65,7 +65,7 @@ int main() {
   // }
   st = new AverageStrategy(input_parser, output_parser, advisor);
   st->HandleAllTimes();
-  st->MakeOutput();
+  st->MakeOutput(1);
   // st->CheckResult();
   return 0;
 }
