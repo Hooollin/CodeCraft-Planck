@@ -14,8 +14,10 @@ class Strategy {
 
   virtual void HandleAllTimes() = 0;
 
-  void MakeOutput(bool local = true) {
-    if (local)
+  virtual void CheckResult() = 0;
+
+  void MakeOutput(bool debug = false) {
+    if (debug)
       output_parser_->LocalDisplay();
     else
       output_parser_->MakeOutput();

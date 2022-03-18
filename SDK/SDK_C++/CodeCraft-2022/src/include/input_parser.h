@@ -16,9 +16,7 @@ class InputParser {
       : config_(config),
         demand_(demand),
         qos_(qos),
-        site_bandwidth_(site_bandwidth) {
-  }
-
+        site_bandwidth_(site_bandwidth) {}
 
   std::map<std::string, EdgeNode *> &GetEdgeNodeMap();
 
@@ -32,10 +30,7 @@ class InputParser {
 
   void ResetEdgeNode();  //重置edge的remain
 
-  void Init(){ 
-    Parse(); 
-  }
-
+  void Init() { Parse(); }
 
  private:
   void ParseConfigFile();

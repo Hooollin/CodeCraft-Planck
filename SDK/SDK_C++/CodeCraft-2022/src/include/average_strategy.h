@@ -19,6 +19,20 @@ class AverageStrategy : public Strategy {
     }
   }
 
+  void CheckResult() {
+    for (int T = 0; T < GetInputParser()->GetT(); T++) {
+      for (auto custome : GetInputParser()->GetClientNameList()) {
+        int alloc_band = 0;
+        for (auto site : GetInputParser()->GetEdgeNameList()) {
+          alloc_band += GetOutputParser()->GetAllocedBand(T, custome, site);
+        }
+        std::cout << T << ": "
+                  << "<" << custome << ", " << alloc_band << ">, ";
+      }
+      std::cout << std::endl;
+    }
+  }
+
  private:
   //得到用户的处理顺序
   std::vector<std::string> GetCustomRank();
@@ -27,6 +41,12 @@ class AverageStrategy : public Strategy {
   std::vector<std::string> GetSiteRank();
 
   void HandleOneSite(const std::string &site, int T);
-  void HandleOneCustome(EdgeNode *site, ClientNode *custome, int T);
-  void HandleOneTimes(int T);  //处理T时刻
+
+  void HandleOneCustome(const std::string &custome, int T);
+
+  void HandleOneCustomeAndCustom(EdgeNode *site, ClientNode *custome, int T,
+                                 int demand);
+
+  //处理T时刻
+  void HandleOneTimes(int T);
 };

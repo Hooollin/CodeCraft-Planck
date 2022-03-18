@@ -29,7 +29,15 @@ class ClientNode {
     assert(available_edgenode_map_.find(name) != available_edgenode_map_.end());
     return available_edgenode_map_[name];
   }
+
   int GetAvailableEdgeNodeCount() { return available_edgenode_map_.size(); }
+
+  std::vector<EdgeNode *> GetEdgeNodeList() {
+    std::vector<EdgeNode *> sites;
+    for (auto [k, v] : available_edgenode_map_) sites.push_back(v);
+    return sites;
+  }
+
   std::string ToString() {
     std::ostringstream oss;
     oss << "{\n"

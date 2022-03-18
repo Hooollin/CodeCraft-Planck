@@ -3,7 +3,7 @@
 #include "input_parser.h"
 #include "strategy.h"
 
-static bool local = true;
+static bool local = false;
 
 int main() {
   InputParser *input_parser;
@@ -13,22 +13,23 @@ int main() {
     input_parser =
         new InputParser("../data/config.ini", "../data/demand.csv",
                         "../data/qos.csv", "../data/site_bandwidth.csv");
-        input_parser->Init();
+    input_parser->Init();
 
     output_parser = new OutputParser(
         input_parser->GetT(), input_parser->GetClientNameList(),
-        input_parser->GetEdgeNameList(), "../output/solution.txt");
+        input_parser->GetEdgeNameList(), "../data/solution.txt");
   } else {
     input_parser = new InputParser();
     input_parser->Init();
 
     output_parser = new OutputParser(
         input_parser->GetT(), input_parser->GetClientNameList(),
-        input_parser->GetEdgeNameList(), "output/solution.txt");
+        input_parser->GetEdgeNameList(), "/output/solution.txt");
   }
 
   st = new AverageStrategy(input_parser, output_parser);
   st->HandleAllTimes();
   st->MakeOutput();
+  // st->CheckResult();
   return 0;
 }
