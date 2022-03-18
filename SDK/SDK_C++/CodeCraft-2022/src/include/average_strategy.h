@@ -7,8 +7,8 @@
 
 class AverageStrategy : public Strategy {
  public:
-  AverageStrategy(InputParser *input_parser, OutputParser *output_parser, Advisor* Advisor)
-      : Strategy(input_parser, output_parser, advisor_) {}
+  AverageStrategy(InputParser *input_parser, OutputParser *output_parser, Advisor* advisor)
+      : Strategy(input_parser, output_parser, advisor) {}
 
   void Init() {}
 
