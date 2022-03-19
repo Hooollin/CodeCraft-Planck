@@ -4,13 +4,13 @@
 #include "strategy.h"
 #include "advisor.h"
 
-static bool local = true;
+static bool local = false;
 
 int main() {
-  InputParser *input_parser;
-  OutputParser *output_parser;
-  Advisor *advisor;
-  Strategy *st;
+  InputParser *input_parser = nullptr;
+  OutputParser *output_parser = nullptr;
+  Advisor *advisor = nullptr;
+  Strategy *st = nullptr;
   if (local) {
     input_parser =
         new InputParser("../data/config.ini", "../data/demand.csv",
@@ -65,7 +65,8 @@ int main() {
   // }
   st = new AverageStrategy(input_parser, output_parser, advisor);
   st->HandleAllTimes();
-  st->MakeOutput(1);
+  // true for local debugging
+  st->MakeOutput(local);
   // st->CheckResult();
   return 0;
 }

@@ -23,11 +23,12 @@ void Advisor::KHeapifyOptimal(int k){
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
     return a->loading < b->loading;
   };
-  for(int i = 0; i < max_loadings_.size() && total_chance_ > 0; ++i){
+  int base = max_loading_change_.size() / k;
+  for(int i = 0; i < max_loadings_.size(); ++i){
     if(max_loading_change_[max_loadings_[i]->which_edge->GetName()] == 0){
       continue;
     }
-    if(k > 0){
+    if(k > 0 && (i + 1) % base == 0){
       std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
       --k;
     }
@@ -67,7 +68,6 @@ void Advisor::KHeapifyOptimal(int k){
       }
       assert(remain >= 0);
       --max_loading_change_[edge_name];
-      --total_chance_;
     }
   }
 }
@@ -167,7 +167,8 @@ void Advisor::Optimal(){
   }
 }
 void Advisor::MakeOverallSuggestion(){
-  FastOptimal();
+  //FastOptimal();
+  KHeapifyOptimal(5);
 }
 
 int Advisor::Predict(int day, std::string edge_name, std::string client_name){

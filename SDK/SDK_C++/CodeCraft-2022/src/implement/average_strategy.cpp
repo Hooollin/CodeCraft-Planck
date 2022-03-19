@@ -49,18 +49,18 @@ void AverageStrategy::HandleOneCustome(const std::string &custome, int T) {
     return site1->GetRemain() > site2->GetRemain();
   };
   sort(sites.begin(), sites.end(), cmp);
-  int used_cnt = 0;
+  //int used_cnt = 0;
   for (auto site : sites) {
     if (client->GetDemand(T) == 0) break;
     int demand = client->GetDemand(T);
     demand = std::min(site->GetRemain(), demand);
-    if (site->GetLimitCnt() >= (int)(GetInputParser()->GetT() * 0.05)) {
-      demand =
-          (demand + sites.size() - used_cnt - 1) / (sites.size() - used_cnt);
-    }
+   // if (site->GetLimitCnt() >= (int)(GetInputParser()->GetT() * 0.05)) {
+      //demand =
+          //(demand + sites.size() - used_cnt - 1) / (sites.size() - used_cnt);
+    //}
     HandleOneCustomeAndCustom(site, client, T, demand);
     assert(site->GetRemain() >= 0);
-    used_cnt += 1;
+    //used_cnt += 1;
   }
   assert(client->GetDemand(T) == 0);
 }

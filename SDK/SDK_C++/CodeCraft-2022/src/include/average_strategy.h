@@ -16,7 +16,9 @@ class AverageStrategy : public Strategy {
     
     for (int T = 0; T < GetInputParser()->GetT(); T++) {
       GetInputParser()->ResetEdgeNode();
-      AdvisorProcess(T);
+      if(advisor_ != nullptr){
+        AdvisorProcess(T);
+      }
       HandleOneTimes(T);
     }
   }
