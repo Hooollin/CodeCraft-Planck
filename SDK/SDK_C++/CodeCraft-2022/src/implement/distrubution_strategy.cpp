@@ -12,13 +12,11 @@ DayDistribution::DayDistribution(
   client_bandwidth_.clear();
   edge_bandwidth_.clear();
   edge_up_.clear();
-  edge_cost_.clear();
   //只输入可以使用的边缘节点信息，并利用信息赋值
   for (auto &p : avaliable_edge_node) {
     edge_client_node_[p] = edge_node[p]->Getservingclientnode();
     edge_up_[p] = edge_node[p]->GetBandwidth();
     edge_bandwidth_[p] = 0;
-    edge_cost_[p] = edge_node[p]->GetCost();
   }
 
   //赋值客户节点信息，并且关联的客户节点为可以使用的边缘节点
@@ -42,7 +40,7 @@ DayDistribution::DayDistribution(
   }
 }
 
-SimplyDayDistribution::SimplyDayDistribution(
+ClientDayDistribution::ClientDayDistribution(
     int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
     std::unordered_map<std::string, ClientNode *> &client_node,
     two_string_key_int &distribution,
@@ -54,12 +52,12 @@ SimplyDayDistribution::SimplyDayDistribution(
     client_order_.emplace_back(p.first);
   }
   std::sort(client_order_.begin(), client_order_.end(),
-       [&](const std::string a, const std::string b) {
-         return client_edge_node_[a].size() < client_edge_node_[b].size();
-       });
+            [&](const std::string a, const std::string b) {
+              return client_edge_node_[a].size() < client_edge_node_[b].size();
+            });
 }
 
-void SimplyDayDistribution::distribute() {
+void ClientDayDistribution::DistributeBalanced() {
   for (std::string client : client_order_) {
     if (client_bandwidth_[client] == 0) continue;
     //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
@@ -103,8 +101,7 @@ void SimplyDayDistribution::distribute() {
         edge_bandwidth_[edge] = all_bandwidth;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       } else {
-        distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge];
+        distribution_[client][edge] += edge_up_[edge] - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = edge_up_[edge];
         leave_bandwidth += all_bandwidth - edge_up_[edge];
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
@@ -118,8 +115,7 @@ void SimplyDayDistribution::distribute() {
         edge_bandwidth_[edge] = all_bandwidth + 1;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
       } else {
-        distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge];
+        distribution_[client][edge] += edge_up_[edge] - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = edge_up_[edge];
         leave_bandwidth += all_bandwidth - edge_up_[edge] + 1;
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
@@ -132,7 +128,7 @@ void SimplyDayDistribution::distribute() {
          });
     for (int i = 0; i < n; i++) {
       std::string edge = connect_edge[i];
-      if(leave_bandwidth == 0) break;
+      if (leave_bandwidth == 0) break;
       if (edge_up_[edge] - edge_bandwidth_[edge] >= leave_bandwidth) {
         edge_bandwidth_[edge] += leave_bandwidth;
         distribution_[client][edge] += leave_bandwidth;
@@ -140,8 +136,7 @@ void SimplyDayDistribution::distribute() {
         leave_bandwidth = 0;
         break;
       } else {
-        distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge];
+        distribution_[client][edge] += edge_up_[edge] - edge_bandwidth_[edge];
         leave_bandwidth -= edge_up_[edge] - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = edge_up_[edge];
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
@@ -150,7 +145,7 @@ void SimplyDayDistribution::distribute() {
     client_bandwidth_[client] = 0;
   }
 }
-void SimplyDayDistribution::distributeeazy() {
+void ClientDayDistribution::DistributeForMyBest() {
   for (std::string client : client_order_) {
     if (client_bandwidth_[client] == 0) continue;
     //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
@@ -176,8 +171,7 @@ void SimplyDayDistribution::distributeeazy() {
         leave_bandwidth = 0;
         break;
       } else {
-        distribution_[client][edge] +=
-            edge_up_[edge] - edge_bandwidth_[edge];
+        distribution_[client][edge] += edge_up_[edge] - edge_bandwidth_[edge];
         leave_bandwidth -= edge_up_[edge] - edge_bandwidth_[edge];
         edge_bandwidth_[edge] = edge_up_[edge];
         if (distribution_[client][edge] == 0) distribution_[client].erase(edge);
@@ -185,4 +179,14 @@ void SimplyDayDistribution::distributeeazy() {
     }
     leave_bandwidth = 0;
   }
+}
+
+EdgeDayDistribution::EdgeDayDistribution(
+    int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
+    std::unordered_map<std::string, ClientNode *> &client_node,
+    two_string_key_int &distribution,
+    std::unordered_set<std::string> &avaliable_edge_node)
+    : DayDistribution(day, edge_node, client_node, distribution,
+                      avaliable_edge_node) {
+
 }

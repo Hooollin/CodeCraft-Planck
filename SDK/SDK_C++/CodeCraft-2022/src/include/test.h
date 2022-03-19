@@ -11,7 +11,7 @@ class Test {
  public:
   Test(int model) : model_(model) {}
 
-  void TestPreDeal();
+  void TestAndCheck();
   void OutputTwoStringKeyInt(two_string_key_int &data);
  private:
   int model_;

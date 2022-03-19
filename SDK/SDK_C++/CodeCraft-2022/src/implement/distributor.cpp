@@ -34,11 +34,11 @@ void Distributor::DayDistribute(){
   //进行每日处理
   for (int i = 0; i < day_; i++) {
 
-    SimplyDayDistribution day_distribution(
+    ClientDayDistribution day_distribution(
         i, edge_node_, client_node_, day_distribution_[i], available_edge_node_[i]);
-    day_distribution.distribute();
+    day_distribution.DistributeBalanced();
 
-    //day_distribution.distributeeazy();
+    //day_distribution.DistributeForMyBest();
 
     two_string_key_int final_distribution = day_distribution.GetDistribution();
 

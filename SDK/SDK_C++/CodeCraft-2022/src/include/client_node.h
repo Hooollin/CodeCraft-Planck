@@ -42,11 +42,3 @@ class ClientNode {
   std::unordered_set<std::string> available_edgenode;  //可用边缘节点集
   int qos_;                                            //延迟上限
 };
-
-class ClientDistribution {
- public:
- private:
-  std::string name_;  //客户节点名
-  std::vector<std::unordered_map<std::string, int> >
-      day_bandwidth_distribution_;  //每日客户节点被边缘节点分配带宽大小
-};

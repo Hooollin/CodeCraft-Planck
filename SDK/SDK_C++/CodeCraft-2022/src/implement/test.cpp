@@ -11,7 +11,7 @@ void Test::OutputTwoStringKeyInt(two_string_key_int &data){
     std::cout<<std::endl;
   }
 }
-void Test::TestPreDeal() {
+void Test::TestAndCheck() {
   InputParser *parser;
   parser = new InputParser(model_);
   parser->Parse();
@@ -58,9 +58,9 @@ void Test::TestPreDeal() {
     std::cout << "day:" << i << std::endl;
     std::unordered_map<std::string, int> edge_bandwidth;
     auto p = pre_distribution[i];
-    SimplyDayDistribution dayDistribution(
+    ClientDayDistribution dayDistribution(
         i, edge_hash, client_hash, pre_distribution[i], available_edge_node[i]);
-    dayDistribution.distribute();
+    dayDistribution.DistributeBalanced();
     p = dayDistribution.GetDistribution();
     out_parser->SetOutput(i, p);
     for (auto &pp : p) {
