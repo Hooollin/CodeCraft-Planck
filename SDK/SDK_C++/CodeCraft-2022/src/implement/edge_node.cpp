@@ -6,7 +6,7 @@ std::string EdgeNode::ToString() {
   std::ostringstream oss;
   oss << "{"
       << "EdgeNode: " << name_ << ", bandwitdh: " << bandwidth_
-      << ", cost: " << cost_ << "," << std::endl;
+      << "," << std::endl;
   oss << "Serving ClientNodes:" << std::endl << "[";
 
   int count = 0;

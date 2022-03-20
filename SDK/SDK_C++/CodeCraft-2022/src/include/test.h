@@ -11,7 +11,9 @@ class Test {
  public:
   Test(int model) : model_(model) {}
 
-  void TestAndCheck();
+  void TestClientDistribution();
+  void TestEdgeDistribution();
+
   void OutputTwoStringKeyInt(two_string_key_int &data);
  private:
   int model_;

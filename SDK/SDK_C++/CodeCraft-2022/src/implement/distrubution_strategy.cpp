@@ -145,6 +145,7 @@ void ClientDayDistribution::DistributeBalanced() {
     client_bandwidth_[client] = 0;
   }
 }
+
 void ClientDayDistribution::DistributeForMyBest() {
   for (std::string client : client_order_) {
     if (client_bandwidth_[client] == 0) continue;
@@ -181,12 +182,35 @@ void ClientDayDistribution::DistributeForMyBest() {
   }
 }
 
-EdgeDayDistribution::EdgeDayDistribution(
-    int day, std::unordered_map<std::string, EdgeNode *> &edge_node,
-    std::unordered_map<std::string, ClientNode *> &client_node,
-    two_string_key_int &distribution,
-    std::unordered_set<std::string> &avaliable_edge_node)
-    : DayDistribution(day, edge_node, client_node, distribution,
-                      avaliable_edge_node) {
+void EdgeDayDistribution::DistributeForMyBest() {
+
+  for(std::string &edge : edge_order_){
+
+    //获得客户节点排序，连边数作为第一优先级从小到大，带宽作为第二优先级从大到小
+    std::vector<std::string> client_order;
+    for(std::string client : edge_client_node_[edge]) client_order.emplace_back(client);
+    sort(client_order.begin(),client_order.end(),[&](const std::string &a,const std::string &b){
+      if(client_edge_node_[a].size() == client_edge_node_[b].size()) return client_bandwidth_[a] > client_bandwidth_[b];
+      return client_edge_node_[a].size() < client_edge_node_[b].size();
+    });
+
+    int leave_bandwidth = edge_up_[edge];
+
+    //按照客户节点顺序做尽力而为的全分配
+    for(std::string client : client_order){
+      if (leave_bandwidth == 0) break;
+      if(client_bandwidth_[client] == 0) continue;
+      if(leave_bandwidth >= client_bandwidth_[client]){
+        leave_bandwidth -= client_bandwidth_[client];
+        distribution_[client][edge] += client_bandwidth_[client];
+        client_bandwidth_[client] = 0;
+      }else{
+        client_bandwidth_[client] -= leave_bandwidth;
+        distribution_[client][edge] += leave_bandwidth;
+        leave_bandwidth = 0;
+      }
+    }
+    edge_bandwidth_[edge] = edge_up_[edge] - leave_bandwidth;
+  }
 
 }

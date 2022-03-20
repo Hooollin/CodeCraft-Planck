@@ -3,7 +3,7 @@
 
 int main() {
 //  Test test_example(3);
-//  test_example.TestPreDeal();
+//  test_example.TestEdgeDistribution();
 
   Distributor distributor(1);
   distributor.DayDistribute();

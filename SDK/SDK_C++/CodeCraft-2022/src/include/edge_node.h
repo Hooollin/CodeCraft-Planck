@@ -16,7 +16,7 @@ typedef std::unordered_map<std::string, std::unordered_set<std::string> >
 class EdgeNode {
  public:
   EdgeNode(std::string name, int bandwidth)
-      : name_(name), bandwidth_(bandwidth), cost_(0) {}
+      : name_(name), bandwidth_(bandwidth) {}
 
   std::string GetName() { return name_; }
 
