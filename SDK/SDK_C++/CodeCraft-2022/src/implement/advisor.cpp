@@ -19,16 +19,27 @@ void Advisor::Init(){
   }
 }
 
-void Advisor::KHeapifyOptimal(int k){
+void Advisor::KHeapifyOptimal(int k, int div){
+  int counter = 0, total = k + div;
+  // 总共make (k + div) 次heap
+  assert(div >= 1);
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
     return a->loading < b->loading;
   };
-  int base = max_loading_change_.size() / k;
+  int base = std::max(1, (int)max_loading_change_.size() / div);
   for(int i = 0; i < max_loadings_.size(); ++i){
+    // 每一段make_heap一次
+    if(div > 0 && i % base == 0){
+      ++counter;
+      std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
+      --div;
+    }
     if(max_loading_change_[max_loadings_[i]->which_edge->GetName()] == 0){
       continue;
     }
-    if(k > 0 && (i + 1) % base == 0){
+    // 在这里没有make_heap，有k次 make heap的机会
+    if(k > 0 && i % base != 0){
+      ++counter;
       std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
       --k;
     }
@@ -70,8 +81,10 @@ void Advisor::KHeapifyOptimal(int k){
       --max_loading_change_[edge_name];
     }
   }
+  assert(counter <= total);
 }
 void Advisor::FastOptimal(){
+  int counter = 0;
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
     return a->loading < b->loading;
   };
@@ -79,6 +92,7 @@ void Advisor::FastOptimal(){
     if(max_loading_change_[max_loadings_[i]->which_edge->GetName()] == 0){
       continue;
     }
+    ++counter;
     std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
     LoadingNode *to_handle = max_loadings_[i];
     int curr_day = (to_handle)->which_day;
@@ -119,6 +133,8 @@ void Advisor::FastOptimal(){
       --total_chance_;
     }
   }
+  std::cout << counter << std::endl;
+  exit(0);
 }
 
 void Advisor::Optimal(){
@@ -167,8 +183,8 @@ void Advisor::Optimal(){
   }
 }
 void Advisor::MakeOverallSuggestion(){
-  //FastOptimal();
-  KHeapifyOptimal(5);
+  FastOptimal();
+  //KHeapifyOptimal(5000, 100);
 }
 
 int Advisor::Predict(int day, std::string edge_name, std::string client_name){

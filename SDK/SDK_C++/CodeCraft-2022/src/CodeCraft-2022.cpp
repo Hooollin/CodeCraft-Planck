@@ -4,7 +4,7 @@
 #include "strategy.h"
 #include "advisor.h"
 
-static bool local = false;
+static bool local = true;
 
 int main() {
   InputParser *input_parser = nullptr;
