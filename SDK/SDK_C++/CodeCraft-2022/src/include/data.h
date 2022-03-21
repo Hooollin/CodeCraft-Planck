@@ -79,6 +79,10 @@ class Data {
   //获得边缘节点集合
   std::unordered_set<std::string> GetEdgeSet();
 
+  EdgeNode* GetEdgeNode(std::string name);
+
+  ClientNode* GetClientNode(std::string name);
+
  private:
   //边缘节点集合
   std::unordered_map<std::string, EdgeNode *> edge_node_;

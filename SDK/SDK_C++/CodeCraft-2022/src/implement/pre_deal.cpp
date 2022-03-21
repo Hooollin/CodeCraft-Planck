@@ -25,14 +25,20 @@ void PreDistribution::Distribute() {
   }
 
   for (int i = 0; i < n; i++) {
+    long long max_perfent_five = 0, max_bandwidth = 0, max_serving_client_count = 0;
     //每个边缘节点前5%大的天数的流量总和
-    std::unordered_map<std::string, long long> percent_five{};
+    std::unordered_map<std::string, std::vector<long long>> percent_five{};
 
     //每个边缘节点前5%大的天数
     std::unordered_map<std::string, std::vector<int>> percent_days{};
 
     for (int j = 0; j < n; j++) {
-      percent_five[available_edge_node[j]] = 0;
+      percent_five[available_edge_node[j]] = std::vector<long long>(3, 0);
+      percent_five[available_edge_node[j]][1] = data_->GetEdgeNode(available_edge_node[j])->GetBandwidth();
+      percent_five[available_edge_node[j]][2] = data_->GetEdgeNode(available_edge_node[j])->GetservingclientnodeNum();
+      max_bandwidth = std::max(percent_five[available_edge_node[j]][1], max_bandwidth);
+      max_serving_client_count = std::max(percent_five[available_edge_node[j]][2], max_serving_client_count);
+
       percent_days[available_edge_node[j]] = std::vector<int>(0);
     }
     //统计当前剩下的n-i个边缘节点的每日带宽
@@ -62,12 +68,19 @@ void PreDistribution::Distribute() {
         total += edge_bandwidth[seq[k]];
         percent_days[edge].emplace_back(seq[k]);
       }
-      percent_five[edge] = total;
+      percent_five[edge][0] = total;
+      max_perfent_five = std::max(total, max_perfent_five);
     }
     //对边缘节点按照带宽最大5%排序
     sort(available_edge_node.begin(), available_edge_node.end(),
          [&](const std::string &a, const std::string &b) {
-           return percent_five[a] < percent_five[b];
+           // 45w: 0.0, 1.0, 0.5
+           // 43.6w: 0.0, 2.0, 0.5
+           // loading : bandwidth : servingcount
+           double w1 = 0.1, w2 = 0.0, w3 = 1.0;
+           double f1 = w1 * percent_five[a][0] / max_perfent_five + w2 * percent_five[a][1] / max_bandwidth + w3 * percent_five[a][2] / max_serving_client_count;
+           double f2 = w1 * percent_five[b][0] / max_perfent_five + w2 * percent_five[b][1] / max_bandwidth + w3 * percent_five[b][2] / max_serving_client_count;
+           return f1 < f2;
          });
 
     //取最大的边缘节点

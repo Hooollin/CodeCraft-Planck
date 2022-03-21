@@ -151,3 +151,11 @@ void Data::SetAllDays(int days){
   std::unordered_set<std::string> edge_set = GetEdgeSet();
   for(int i=0;i<days;i++) available_edge_node_[i] = edge_set;
 }
+
+EdgeNode *Data::GetEdgeNode(std::string name){
+  return edge_node_[name];
+}
+
+ClientNode *Data::GetClientNode(std::string name){
+  return client_node_[name];
+}
