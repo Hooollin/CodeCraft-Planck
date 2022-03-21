@@ -36,6 +36,7 @@ class ClientDayDistribution : DayDistribution {
   ClientDayDistribution(int &day, Data *data) : DayDistribution(day,data) {}
   void DistributeBalanced();
   void DistributeForMyBest();
+  void DistributeMaxBandwidth();
 
  private:
 };
