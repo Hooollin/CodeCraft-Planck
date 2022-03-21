@@ -2,13 +2,11 @@
 #include "pre_deal.h"
 
 void PreDistribution::Distribute() {
+  //前5%的天数
   int percent_five_day =
       std::max((int)(1.0 * (data_->GetAllDays()) * 0.05), 0);
 
   std::vector<std::string> available_edge_node = edge_node_;
-  std::cout<<std::endl;
-  std::unordered_set<std::string> chose_nodes = data_->GetEdgeSet();
-
   int n = available_edge_node.size();
   int l = allday_;
 
@@ -16,9 +14,6 @@ void PreDistribution::Distribute() {
   std::unordered_map<std::string, int> client_edge_num;
   for (std::string &client : client_node_) {
     client_edge_num[client] = data_->GetClientEdgeNum(client);
-  }
-  for (int i = 0; i < l; i++) {
-    data_->SetAvailableEdgeNode(i, chose_nodes);
   }
   //获得每日流量需求
   std::vector<std::unordered_map<std::string, int>> days_client_bandwidth(l);
