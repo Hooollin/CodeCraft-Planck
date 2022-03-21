@@ -176,6 +176,30 @@ implement/client_node.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.s
 .PHONY : implement/client_node.cpp.s
 
+implement/data.obj: implement/data.cpp.obj
+.PHONY : implement/data.obj
+
+# target to build an object file
+implement/data.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/data.cpp.obj
+.PHONY : implement/data.cpp.obj
+
+implement/data.i: implement/data.cpp.i
+.PHONY : implement/data.i
+
+# target to preprocess a source file
+implement/data.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/data.cpp.i
+.PHONY : implement/data.cpp.i
+
+implement/data.s: implement/data.cpp.s
+.PHONY : implement/data.s
+
+# target to generate assembly for a file
+implement/data.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/data.cpp.s
+.PHONY : implement/data.cpp.s
+
 implement/distributor.obj: implement/distributor.cpp.obj
 .PHONY : implement/distributor.obj
 
@@ -359,6 +383,9 @@ help:
 	@echo ... implement/client_node.obj
 	@echo ... implement/client_node.i
 	@echo ... implement/client_node.s
+	@echo ... implement/data.obj
+	@echo ... implement/data.i
+	@echo ... implement/data.s
 	@echo ... implement/distributor.obj
 	@echo ... implement/distributor.i
 	@echo ... implement/distributor.s

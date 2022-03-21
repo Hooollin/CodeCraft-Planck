@@ -3,7 +3,7 @@
 #include "client_node.h"
 #include "edge_node.h"
 
-InputParser::InputParser(int model) {
+InputParser::InputParser(int &model, Data* data) {
   assert(model >= 1 && model <= 3);
   if (model == 1) {
     config_ = demand_ = qos_ = site_bandwidth_ = online_pre_;
@@ -16,6 +16,7 @@ InputParser::InputParser(int model) {
   demand_ += demand_suf_;
   qos_ += qos_suf_;
   site_bandwidth_ += site_bandwidth_suf_;
+  data_ = data;
 }
 
 std::unordered_map<std::string, EdgeNode *> &InputParser::GetEdgeNodeMap() {
@@ -31,6 +32,9 @@ void InputParser::Parse() {
   ParseSiteBandWidthFile();
   ParseConfigFile();
   ParseQosFile();
+  data_->SetEdgeNode(edgenode_map_);
+  data_->SetClientNode(clientnode_map_);
+  data_->SetAllDays(clientnode_map_.begin()->second->GetDays());
 }
 
 void InputParser::ParseDemandFile() {

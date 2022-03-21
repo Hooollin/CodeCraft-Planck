@@ -23,11 +23,16 @@ class EdgeNode {
   void AddServingClientNode(std::string name) {
     serving_clientnode.insert(name);
   }
-  std::unordered_set<std::string> Getservingclientnode() {
+
+  std::unordered_set<std::string> &Getservingclientnode() {
     return serving_clientnode;
   }
 
-  int GetBandwidth() { return bandwidth_; }
+  int GetservingclientnodeNum() {
+    return serving_clientnode.size();
+  }
+
+  int &GetBandwidth() { return bandwidth_; }
 
 
   std::string ToString();
@@ -38,4 +43,5 @@ class EdgeNode {
   int bandwidth_;  //边缘节点带宽上限
 
   std::unordered_set<std::string> serving_clientnode;  //连接的客户节点
+
 };

@@ -19,6 +19,22 @@ unordered_set
 -
 vector
 -
+cassert
+-
+
+../include/data.h
+map
+-
+unordered_map
+-
+unordered_set
+-
+vector
+-
+client_node.h
+../include/client_node.h
+edge_node.h
+../include/edge_node.h
 
 ../include/distributor.h
 distrubution_strategy.h
@@ -29,6 +45,8 @@ output_parser.h
 ../include/output_parser.h
 pre_deal.h
 ../include/pre_deal.h
+data.h
+../include/data.h
 
 ../include/distrubution_strategy.h
 algorithm
@@ -43,6 +61,8 @@ unordered_set
 -
 client_node.h
 ../include/client_node.h
+data.h
+../include/data.h
 edge_node.h
 ../include/edge_node.h
 
@@ -77,6 +97,8 @@ client_node.h
 ../include/client_node.h
 edge_node.h
 ../include/edge_node.h
+data.h
+../include/data.h
 
 ../include/output_parser.h
 cassert
@@ -95,6 +117,8 @@ unordered_set
 -
 vector
 -
+data.h
+../include/data.h
 
 ../include/pre_deal.h
 math.h
@@ -107,28 +131,18 @@ cmath
 -
 client_node.h
 ../include/client_node.h
+data.h
+../include/data.h
 edge_node.h
 ../include/edge_node.h
 
 ../include/test.h
-map
--
-client_node.h
-../include/client_node.h
-distrubution_strategy.h
-../include/distrubution_strategy.h
-edge_node.h
-../include/edge_node.h
-input_parser.h
-../include/input_parser.h
-output_parser.h
-../include/output_parser.h
-pre_deal.h
-../include/pre_deal.h
 
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CodeCraft-2022.cpp
 test.h
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/test.h
 distributor.h
 F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/distributor.h
+
+F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp
 

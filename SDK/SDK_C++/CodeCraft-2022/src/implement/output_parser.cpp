@@ -1,7 +1,7 @@
 
 #include "output_parser.h"
 
-OutputParser::OutputParser(int model,int day) {
+OutputParser::OutputParser(int &model,Data* data) {
   assert(model >= 1 && model <= 3);
   if (model == 1) {
     solution_ = online_pre_ + solution_suf_;
@@ -10,48 +10,26 @@ OutputParser::OutputParser(int model,int day) {
   } else {
     solution_ = windows_pre_ + solution_suf_;
   }
-  client_list_.clear();
-  day_ = day;
-  output_data_.clear();
-  output_data_.resize(day);
-}
-
-void OutputParser::SetAllDay(int day) {
-  day_ = day;
-  output_data_.clear();
-  output_data_.resize(day);
-}
-
-void OutputParser::SetOutput(int day, two_string_key_int day_distribution) {
-  output_data_[day] = day_distribution;
-}
-
-void OutputParser::SetOutput(
-    int day, std::string client,
-    std::unordered_map<std::string, int> day_client_distribution) {
-  output_data_[day][client] = day_client_distribution;
-}
-
-void OutputParser::SetOutput(int day, std::string client, std::string edge,
-                             int distribution) {
-  output_data_[day][client][edge] = distribution;
+  data_ = data;
+  day_ = data->GetAllDays();
 }
 
 void OutputParser::StandradOutput() {
   ofs_.clear();
-  ofs_.open(solution_, std::ios::out | std::ios::app);
+  ofs_.open(solution_, std::ios::out);
   assert(ofs_.is_open());
-  for (int i = 0; i < output_data_.size(); i++) {
-    auto day_distribution = output_data_[i];
-    for (auto client : client_list_) {
+  std::vector<std::string> client_list = data_->GetClientList();
+  for (int i = 0; i < day_; i++) {
+    for (std::string client : client_list) {
       ofs_ << client << ":";
       bool flag = false;
-      for (auto &distribution : day_distribution[client]) {
+      std::unordered_map<std::string,int> distributions = data_->GetDistribution(i,client);
+      for (auto &distribution : distributions) {
         std::string edge = distribution.first;
-        int distri = distribution.second;
-        if (distri == 0) continue;
+        int value = distribution.second;
+        if (value == 0) continue;
         if (flag) ofs_ << ",";
-        ofs_ << "<" << edge << "," << distri << ">";
+        ofs_ << "<" << edge << "," << value << ">";
         flag = true;
       }
       ofs_ << std::endl;

@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CodeCraft-2022.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj"
   "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.obj"
+  "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/data.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/implement/data.cpp.obj"
   "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distributor.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj"
   "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distrubution_strategy.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj"
   "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/edge_node.cpp" "F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj"

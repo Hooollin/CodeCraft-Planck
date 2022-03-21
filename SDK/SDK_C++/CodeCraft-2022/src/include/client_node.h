@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <cassert>
 typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
     two_string_key_int;
 typedef std::unordered_map<std::string, std::unordered_set<std::string> >
@@ -22,7 +23,9 @@ class ClientNode {
 
   int GetQos() { return qos_; }
 
-  int GetDemand(int day) { return demand_[day]; }
+  int GetDemand(int &day) {
+    assert(day < demand_.size());
+    return demand_[day]; }
 
   int GetDays() { return demand_.size(); }
 
@@ -30,8 +33,12 @@ class ClientNode {
     available_edgenode.insert(name);
   }
 
-  std::unordered_set<std::string> GetAvailableEdgeNode() {
+  std::unordered_set<std::string> &GetAvailableEdgeNode() {
     return available_edgenode;
+  };
+
+  int GetAvailableEdgeNodeNum() {
+    return available_edgenode.size();
   };
 
   std::string ToString();

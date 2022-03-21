@@ -5,10 +5,11 @@
 #include <vector>
 #include "client_node.h"
 #include "edge_node.h"
+#include "data.h"
 
 class InputParser {
  public:
-  InputParser(int model);
+  InputParser(int &model,Data* data);
 
   InputParser(InputParser &) = delete;
 
@@ -51,4 +52,6 @@ class InputParser {
   std::unordered_map<std::string, ClientNode *> clientnode_map_;
 
   std::ifstream ifs_;
+
+  Data* data_;
 };
