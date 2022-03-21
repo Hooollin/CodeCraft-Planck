@@ -5,7 +5,7 @@ int main() {
 //  Test test_example(3);
 //  test_example.TestEdgeDistribution();
 
-  Distributor distributor(1);
+  Distributor distributor(3);
   distributor.DayDistribute();
   return 0;
 }

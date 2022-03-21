@@ -148,4 +148,6 @@ void Data::SetAllDays(int days){
   distribution_.resize(alldays_);
   available_edge_node_.clear();
   available_edge_node_.resize(alldays_);
+  std::unordered_set<std::string> edge_set = GetEdgeSet();
+  for(int i=0;i<days;i++) available_edge_node_[i] = edge_set;
 }
