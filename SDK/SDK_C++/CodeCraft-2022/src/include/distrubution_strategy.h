@@ -14,9 +14,9 @@ class DayDistribution {
  protected:
   //数据
   Data *data_;
-  //边缘节点连接的客户端节点
+  //边缘节点连接的客户端节点（过滤了不在available_edge_node的边缘节点）
   one_string_key_set edge_client_node_;
-  //客户端端节点连接的边缘节点
+  //客户端端节点连接的边缘节点（过滤了不在available_edge_node的边缘节点）
   one_string_key_set client_edge_node_;
   //已分配边缘节点流量
   std::unordered_map<std::string, int> edge_bandwidth_;
