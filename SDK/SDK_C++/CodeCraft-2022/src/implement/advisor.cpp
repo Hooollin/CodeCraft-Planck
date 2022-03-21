@@ -1,28 +1,36 @@
 #include "advisor.h"
 
 void Advisor::Init(){
+  total_chance_ = 0;
   // 计算max_loading并创建LoadingNode
   for(auto edgenode : edgenodes_){
-    max_loading_change_[edgenode->GetName()] = int(0.05 * T_); // maybe buggy
-    total_chance_ += int(0.05 * T_);
     for(int i = 0; i < T_; ++i){
       LoadingNode *node = new LoadingNode();
+      node->loading = 0;
       node->which_day = i;
       node->which_edge = edgenode;
       for(auto clientnode : edgenode->GetServingClientNode()){
-        client_day_specified_demand_[clientnode->GetName()][i] = clientnode->GetDemand(i);
-        node->loading += clientnode->GetDemand(i);
-        client_to_day_specified_loading_node_[clientnode->GetName()][i].push_back(node);
+        if(clientnode->GetDemand(i) > 0){
+          client_day_specified_demand_[clientnode->GetName()][i] = clientnode->GetDemand(i);
+          node->loading += clientnode->GetDemand(i);
+          client_to_day_specified_loading_node_[clientnode->GetName()][i].push_back(node);
+        }
       }
-      max_loadings_.push_back(node);
+      if(node->loading > 0){
+        ++max_loading_change_[edgenode->GetName()];
+        max_loadings_.push_back(node);
+      }
     }
+    max_loading_change_[edgenode->GetName()] = std::max((int)0, (int)(max_loading_change_[edgenode->GetName()] * 0.05) - 1);
+    assert(max_loading_change_[edgenode->GetName()] >= 0);
+    total_chance_ += max_loading_change_[edgenode->GetName()];
   }
 }
 
-void Advisor::KHeapifyOptimal(int k, int div){
+void Advisor::KHeapifyOptimal(int k){
+  int div = 100;
   int counter = 0, total = k + div;
   // 总共make (k + div) 次heap
-  assert(div >= 1);
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
     return a->loading < b->loading;
   };
@@ -38,7 +46,7 @@ void Advisor::KHeapifyOptimal(int k, int div){
       continue;
     }
     // 在这里没有make_heap，有k次 make heap的机会
-    if(k > 0 && i % base != 0){
+    if(k > 0){
       ++counter;
       std::make_heap(max_loadings_.begin() + i, max_loadings_.end(), heap_comparator);
       --k;
@@ -83,6 +91,7 @@ void Advisor::KHeapifyOptimal(int k, int div){
   }
   assert(counter <= total);
 }
+
 void Advisor::FastOptimal(){
   int counter = 0;
   auto heap_comparator = [](LoadingNode *a, LoadingNode *b){
@@ -128,13 +137,13 @@ void Advisor::FastOptimal(){
           loadingnode->loading -= real_demand;
         }
       }
-      assert(remain >= 0);
       --max_loading_change_[edge_name];
       --total_chance_;
+      assert(remain >= 0);
     }
   }
   std::cout << counter << std::endl;
-  exit(0);
+  //exit(0);
 }
 
 void Advisor::Optimal(){
@@ -183,8 +192,8 @@ void Advisor::Optimal(){
   }
 }
 void Advisor::MakeOverallSuggestion(){
-  FastOptimal();
-  //KHeapifyOptimal(5000, 100);
+  //FastOptimal();
+  KHeapifyOptimal(10000);
 }
 
 int Advisor::Predict(int day, std::string edge_name, std::string client_name){

@@ -44,9 +44,7 @@ void AverageStrategy::HandleOneCustome(const std::string &custome, int T) {
   ClientNode *client = GetInputParser()->GetClientNodeMap()[custome];
   std::vector<EdgeNode *> sites = client->GetEdgeNodeList();
   auto cmp = [&](EdgeNode *site1, EdgeNode *site2) {
-    if (site1->GetRemain() == site2->GetRemain())
-      return site1->GetLimitCnt() < site2->GetLimitCnt();
-    return site1->GetRemain() > site2->GetRemain();
+    return site1->GetServingClientNodeCount() < site2->GetServingClientNodeCount();
   };
   sort(sites.begin(), sites.end(), cmp);
   //int used_cnt = 0;
@@ -70,9 +68,5 @@ void AverageStrategy::HandleOneTimes(int T) {
   auto customes = GetCustomRank();
   for (int i = 0; i < customes.size(); i++) {
     HandleOneCustome(customes[i], T);
-    for (auto site : GetInputParser()->GetEdgeNameList()) {
-      EdgeNode *edge = GetInputParser()->GetEdgeNodeMap()[site];
-      if (edge->GetRemain() == 0) edge->IncLimitCnt();
-    }
   }
 }
