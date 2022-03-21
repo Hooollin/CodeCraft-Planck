@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <set>
 #include "client_node.h"
 #include "data.h"
 #include "edge_node.h"
@@ -23,6 +24,9 @@ class PreDistribution {
 
   //预分配策略
   void Distribute();
+  
+  // LH预分配策略
+  void LHDistribute();
 
   //获取边缘节点顺序
   void GetEdgeOrder();

@@ -133,6 +133,42 @@ void ClientDayDistribution::DistributeBalanced() {
   }
 }
 
+void ClientDayDistribution::DistributeMaxBandwidth(){
+   std::vector<std::string> client_order_;
+  for (std::string client : client_node_) {
+    client_order_.emplace_back(client);
+  }
+  sort(client_order_.begin(), client_order_.end(),
+       [&](const std::string &a, const std::string &b) {
+         return client_edge_node_[a].size() < client_edge_node_[b].size();
+       });
+  for (std::string client : client_order_) {
+    if (client_bandwidth_[client] == 0) continue;
+    //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
+    std::vector<std::string> connect_edge;
+    int client_bandwidth = client_bandwidth_[client];
+    for (auto &p : client_edge_node_[client]) {
+      connect_edge.emplace_back(p);
+    }
+    int n = connect_edge.size();
+    sort(connect_edge.begin(), connect_edge.end(),
+         [&](const std::string a, const std::string b) {
+           return data_->GetEdgeNode(a)->GetBandwidth() > data_->GetEdgeNode(b)->GetBandwidth();
+         });
+
+    for(auto &edge_name : connect_edge){
+      if(client_bandwidth_[client] == 0) break;
+      int remain = data_->GetEdgeNode(edge_name)->GetBandwidth() - edge_bandwidth_[edge_name];
+      if(remain > 0){
+        int occupation = std::min(client_bandwidth_[client], remain);
+        edge_bandwidth_[edge_name] += occupation;
+        client_bandwidth_[client] -= occupation;
+        data_->AddDistribution(days_, client, edge_name, occupation);
+      }
+    }
+  }
+}
+
 void ClientDayDistribution::DistributeForMyBest() {
   std::vector<std::string> client_order_;
   for (std::string client : client_node_) {
@@ -153,7 +189,8 @@ void ClientDayDistribution::DistributeForMyBest() {
     int n = connect_edge.size();
     sort(connect_edge.begin(), connect_edge.end(),
          [&](const std::string a, const std::string b) {
-           return edge_bandwidth_[a] < edge_bandwidth_[b];
+           //return edge_bandwidth_[a] < edge_bandwidth_[b];
+           return data_->GetEdgeNode(a)->GetservingclientnodeNum() < data_->GetEdgeNode(b)->GetservingclientnodeNum();
          });
 
     //尽力而为分配
