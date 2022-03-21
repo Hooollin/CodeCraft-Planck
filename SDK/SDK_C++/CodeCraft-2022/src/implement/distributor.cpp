@@ -10,6 +10,7 @@ void Distributor::DayDistribute() {
   //预处理，获得预处理分配
   PreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
+  pre_distribution.GetEdgeOrder();
   int allday = data_.GetAllDays();
 
   //进行每日处理
@@ -17,6 +18,7 @@ void Distributor::DayDistribute() {
     ClientDayDistribution day_distribution(i, &data_);
     day_distribution.DistributeBalanced();
   }
+
   output_parser.StandradOutput();
   return;
 }

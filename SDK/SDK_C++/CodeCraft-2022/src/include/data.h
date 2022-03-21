@@ -88,11 +88,11 @@ class Data {
   std::vector<
       std::unordered_map<std::string, std::unordered_map<std::string, int>>>
       distribution_;
-  //可用节点情况
+  //可用节点情况 available_edge_node_[day]
   std::vector<std::unordered_set<std::string>> available_edge_node_;
-  //顺序边缘节点
+  //遍历边缘节点的顺序
   std::vector<std::string> edge_order_;
-  //顺序客户节点
+  //遍历客户节点的顺序
   std::vector<std::string> client_order_;
   //总天数
   int alldays_;
