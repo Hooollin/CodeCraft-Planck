@@ -212,3 +212,64 @@ void ClientDayDistribution::DistributeForMyBest() {
     leave_bandwidth = 0;
   }
 }
+
+//控制阈值分配
+void ClientDayDistribution::DistributeThreshold() {
+  std::vector<std::string> client_order_;
+  for (std::string client : client_node_) {
+    client_order_.emplace_back(client);
+  }
+  sort(client_order_.begin(), client_order_.end(),
+       [&](const std::string &a, const std::string &b) {
+         return client_edge_node_[a].size() < client_edge_node_[b].size();
+       });
+  data_->ResetEdgeBand();//重置边缘节点剩余带宽和成本
+  for (std::string client : client_order_) {
+    if (client_bandwidth_[client] == 0) continue;
+    //获得一个该客户节点连接的边缘节点序列
+    std::vector<std::string> connect_edge;
+    int client_bandwidth = client_bandwidth_[client];
+    int total = 0;//不增加成本时剩余带宽
+    for (auto &p : client_edge_node_[client]) {
+      connect_edge.emplace_back(p);
+      total += data_->GetEdgeNode(p)->GetLowCostRemain();
+    }
+    int n = connect_edge.size();
+    //不增加成本分配一次
+    if(total > client_bandwidth) { // 可以不增加成本分配完
+      sort(connect_edge.begin(), connect_edge.end(),
+         [&](const std::string a, const std::string b) {
+           return data_->GetEdgeNode(a)->GetLowCostRemain() > data_->GetEdgeNode(b)->GetLowCostRemain();
+         });
+    } else {
+      sort(connect_edge.begin(), connect_edge.end(),
+         [&](const std::string a, const std::string b) {
+           return data_->GetEdgeNode(a)->GetLowCostRemain() < data_->GetEdgeNode(b)->GetLowCostRemain();
+         });
+    }
+    int leave_bandwidth = client_bandwidth;
+    for (std::string &edge : connect_edge) {
+      if (leave_bandwidth == 0) break;
+      int alloc = std::min(data_->GetEdgeNode(edge)->GetLowCostRemain(), leave_bandwidth);
+      data_->AddDistribution(days_,client,edge,alloc);
+      leave_bandwidth -= alloc;
+      data_->GetEdgeNode(edge)->DecRemain(alloc);
+    }
+    //现在分配必须增加成本（最好按照T天接受请求的3/4分位数来排序）这里暂时平均放置
+    sort(connect_edge.begin(), connect_edge.end(),
+         [&](const std::string a, const std::string b) {
+           return data_->GetEdgeNode(a)->GetRemain() < data_->GetEdgeNode(b)->GetRemain();
+         });
+    int use_cnt = 0;
+    for (std::string &edge : connect_edge) {
+      if (leave_bandwidth == 0) break;
+      int alloc = (leave_bandwidth + n - use_cnt - 1) / (n - use_cnt);
+      alloc = std::min(data_->GetEdgeNode(edge)->GetRemain(), alloc);
+      data_->AddDistribution(days_,client,edge,alloc);
+      leave_bandwidth -= alloc;
+      data_->GetEdgeNode(edge)->DecRemain(alloc);
+      data_->GetEdgeNode(edge)->SetCostThreshold();
+    }
+    assert (leave_bandwidth == 0);
+  }
+}

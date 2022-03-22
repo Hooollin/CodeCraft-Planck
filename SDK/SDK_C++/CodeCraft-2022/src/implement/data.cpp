@@ -159,3 +159,9 @@ EdgeNode *Data::GetEdgeNode(std::string name){
 ClientNode *Data::GetClientNode(std::string name){
   return client_node_[name];
 }
+
+void Data::ResetEdgeBand() {
+  for(auto& edgename: GetEdgeList()) {
+    GetEdgeNode(edgename)->Reset();
+  }
+}
