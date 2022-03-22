@@ -74,13 +74,17 @@ void PreDistribution::Distribute() {
     //对边缘节点按照带宽最大5%排序
     sort(available_edge_node.begin(), available_edge_node.end(),
          [&](const std::string &a, const std::string &b) {
-           // 45.6w: 0.0, 1.0, 0.5
-           // 43.6w: 0.0, 2.0, 0.5
-           // 40.3w: 0.0, 1.0, 0.0
+           // 45.6w: 0.0, 1.0, 0.5 (plus)
+           // 43.6w: 0.0, 2.0, 0.5 (plus)
+           // 40.3w: 0.0, 1.0, 0.0 (plus)
+           // 41.9w: 0.1, 1.0, 0.0 (plus)
+           // 38.9w: 0.0, 1.0, 0.1 (minus)
+           // 38.8w: 0.05, 1.0, 0.1 (minus)
+           // 38.5w: 0.02, 1.0, 0.1 (minus)
            // loading : bandwidth : servingcount
-           double w1 = 0.0, w2 = 1.0, w3 = 0.0;
-           double f1 = w1 * percent_five[a][0] / max_perfent_five + w2 * percent_five[a][1] / max_bandwidth + w3 * percent_five[a][2] / max_serving_client_count;
-           double f2 = w1 * percent_five[b][0] / max_perfent_five + w2 * percent_five[b][1] / max_bandwidth + w3 * percent_five[b][2] / max_serving_client_count;
+           double w1 = 0.02, w2 = 1.0, w3 = 0.1;
+           double f1 = w1 * percent_five[a][0] / max_perfent_five + w2 * percent_five[a][1] / max_bandwidth - w3 * percent_five[a][2] / max_serving_client_count;
+           double f2 = w1 * percent_five[b][0] / max_perfent_five + w2 * percent_five[b][1] / max_bandwidth - w3 * percent_five[b][2] / max_serving_client_count;
            return f1 < f2;
          });
 
@@ -145,6 +149,7 @@ void PreDistribution::LHDistribute(){
       client_edge_num[client].insert(edge);
     }
   }
+  
   //获得每日流量需求
   std::vector<std::unordered_map<std::string, int>> days_client_bandwidth(l);
 
@@ -156,7 +161,7 @@ void PreDistribution::LHDistribute(){
 
   for (int i = 0; i < n; i++) {
     //每个边缘节点前5%大的天数的流量总和
-    std::unordered_map<std::string, long long> percent_five{};
+    std::unordered_map<std::string, double> percent_five{};
 
     //每个边缘节点前5%大的天数
     std::unordered_map<std::string, std::vector<int>> percent_days{};
@@ -169,46 +174,46 @@ void PreDistribution::LHDistribute(){
     for (int j = 0; j < n - i; j++) {
       std::string edge = available_edge_node[j];
 
-      std::vector<long long> edge_bandwidth(l, 0);
+      std::vector<double> edge_bandwidth(l, 0);
       std::vector<int> seq(l);
 
       for (int k = 0; k < l; k++) seq[k] = k;
 
+      
+
       std::unordered_set<std::string> edge_client = data_->GetEdgeClient(edge);
+
+      std::set<std::string> link_counter;
+      for (auto &client : edge_client) {
+          for (auto &nei_edge_name : client_edge_num[client]) {
+            link_counter.insert(nei_edge_name);
+          }
+      }
       for (int k = 0; k < l; k++) {
         for (auto &client : edge_client) {
           edge_bandwidth[k] += days_client_bandwidth[k][client];
           assert(days_client_bandwidth[k][client] >= 0);
-          assert(edge_bandwidth[k] >= 0);
+          //assert(edge_bandwidth[k] >= 0);
         }
+        edge_bandwidth[k] = std::fabs((data_->GetEdgeNode(edge)->GetBandwidth() - edge_bandwidth[k]) / (1 + link_counter.size()));
       }
+
 
       std::sort(seq.begin(), seq.end(), [&](const int &a, const int &b) {
         return edge_bandwidth[a] > edge_bandwidth[b];
       });
 
-      long long total = 0;
+      double total = 0.0f;
       for (int k = 0; k < percent_five_day; k++) {
         total += edge_bandwidth[seq[k]];
         percent_days[edge].emplace_back(seq[k]);
       }
-      percent_five[edge] = std::abs(data_->GetEdgeNode(edge)->GetBandwidth() * percent_five_day - total);
+      percent_five[edge] = total;
     }
     //对边缘节点按照带宽最大5%排序
     sort(available_edge_node.begin(), available_edge_node.end(),
          [&](const std::string &a, const std::string &b) {
-           std::set<std::string> as, bs;
-           for(auto &nei_client_name : data_->GetEdgeNode(a)->Getservingclientnode()){
-              for(auto &nei_edge_name : client_edge_num[nei_client_name]){
-                as.insert(nei_edge_name);
-              }
-           }
-           for(auto &nei_client_name : data_->GetEdgeNode(b)->Getservingclientnode()){
-              for(auto &nei_edge_name : client_edge_num[nei_client_name]){
-                bs.insert(nei_edge_name);
-              }
-           }
-           return 1.0 * percent_five[a] / (int)(as.size() + 1) > 1.0 * percent_five[b] / (int)(bs.size() + 1);
+           return percent_five[a] > percent_five[b];
          });
 
     //取最大的边缘节点
