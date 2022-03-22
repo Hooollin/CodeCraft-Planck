@@ -16,7 +16,8 @@ void Distributor::DayDistribute() {
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     ClientDayDistribution day_distribution(i, &data_);
-    day_distribution.DistributeBalanced();
+    // day_distribution.DistributeBalanced();
+    day_distribution.DistributeThreshold();
   }
 
   output_parser.StandradOutput();

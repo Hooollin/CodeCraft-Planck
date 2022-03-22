@@ -38,5 +38,6 @@ class ClientDayDistribution : DayDistribution {
   void DistributeForMyBest();
   void DistributeMaxBandwidth();
 
+  void DistributeThreshold(); // 记录成本阈值
  private:
 };

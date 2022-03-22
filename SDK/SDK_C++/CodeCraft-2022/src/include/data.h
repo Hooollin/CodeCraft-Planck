@@ -84,6 +84,9 @@ class Data {
   //获得客户节点
   ClientNode* GetClientNode(std::string name);
 
+  //充值边缘节点剩余带宽和当前成本
+  void ResetEdgeBand();
+
  private:
   //边缘节点集合
   std::unordered_map<std::string, EdgeNode *> edge_node_;
