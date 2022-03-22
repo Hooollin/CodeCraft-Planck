@@ -35,4 +35,5 @@ void OutputParser::StandradOutput() {
       ofs_ << std::endl;
     }
   }
+  ofs_.close();
 }
