@@ -96,6 +96,11 @@ class Data {
   //获得边缘节点成本
   int GetEdgeCost(std::string &edge);
 
+  //设置每日处理顺序
+  void SetDaysOrder(std::vector<int> &days_order);
+  //获得每日处理顺序
+  std::vector<int> &GetDaysOrder();
+
  private:
   //边缘节点集合
   std::unordered_map<std::string, EdgeNode *> edge_node_;
@@ -111,6 +116,8 @@ class Data {
   std::unordered_map<std::string, int> edge_order_;
   //遍历客户节点的顺序,value是其在节点中的排序值
   std::unordered_map<std::string, int> client_order_;
+  //处理每一天的顺序
+  std::vector<int> days_order_;
   //总天数
   int alldays_;
   //边缘节点成本（使用最大带宽量）

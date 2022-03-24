@@ -143,6 +143,7 @@ void PreDistribution::LHLDistribute() {
       data_->DelAvailableEdgeNode(deal_day, max_edge);
     }
   }
+  days_client_bandwidth_ = days_client_bandwidth;
   return;
 }
 
@@ -269,6 +270,7 @@ void PreDistribution::LHKDistribute() {
       data_->DelAvailableEdgeNode(deal_day, max_edge);
     }
   }
+  days_client_bandwidth_ = days_client_bandwidth;
   return;
 }
 
@@ -276,14 +278,6 @@ void PreDistribution::GetEdgeOrder() {
   std::vector<long long> bandwidth;  //用以排序并获取大流量值的流量和数组
   bandwidth.reserve(allday_ * edge_node_.size());
 
-  //获得每日客户节点的带宽需求量
-  std::vector<std::unordered_map<std::string, long long>> days_client_bandwidth(
-      allday_, std::unordered_map<std::string, long long>{});
-  for (int i = 0; i < allday_; i++) {
-    for (std::string &client : client_node_) {
-      days_client_bandwidth[i][client] = data_->GetClientDayDemand(i, client);
-    }
-  }
   //每日边缘节点的需要满足的带宽最大量
   std::vector<std::unordered_map<std::string, long long>> days_edge_bandwidth(
       allday_, std::unordered_map<std::string, long long>{});
@@ -298,7 +292,7 @@ void PreDistribution::GetEdgeOrder() {
     for (int i = 0; i < allday_; i++) {
       long long tmp_bandwidth = 0;
       for (std::string client : edge_client) {
-        tmp_bandwidth += days_client_bandwidth[i][client];
+        tmp_bandwidth += days_client_bandwidth_[i][client];
       }
       days_edge_bandwidth[i][edge] = tmp_bandwidth;
       bandwidth.emplace_back(tmp_bandwidth);
@@ -336,16 +330,6 @@ void PreDistribution::GetClientOrder() {
   std::vector<long long> bandwidth;  //用以排序并获取大流量值的流量和数组
   bandwidth.reserve(allday_ * client_node_.size());
 
-  //获得每日客户节点的带宽需求量
-  std::vector<std::unordered_map<std::string, long long>> days_client_bandwidth(
-      allday_, std::unordered_map<std::string, long long>{});
-  for (int i = 0; i < allday_; i++) {
-    for (std::string &client : client_node_) {
-      days_client_bandwidth[i][client] = data_->GetClientDayDemand(i, client);
-      bandwidth.emplace_back(days_client_bandwidth[i][client]);
-    }
-  }
-
   //最终获得的客户节点顺序
   std::vector<std::string> client_order;
 
@@ -360,7 +344,7 @@ void PreDistribution::GetClientOrder() {
   std::unordered_map<std::string, int> client_big_bandwidth;
   for (int i = 0; i < allday_; i++) {
     for (std::string client : client_node_) {
-      if (days_client_bandwidth[i][client] >= up_value) {
+      if (days_client_bandwidth_[i][client] >= up_value) {
         client_big_bandwidth[client]++;
       }
     }
@@ -376,4 +360,25 @@ void PreDistribution::GetClientOrder() {
        });
   int n = client_order.size();
   for (int i = 0; i < n; i++) data_->SetClientNodeOrder(client_order[i], i);
+}
+
+void PreDistribution::GetDaysOrder(){
+
+  //获取每日流量和
+  std::vector<long long> days_bandwidth(allday_,0);
+  for(int i=0;i<allday_;i++){
+    for(auto &p : days_client_bandwidth_[i]){
+      std::string client = p.first;
+      int bandwidth =  p.second;
+      days_bandwidth[i] += bandwidth;
+    }
+  }
+
+  std::vector<int> days_order(allday_);
+  for(int i=0;i<allday_;i++) days_order[i] = i;
+  std::sort(days_order.begin(), days_order.end(),[&](const int &a,const int &b){
+    return days_bandwidth[a] > days_bandwidth[b];
+  });
+  data_->SetDaysOrder(days_order);
+  return ;
 }

@@ -12,11 +12,15 @@ void Distributor::DayDistribute() {
   pre_distribution.Distribute();
   pre_distribution.GetEdgeOrder();
   pre_distribution.GetClientOrder();
+  pre_distribution.GetDaysOrder();
+
   int allday = data_.GetAllDays();
+  std::vector<int> days_order = data_.GetDaysOrder();
 
   //进行每日处理
   for (int i = 0; i < allday; i++) {
-    ClientDayDistribution day_distribution(i, &data_);
+    int nowaday = days_order[i];
+    ClientDayDistribution day_distribution(nowaday, &data_);
     day_distribution.Distribute();
   }
 

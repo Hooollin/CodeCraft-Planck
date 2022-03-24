@@ -27,18 +27,16 @@ class PreDistribution {
 
   //正式分配策略
   void Distribute();
-
   // LHK预分配策略
   void LHKDistribute();
-
   // LHL预分配策略
   void LHLDistribute();
   //获取边缘节点顺序
   void GetEdgeOrder();
-
   //获取客户节点排序
   void GetClientOrder();
-
+  //获得每天处理顺序
+  void GetDaysOrder();
  private:
   //数据
   Data *data_;
@@ -48,4 +46,6 @@ class PreDistribution {
   std::vector<std::string> edge_node_;
   //客户节点列表
   std::vector<std::string> client_node_;
+  //剩余客户节点需满足流量
+  std::vector<std::unordered_map<std::string,int> >  days_client_bandwidth_;
 };
