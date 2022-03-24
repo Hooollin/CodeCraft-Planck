@@ -29,7 +29,7 @@ class EdgeNode {
   }
 
   int GetservingclientnodeNum() {
-    return serving_clientnode.size();
+    return (int) serving_clientnode.size();
   }
 
   int &GetBandwidth() { return bandwidth_; }
@@ -58,7 +58,6 @@ class EdgeNode {
 
   int bandwidth_;  //边缘节点带宽上限
   int remain_; //剩余可用带宽
-
   int cost_threshold_; //成本阈值
 
   std::unordered_set<std::string> serving_clientnode;  //连接的客户节点

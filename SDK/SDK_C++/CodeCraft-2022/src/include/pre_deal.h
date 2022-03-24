@@ -9,8 +9,11 @@
 #include "data.h"
 #include "edge_node.h"
 
-const double UP_BANDWIDTH_PERCENT =
-    0.8;  //用以获得边缘节点顺序时使用.每天每个边缘节点最大流量之和排序后，大于该比例的流量之和算作大流量，在计数上算1。
+const double UP_EDGE_BANDWIDTH_PERCENT =
+    0.4;  //用以获得边缘节点顺序时使用。每天每个边缘节点最大流量之和排序后，大于该比例的流量之和算作大流量，在计数上算1。
+
+const double UP_CLIENT_BANDWIDTH_PERCENT =
+    0.7;  //用以获得客户节点顺序时使用。每天每个客户节点流量排序后，大于该比例的流量算作大流量，在计数上算1。
 
 class PreDistribution {
  public:
@@ -22,17 +25,20 @@ class PreDistribution {
     allday_ = data_->GetAllDays();
   }
 
-  //预分配策略
+  //正式分配策略
   void Distribute();
-  
-  // LH预分配策略
-  void LHDistribute();
 
+  // LHK预分配策略
+  void LHKDistribute();
+
+  // LHL预分配策略
+  void LHLDistribute();
   //获取边缘节点顺序
   void GetEdgeOrder();
 
   //获取客户节点排序
   void GetClientOrder();
+
  private:
   //数据
   Data *data_;

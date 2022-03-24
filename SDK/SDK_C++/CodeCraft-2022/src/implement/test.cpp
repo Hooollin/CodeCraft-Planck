@@ -63,10 +63,10 @@ void Test::TestEdgeAndClient() {
   int client_size = client_node.size();
   for (std::string edge : edge_node) {
     EdgeNode *node = data_.GetEdgeNode(edge);
-    assert(data_.GetEdgeBandwidthLimit(edge) >= 0);
-    assert(data_.GetEdgeClientNum(edge) >= 0 &&
-           data_.GetEdgeClientNum(edge) <= client_size);
     ofs_ << node->ToString() << std::endl;
+    assert(data_.GetEdgeBandwidthLimit(edge) >= 0);
+    assert(data_.GetEdgeClientNum(edge) >= 0 );
+    assert(data_.GetEdgeClientNum(edge) <= client_size);
   }
 
   for (std::string client : client_node) {
@@ -175,13 +175,14 @@ void Test::TestAll() {
   //预处理，获得预处理分配
   PreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
-  // pre_distribution.GetEdgeOrder();
+  pre_distribution.GetEdgeOrder();
+  pre_distribution.GetClientOrder();
   int allday = data_.GetAllDays();
   TestPreDeal();
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     ClientDayDistribution day_distribution(i, &data_);
-    day_distribution.DistributeBalanced();
+    day_distribution.Distribute();
   }
   TestEverydaysDistribution();
   TestFinalCost();

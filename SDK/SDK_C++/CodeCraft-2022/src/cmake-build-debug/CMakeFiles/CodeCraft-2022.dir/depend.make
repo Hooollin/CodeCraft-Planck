@@ -58,4 +58,12 @@ CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.obj: \
  ../include/pre_deal.h \
  ../implement/pre_deal.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: \
+ ../include/client_node.h \
+ ../include/data.h \
+ ../include/distrubution_strategy.h \
+ ../include/edge_node.h \
+ ../include/input_parser.h \
+ ../include/output_parser.h \
+ ../include/pre_deal.h \
+ ../include/test.h \
  ../implement/test.cpp

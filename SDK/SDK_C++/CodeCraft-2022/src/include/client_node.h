@@ -38,7 +38,7 @@ class ClientNode {
   };
 
   int GetAvailableEdgeNodeNum() {
-    return available_edgenode.size();
+    return (int) available_edgenode.size();
   };
 
   std::string ToString();

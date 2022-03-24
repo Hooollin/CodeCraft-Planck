@@ -26,18 +26,26 @@ class DayDistribution {
   std::unordered_set<std::string> client_node_;
   //边缘节点集合
   std::unordered_set<std::string> edge_node_;
+  //客户节点顺序序列
+  std::vector<std::string> client_node_v_;
+  //边缘节点顺序序列
+  std::vector<std::string> edge_node_v_;
   //今天是第几天
   int days_;
 };
 
 class ClientDayDistribution : DayDistribution {
  public:
-
-  ClientDayDistribution(int &day, Data *data) : DayDistribution(day,data) {}
+  ClientDayDistribution(int &day, Data *data) : DayDistribution(day, data) {}
+  //实际分配策略
+  void Distribute();
+  //服务器均衡分配策略
   void DistributeBalanced();
-  void DistributeForMyBest();
+  //集中在几台服务器的全分配策略
+  void DistributeAllIn();
   void DistributeMaxBandwidth();
+  //记录成本阈值
+  void DistributeThreshold();
 
-  void DistributeThreshold(); // 记录成本阈值
  private:
 };

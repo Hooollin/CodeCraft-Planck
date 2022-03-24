@@ -59,10 +59,14 @@ class Data {
   //输出edge数据
   void EdgeToString(std::string &edge);
 
-  //设置顺序边缘节点
-  void SetEdgeNodeOrder(std::vector<std::string> &order);
-  //设置顺序客户节点
-  void SetClientNodeOrder(std::vector<std::string> &order);
+  //设置边缘节点顺序
+  void SetEdgeNodeOrder(std::string &edge, int &order);
+  //设置客户节点顺序
+  void SetClientNodeOrder(std::string &client, int &order);
+  //获得边缘节点顺序
+  int &GetEdgeNodeOrder(std::string &edge);
+  //获得客户节点顺序
+  int &GetClientNodeOrder(std::string &client);
 
   //设置总天数,并对数组初始化
   void SetAllDays(int days);
@@ -80,12 +84,17 @@ class Data {
   std::unordered_set<std::string> GetEdgeSet();
 
   //获得边缘节点
-  EdgeNode* GetEdgeNode(std::string name);
+  EdgeNode *GetEdgeNode(std::string name);
   //获得客户节点
-  ClientNode* GetClientNode(std::string name);
+  ClientNode *GetClientNode(std::string name);
 
-  //充值边缘节点剩余带宽和当前成本
+  //重置边缘节点剩余带宽和当前成本
   void ResetEdgeBand();
+
+  //更新边缘节点成本
+  void UpdateEdgeCost(std::string &edge, int &num);
+  //获得边缘节点成本
+  int GetEdgeCost(std::string &edge);
 
  private:
   //边缘节点集合
@@ -98,12 +107,14 @@ class Data {
       distribution_;
   //可用节点情况 available_edge_node_[day]
   std::vector<std::unordered_set<std::string>> available_edge_node_;
-  //遍历边缘节点的顺序
-  std::vector<std::string> edge_order_;
-  //遍历客户节点的顺序
-  std::vector<std::string> client_order_;
+  //边缘节点的顺序,value是其在节点中的排序值
+  std::unordered_map<std::string, int> edge_order_;
+  //遍历客户节点的顺序,value是其在节点中的排序值
+  std::unordered_map<std::string, int> client_order_;
   //总天数
   int alldays_;
+  //边缘节点成本（使用最大带宽量）
+  std::unordered_map<std::string, int> edge_cost_;
 };
 
 void OutputTwoStringKeyInt(two_string_key_int &data);

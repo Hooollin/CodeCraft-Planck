@@ -11,13 +11,13 @@ void Distributor::DayDistribute() {
   PreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
   pre_distribution.GetEdgeOrder();
+  pre_distribution.GetClientOrder();
   int allday = data_.GetAllDays();
 
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     ClientDayDistribution day_distribution(i, &data_);
-    // day_distribution.DistributeBalanced();
-    day_distribution.DistributeThreshold();
+    day_distribution.Distribute();
   }
 
   output_parser.StandradOutput();
