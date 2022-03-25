@@ -377,7 +377,7 @@ void PreDistribution::GetDaysOrder(){
   std::vector<int> days_order(allday_);
   for(int i=0;i<allday_;i++) days_order[i] = i;
   std::sort(days_order.begin(), days_order.end(),[&](const int &a,const int &b){
-    return days_bandwidth[a] > days_bandwidth[b];
+    return days_bandwidth[a] < days_bandwidth[b];
   });
   data_->SetDaysOrder(days_order);
   return ;
