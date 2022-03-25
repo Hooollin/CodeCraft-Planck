@@ -65,7 +65,7 @@ void Test::TestEdgeAndClient() {
     EdgeNode *node = data_.GetEdgeNode(edge);
     ofs_ << node->ToString() << std::endl;
     assert(data_.GetEdgeBandwidthLimit(edge) >= 0);
-    assert(data_.GetEdgeClientNum(edge) >= 0 );
+    assert(data_.GetEdgeClientNum(edge) >= 0);
     assert(data_.GetEdgeClientNum(edge) <= client_size);
   }
 
@@ -119,6 +119,35 @@ void Test::TestEverydaysDistribution() {
     ofs_ << "day" << i << ":" << std::endl;
     auto distribution = data_.GetDistribution(i);
     ofs_ << OutputEDistribution(distribution, i);
+    //输出流量情况
+    std::unordered_map<std::string, long long> edge_bandwidth;
+    long long total_bandwidth = 0;
+    for (auto &p : distribution) {
+      std::string client = p.first;
+      for (auto &pp : p.second) {
+        std::string edge = pp.first;
+        int val = pp.second;
+        edge_bandwidth[edge] += val;
+        total_bandwidth += val;
+      }
+    }
+    std::vector<std::string> edge_list = data_.GetEdgeList();
+    std::sort(edge_list.begin(), edge_list.end(),
+              [&](const std::string &a, const std::string &b) {
+                return edge_bandwidth[a] > edge_bandwidth[b];
+              });
+    //输出节点占比
+    ofs_ <<"边缘节点流量占比："<<std::endl;
+    for(std::string &edge : edge_list){
+      ofs_<<"("<<edge<<","<<(int)(1.0 * edge_bandwidth[edge] / total_bandwidth * 100)<<"%)"<<" ";
+    }
+    ofs_<<std::endl;
+    //输出边缘节点流量
+    ofs_ <<"边缘节点流量："<<std::endl;
+    for(std::string &edge : edge_list){
+      ofs_<<"("<<edge<<","<<edge_bandwidth[edge]<<")"<<" ";
+    }
+    ofs_<<std::endl;
     std::unordered_set<std::string> available_edge_node =
         data_.GetAvailableEdgeNode(i);
     ofs_ << std::endl;
@@ -151,14 +180,14 @@ void Test::TestFinalCost() {
       }
     }
   }
-  ofs_ << "edge cost :"<<std::endl;
+  ofs_ << "edge cost :" << std::endl;
   long long total_cost = 0;
   for (auto &p : edge_days_bandwidth) {
     std::string edge = p.first;
     std::vector<int> &bandwidth = p.second;
     sort(bandwidth.begin(), bandwidth.end());
     int cost = bandwidth[percent_95 - 1];
-    ofs_ << "<" << edge << "," << cost << ">"<<std::endl;
+    ofs_ << "<" << edge << "," << cost << ">" << std::endl;
     total_cost += cost;
   }
   ofs_ << std::endl;
