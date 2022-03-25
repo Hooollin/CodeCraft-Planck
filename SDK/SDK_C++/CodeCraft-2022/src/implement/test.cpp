@@ -139,7 +139,7 @@ void Test::TestEverydaysDistribution() {
     //输出节点占比
     ofs_ <<"边缘节点流量占比："<<std::endl;
     for(std::string &edge : edge_list){
-      ofs_<<"("<<edge<<","<<(int)(1.0 * edge_bandwidth[edge] / total_bandwidth * 100)<<"%)"<<" ";
+      ofs_<<"("<<edge<<","<<std::fixed<<std::setprecision(2)<<(1.0 * edge_bandwidth[edge] / total_bandwidth * 100)<<"%)"<<" ";
     }
     ofs_<<std::endl;
     //输出边缘节点流量
