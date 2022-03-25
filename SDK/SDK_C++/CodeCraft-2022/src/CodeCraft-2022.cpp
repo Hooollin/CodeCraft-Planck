@@ -2,10 +2,10 @@
 #include "distributor.h"
 
 int main() {
-//  Test test_example(3);
-//  test_example.TestAll();
+  Test test_example(3);
+  test_example.TestAll();
 
-  Distributor distributor(1);
-  distributor.DayDistribute();
-  return 0;
+//  Distributor distributor(1);
+//  distributor.DayDistribute();
+//  return 0;
 }

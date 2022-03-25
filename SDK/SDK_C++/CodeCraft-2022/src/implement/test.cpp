@@ -100,6 +100,9 @@ void Test::TestPreDeal() {
     for (auto &p : distribution) {
       for (auto &pp : p.second) {
         std::string name = pp.first;
+        if(available_edge_node.find(name) != available_edge_node.end()){
+          std::cout<<p.first<<" "<<name<<" "<<pp.second<<std::endl;
+        }
         assert(available_edge_node.find(name) == available_edge_node.end());
       }
     }
@@ -137,8 +140,10 @@ void Test::TestEverydaysDistribution() {
                 return edge_bandwidth[a] > edge_bandwidth[b];
               });
     //输出节点占比
+
     ofs_ <<"边缘节点流量占比："<<std::endl;
     for(std::string &edge : edge_list){
+      assert(edge_bandwidth[edge] <= data_.GetEdgeBandwidthLimit(edge));
       ofs_<<"("<<edge<<","<<std::fixed<<std::setprecision(2)<<(1.0 * edge_bandwidth[edge] / total_bandwidth * 100)<<"%)"<<" ";
     }
     ofs_<<std::endl;
