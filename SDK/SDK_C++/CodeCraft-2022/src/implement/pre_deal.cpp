@@ -83,15 +83,13 @@ void PreDistribution::LHLDistribute() {
     //对边缘节点按照带宽最大5%排序
     sort(available_edge_node.begin(), available_edge_node.end(),
          [&](const std::string &a, const std::string &b) {
-           // 45.6w: 0.0, 1.0, 0.5 (plus)
-           // 43.6w: 0.0, 2.0, 0.5 (plus)
-           // 40.3w: 0.0, 1.0, 0.0 (plus)
-           // 41.9w: 0.1, 1.0, 0.0 (plus)
-           // 38.9w: 0.0, 1.0, 0.1 (minus)
-           // 38.8w: 0.05, 1.0, 0.1 (minus)
-           // 38.5w: 0.02, 1.0, 0.1 (minus)
+           // 310w: 0.01, 1.0, 0.15
+           // 300w: 0.15, 1.0, 0.1
+           // 300w: 0.05, 1.0, 0.1
+           // 304w: 0.02, 1.0, 0.1
+           // 298w: 0.01, 1.0, 0.1 (minus)
            // loading : bandwidth : servingcount
-           double w1 = 0.02, w2 = 1.0, w3 = 0.1;
+           double w1 = 0.01, w2 = 1.0, w3 = 0.15;
            double f1 = w1 * percent_five[a][0] / max_perfent_five +
                        w2 * percent_five[a][1] / max_bandwidth -
                        w3 * percent_five[a][2] / max_serving_client_count;
