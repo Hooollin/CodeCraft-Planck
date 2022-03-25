@@ -7,6 +7,9 @@
 #include "client_node.h"
 #include "data.h"
 #include "edge_node.h"
+
+//将排序过后前x%和后x%的边缘节点的流量放回重分配
+const double RE_DISTRIBUTE_PROPORTION = 0.4;
 class DayDistribution {
  public:
   DayDistribution(int &day, Data *data);
@@ -48,5 +51,7 @@ class ClientDayDistribution : DayDistribution {
   void DistributeThreshold();
   //对未到达cost上限的首先进行上限均分
   void DistributeForCost();
+  //带回收的均分策略
+  void DistributeAverage();
  private:
 };

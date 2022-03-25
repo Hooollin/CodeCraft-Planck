@@ -37,6 +37,8 @@ class PreDistribution {
   void GetClientOrder();
   //获得每天处理顺序
   void GetDaysOrder();
+  //二分获取边缘节点分配给客户节点的最大平均流量
+  int GetAvangeBandwidth(std::vector<std::string> &client_lists,int &bandwidth,int &deal_day);
  private:
   //数据
   Data *data_;

@@ -2,8 +2,29 @@
 #include "pre_deal.h"
 
 void PreDistribution::Distribute() {
-  //LHKDistribute();
+  // LHKDistribute();
   LHLDistribute();
+}
+
+int PreDistribution::GetAvangeBandwidth(std::vector<std::string> &client_lists,
+                                        int &bandwidth, int &deal_day) {
+  int l = 0;
+  int r =
+      days_client_bandwidth_[deal_day][client_lists[client_lists.size() - 1]];
+  int res = 0;
+  while (l <= r) {
+    int mid = (l + r) >> 1;
+    long long total = 0;
+    for (std::string &client : client_lists)
+      total += std::min(days_client_bandwidth_[deal_day][client], mid);
+    if (total <= bandwidth) {
+      res = (int)total;
+      l = mid + 1;
+    } else {
+      r = mid - 1;
+    }
+  }
+  return res;
 }
 
 void PreDistribution::LHLDistribute() {
@@ -20,11 +41,12 @@ void PreDistribution::LHLDistribute() {
     client_edge_num[client] = data_->GetClientEdgeNum(client);
   }
   //获得每日流量需求
-  std::vector<std::unordered_map<std::string, int>> days_client_bandwidth(l);
-
+  days_client_bandwidth_ = std::vector<std::unordered_map<std::string, int>>(l);
+  //每日客户节点连接边缘节点已被处理数
+  std::vector<std::unordered_map<std::string, int>> days_client_deal_nums(l);
   for (int i = 0; i < allday_; i++) {
     for (std::string &client : client_node_) {
-      days_client_bandwidth[i][client] = data_->GetClientDayDemand(i, client);
+      days_client_bandwidth_[i][client] = data_->GetClientDayDemand(i, client);
     }
   }
 
@@ -47,7 +69,6 @@ void PreDistribution::LHLDistribute() {
           std::max(percent_five[available_edge_node[j]][1], max_bandwidth);
       max_serving_client_count = std::max(
           percent_five[available_edge_node[j]][2], max_serving_client_count);
-
       percent_days[available_edge_node[j]] = std::vector<int>(0);
     }
     //统计当前剩下的n-i个边缘节点的每日带宽
@@ -62,8 +83,8 @@ void PreDistribution::LHLDistribute() {
       std::unordered_set<std::string> edge_client = data_->GetEdgeClient(edge);
       for (int k = 0; k < l; k++) {
         for (auto &client : edge_client) {
-          edge_bandwidth[k] += days_client_bandwidth[k][client];
-          assert(days_client_bandwidth[k][client] >= 0);
+          edge_bandwidth[k] += days_client_bandwidth_[k][client];
+          assert(days_client_bandwidth_[k][client] >= 0);
           assert(edge_bandwidth[k] >= 0);
         }
       }
@@ -80,23 +101,23 @@ void PreDistribution::LHLDistribute() {
       percent_five[edge][0] = total;
       max_perfent_five = std::max(total, max_perfent_five);
     }
+    // 310w: 0.01, 1.0, 0.15
+    // 300w: 0.15, 1.0, 0.1
+    // 300w: 0.05, 1.0, 0.1
+    // 304w: 0.02, 1.0, 0.1
+    // 298w: 0.01, 1.0, 0.1 (minus)
+    // loading : bandwidth : servingcount
+    double w1 = 0.01, w2 = 1.0, w3 = 0.1;
+    std::unordered_map<std::string, double> f;
+    for (std::string edge : available_edge_node) {
+      f[edge] = w1 * percent_five[edge][0] / max_perfent_five +
+                w2 * percent_five[edge][1] / max_bandwidth -
+                w3 * percent_five[edge][2] / max_serving_client_count;
+    }
     //对边缘节点按照带宽最大5%排序
     sort(available_edge_node.begin(), available_edge_node.end(),
          [&](const std::string &a, const std::string &b) {
-           // 310w: 0.01, 1.0, 0.15
-           // 300w: 0.15, 1.0, 0.1
-           // 300w: 0.05, 1.0, 0.1
-           // 304w: 0.02, 1.0, 0.1
-           // 298w: 0.01, 1.0, 0.1 (minus)
-           // loading : bandwidth : servingcount
-           double w1 = 0.01, w2 = 1.0, w3 = 0.15;
-           double f1 = w1 * percent_five[a][0] / max_perfent_five +
-                       w2 * percent_five[a][1] / max_bandwidth -
-                       w3 * percent_five[a][2] / max_serving_client_count;
-           double f2 = w1 * percent_five[b][0] / max_perfent_five +
-                       w2 * percent_five[b][1] / max_bandwidth -
-                       w3 * percent_five[b][2] / max_serving_client_count;
-           return f1 < f2;
+           return f[a] < f[b];
          });
 
     //取最大的边缘节点
@@ -105,43 +126,63 @@ void PreDistribution::LHLDistribute() {
 
     std::unordered_set<std::string> edge_client =
         data_->GetEdgeClient(max_edge);
-    std::vector<std::string> client_lists;
-    //按照客户端连边数对客户节点排序
-    for (std::string client : edge_client) client_lists.emplace_back(client);
-    sort(client_lists.begin(), client_lists.end(),
-         [&](const std::string &a, const std::string &b) {
-           return client_edge_num[a] < client_edge_num[b];
-         });
     //对每天做处理
     for (int deal_day : percent_days[max_edge]) {
       //剩余流量
       int leave_bandwidth = data_->GetEdgeBandwidthLimit(max_edge);
-
-      assert(leave_bandwidth >= 0);
-
-      //按照客户端节点连边数从小到大更新
-      for (std::string client : client_lists) {
-        if (leave_bandwidth == 0) break;
-        if (days_client_bandwidth[deal_day][client] == 0) continue;
-
-        if (leave_bandwidth >= days_client_bandwidth[deal_day][client]) {
-          leave_bandwidth -= days_client_bandwidth[deal_day][client];
-          data_->AddDistribution(deal_day, client, max_edge,
-                                 days_client_bandwidth[deal_day][client]);
-          days_client_bandwidth[deal_day][client] = 0;
-          assert(leave_bandwidth >= 0);
-
+      //先将客户节点仅剩该边缘节点可更新流量的情况满足,并将剩余节点加入可平均列表中
+      std::vector<std::string> client_lists;
+      for (std::string client : edge_client) {
+        if (days_client_deal_nums[deal_day][client] ==
+            client_edge_num[client] - 1) {
+          int occupy = std::min(leave_bandwidth,
+                                days_client_bandwidth_[deal_day][client]);
+          days_client_bandwidth_[deal_day][client] -= occupy;
+          assert(days_client_bandwidth_[deal_day][client] > 0);
+          leave_bandwidth -= occupy;
+          data_->AddDistribution(deal_day, client, max_edge, occupy);
+          days_client_deal_nums[deal_day][client]++;
         } else {
-          data_->AddDistribution(deal_day, client, max_edge, leave_bandwidth);
-          days_client_bandwidth[deal_day][client] -= leave_bandwidth;
-          assert(days_client_bandwidth[deal_day][client] >= 0);
-          leave_bandwidth = 0;
+          client_lists.emplace_back(client);
         }
+      }
+      //将客户节点按需分配流量从小到大排序
+      if (client_lists.size() == 0) {
+        data_->DelAvailableEdgeNode(deal_day, max_edge);
+        continue;
+      }
+      std::sort(client_lists.begin(), client_lists.end(),
+                [&](const std::string &a, const std::string &b) {
+                  return days_client_bandwidth_[deal_day][a] <
+                         days_client_bandwidth_[deal_day][b];
+                });
+      //获得平均分配的流量值
+      int avange_bandwidth =
+          GetAvangeBandwidth(client_lists, leave_bandwidth, deal_day);
+      //进行平均分配
+      for (std::string &client : client_lists) {
+        int occupy = std::min(days_client_bandwidth_[deal_day][client],
+                              avange_bandwidth);
+        days_client_bandwidth_[deal_day][client] -= occupy;
+        leave_bandwidth -= occupy;
+        data_->AddDistribution(deal_day, client, max_edge, occupy);
+        days_client_deal_nums[deal_day][client]++;
+      }
+      int n = client_lists.size();
+      if (avange_bandwidth >=
+          days_client_bandwidth_[deal_day][client_lists[n - 1]]) {
+        data_->DelAvailableEdgeNode(deal_day, max_edge);
+        continue;
+      }
+      for (int i = n - 1; i >= n - leave_bandwidth; i--) {
+        days_client_bandwidth_[deal_day][client_lists[i]]--;
+        data_->AddDistribution(deal_day, client_lists[i], max_edge, 1);
+
+        leave_bandwidth = 0;
       }
       data_->DelAvailableEdgeNode(deal_day, max_edge);
     }
   }
-  days_client_bandwidth_ = days_client_bandwidth;
   return;
 }
 
@@ -162,11 +203,11 @@ void PreDistribution::LHKDistribute() {
   }
 
   //获得每日流量需求
-  std::vector<std::unordered_map<std::string, int>> days_client_bandwidth(l);
+  days_client_bandwidth_ = std::vector<std::unordered_map<std::string, int>>(l);
 
   for (int i = 0; i < allday_; i++) {
     for (std::string &client : client_node_) {
-      days_client_bandwidth[i][client] = data_->GetClientDayDemand(i, client);
+      days_client_bandwidth_[i][client] = data_->GetClientDayDemand(i, client);
     }
   }
 
@@ -200,8 +241,8 @@ void PreDistribution::LHKDistribute() {
       }
       for (int k = 0; k < l; k++) {
         for (auto &client : edge_client) {
-          edge_bandwidth[k] += days_client_bandwidth[k][client];
-          assert(days_client_bandwidth[k][client] >= 0);
+          edge_bandwidth[k] += days_client_bandwidth_[k][client];
+          assert(days_client_bandwidth_[k][client] >= 0);
           // assert(edge_bandwidth[k] >= 0);
         }
         edge_bandwidth[k] = std::fabs(
@@ -249,26 +290,25 @@ void PreDistribution::LHKDistribute() {
       //按照客户端节点连边数从小到大更新
       for (std::string client : client_lists) {
         if (leave_bandwidth == 0) break;
-        if (days_client_bandwidth[deal_day][client] == 0) continue;
+        if (days_client_bandwidth_[deal_day][client] == 0) continue;
 
-        if (leave_bandwidth >= days_client_bandwidth[deal_day][client]) {
-          leave_bandwidth -= days_client_bandwidth[deal_day][client];
+        if (leave_bandwidth >= days_client_bandwidth_[deal_day][client]) {
+          leave_bandwidth -= days_client_bandwidth_[deal_day][client];
           data_->AddDistribution(deal_day, client, max_edge,
-                                 days_client_bandwidth[deal_day][client]);
-          days_client_bandwidth[deal_day][client] = 0;
+                                 days_client_bandwidth_[deal_day][client]);
+          days_client_bandwidth_[deal_day][client] = 0;
           assert(leave_bandwidth >= 0);
 
         } else {
           data_->AddDistribution(deal_day, client, max_edge, leave_bandwidth);
-          days_client_bandwidth[deal_day][client] -= leave_bandwidth;
-          assert(days_client_bandwidth[deal_day][client] >= 0);
+          days_client_bandwidth_[deal_day][client] -= leave_bandwidth;
+          assert(days_client_bandwidth_[deal_day][client] >= 0);
           leave_bandwidth = 0;
         }
       }
       data_->DelAvailableEdgeNode(deal_day, max_edge);
     }
   }
-  days_client_bandwidth_ = days_client_bandwidth;
   return;
 }
 
@@ -360,23 +400,23 @@ void PreDistribution::GetClientOrder() {
   for (int i = 0; i < n; i++) data_->SetClientNodeOrder(client_order[i], i);
 }
 
-void PreDistribution::GetDaysOrder(){
-
+void PreDistribution::GetDaysOrder() {
   //获取每日流量和
-  std::vector<long long> days_bandwidth(allday_,0);
-  for(int i=0;i<allday_;i++){
-    for(auto &p : days_client_bandwidth_[i]){
+  std::vector<long long> days_bandwidth(allday_, 0);
+  for (int i = 0; i < allday_; i++) {
+    for (auto &p : days_client_bandwidth_[i]) {
       std::string client = p.first;
-      int bandwidth =  p.second;
+      int bandwidth = p.second;
       days_bandwidth[i] += bandwidth;
     }
   }
 
   std::vector<int> days_order(allday_);
-  for(int i=0;i<allday_;i++) days_order[i] = i;
-  std::sort(days_order.begin(), days_order.end(),[&](const int &a,const int &b){
-    return days_bandwidth[a] < days_bandwidth[b];
-  });
+  for (int i = 0; i < allday_; i++) days_order[i] = i;
+  std::sort(days_order.begin(), days_order.end(),
+            [&](const int &a, const int &b) {
+              return days_bandwidth[a] < days_bandwidth[b];
+            });
   data_->SetDaysOrder(days_order);
-  return ;
+  return;
 }
