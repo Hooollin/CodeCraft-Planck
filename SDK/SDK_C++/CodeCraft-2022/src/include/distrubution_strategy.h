@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
 #include "client_node.h"
 #include "data.h"
 #include "edge_node.h"
@@ -44,6 +45,8 @@ class ClientDayDistribution : DayDistribution {
   void Distribute();
   //服务器均衡分配策略
   void DistributeBalanced();
+  //服务器均衡扩展成本策略
+  void DistributeAddCostBalanced();
   //集中在几台服务器的全分配策略
   void DistributeAllIn();
   void DistributeMaxBandwidth();
@@ -53,10 +56,15 @@ class ClientDayDistribution : DayDistribution {
   void DistributeForCost();
   //带回收的均分策略
   void DistributeAverage();
+  //网络流做Cost分配
+  void FlowForCost();
   // balanced策略中，二分获得均衡流量值函数
   int GetAvangeBandwidthB(std::vector<std::string> &edge_lists, int &bandwidth,
                           int &day);
   // ForCost策略中，二分获得均衡流量值函数
   int GetAvangeBandwidthC(std::vector<std::string> &edge_lists, int &bandwidth,
+                          int &day);
+  // AddCostBalanced策略中，二分获得均衡流量值函数
+  int GetAvangeBandwidthA(std::vector<std::string> &edge_lists, int &bandwidth,
                           int &day);
 };

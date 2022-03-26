@@ -46,6 +46,8 @@ std::string Test::OutputEDistribution(two_string_key_int &datas, int days) {
       counts += pp.second;
     }
     ssm << " total:" << counts;
+    if(counts != data_.GetClientDayDemand(days, firstkey))
+      std::cout<<data_.GetClientDayDemand(days, firstkey) - counts<<std::endl;
     assert(counts == data_.GetClientDayDemand(days, firstkey));
     ssm << std::endl;
   }
