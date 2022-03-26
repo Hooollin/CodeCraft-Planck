@@ -2,19 +2,8 @@
 #include "distrubution_strategy.h"
 
 void ClientDayDistribution::Distribute() {
-  std::vector<int> days_order = data_->GetDaysOrder();
-  int idx = -1;
-  for(int i=0;i<days_order.size();i++) {
-    if(days_order[i] == days_){
-      idx = i;
-      break;
-    }
-  }
-  if(idx <= days_order.size() * 0.5){
-    FlowForCost();
-  }else{
-    DistributeForCost();
-  }
+  FlowForCost();
+  DistributeForCost();
   DistributeBalanced();
 }
 int ClientDayDistribution::GetAvangeBandwidthA(
@@ -622,7 +611,7 @@ void ClientDayDistribution::FlowForCost() {
   //客户节点连向汇点，容量为demand,并建立对应反边
   std::vector<std::unordered_map<int, int> > graph(n + m + 2);
   std::vector<int> dfn(n + m + 2, -1);
-  std::unordered_map<std::string, int> mp;
+  std::unordered_map<std::string, int> mp,mp2;
   for (int i = 1; i <= n; i++) {
     std::string &edge = edge_node_v_[i - 1];
     graph[bg][i] = data_->GetEdgeCost(edge);
@@ -633,6 +622,7 @@ void ClientDayDistribution::FlowForCost() {
     std::string &client = client_node_v_[i - n - 1];
     graph[i][ed] = data_->GetClientDayDemand(days_, client);
     graph[ed][i] = 0;
+    mp2[client] = i;
     std::unordered_set<std::string> client_edge = data_->GetClientEdge(client);
     for (std::string edge : client_edge) {
       graph[mp[edge]][i] = data_->GetEdgeCost(edge);
@@ -642,13 +632,14 @@ void ClientDayDistribution::FlowForCost() {
   //dinic求解最大流
   Dinic(bg, ed, graph, dfn);
   //利用反边流量分配
-  for(int i=n+1;i<=m;i++){
-    std::string &client = client_node_v_[i - n - 1];
-    std::unordered_set<std::string> client_edge = data_->GetClientEdge(client);
-    for (std::string edge : client_edge) {
-      data_->AddDistribution(days_,client,edge,graph[i][mp[edge]]);
-      edge_bandwidth_[edge] += graph[i][mp[edge]];
-      client_bandwidth_[client] -= graph[i][mp[edge]];
+  for(int i=1;i<=n;i++){
+    std::string &edge = edge_node_v_[i - 1];
+    std::unordered_set<std::string> edge_client = data_->GetEdgeClient(edge);
+    if(graph[0][i] != 0) continue;
+    for (std::string client : edge_client) {
+      data_->AddDistribution(days_,client,edge,graph[mp2[client]][i]);
+      edge_bandwidth_[edge] += graph[mp2[client]][i];
+      client_bandwidth_[client] -= graph[mp2[client]][i];
     }
   }
 }
