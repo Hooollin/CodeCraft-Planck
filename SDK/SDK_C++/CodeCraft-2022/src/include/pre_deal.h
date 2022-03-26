@@ -34,7 +34,7 @@ class PreDistribution {
   void LHLDistribute();
   //均衡预分配策略
   void BalancedDistribute();
-      //获取边缘节点顺序
+  //获取边缘节点顺序
   void GetEdgeOrder();
   //获取客户节点排序
   void GetClientOrder();
