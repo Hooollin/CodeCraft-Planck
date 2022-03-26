@@ -53,5 +53,10 @@ class ClientDayDistribution : DayDistribution {
   void DistributeForCost();
   //带回收的均分策略
   void DistributeAverage();
- private:
+  // balanced策略中，二分获得均衡流量值函数
+  int GetAvangeBandwidthB(std::vector<std::string> &edge_lists, int &bandwidth,
+                          int &day);
+  // ForCost策略中，二分获得均衡流量值函数
+  int GetAvangeBandwidthC(std::vector<std::string> &edge_lists, int &bandwidth,
+                          int &day);
 };

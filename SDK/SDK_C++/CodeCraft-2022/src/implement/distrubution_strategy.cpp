@@ -4,7 +4,51 @@
 void ClientDayDistribution::Distribute() {
   DistributeForCost();
   DistributeBalanced();
-//    DistributeAverage();
+  //    DistributeAverage();
+}
+
+int ClientDayDistribution::GetAvangeBandwidthB(
+    std::vector<std::string> &edge_lists, int &bandwidth, int &day) {
+  int n = edge_lists.size();
+  int l = 0;
+  int r = data_->GetEdgeBandwidthLimit(edge_lists[n - 1]);
+  int res = 0;
+  while (l <= r) {
+    int mid = (l + r) >> 1;
+    long long total = 0;
+    for (std::string &edge : edge_lists)
+      total += std::max(0, std::min(data_->GetEdgeBandwidthLimit(edge), mid) -
+                               edge_bandwidth_[edge]);
+    if (total <= bandwidth) {
+      res = mid;
+      l = mid + 1;
+    } else {
+      r = mid - 1;
+    }
+  }
+  return res;
+}
+
+int ClientDayDistribution::GetAvangeBandwidthC(
+    std::vector<std::string> &edge_lists, int &bandwidth, int &day) {
+  int n = edge_lists.size();
+  int l = 0;
+  int r = data_->GetEdgeCost(edge_lists[n - 1]);
+  int res = 0;
+  while (l <= r) {
+    int mid = (l + r) >> 1;
+    long long total = 0;
+    for (std::string &edge : edge_lists)
+      total += std::max(0, std::min(data_->GetEdgeCost(edge), mid) -
+                               edge_bandwidth_[edge]);
+    if (total <= bandwidth) {
+      res = mid;
+      l = mid + 1;
+    } else {
+      r = mid - 1;
+    }
+  }
+  return res;
 }
 
 DayDistribution::DayDistribution(int &day, Data *data) {
@@ -72,94 +116,43 @@ void ClientDayDistribution::DistributeBalanced() {
 
   for (std::string client : client_order_) {
     if (client_bandwidth_[client] == 0) continue;
-    //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
+    //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量上限从小到大排序
     std::vector<std::string> connect_edge;
-    int client_bandwidth = client_bandwidth_[client];
     for (auto &p : client_edge_node_[client]) {
       connect_edge.emplace_back(p);
     }
     int n = connect_edge.size();
     sort(connect_edge.begin(), connect_edge.end(),
-         [&](const std::string a, const std::string b) {
-           return edge_bandwidth_[a] < edge_bandwidth_[b];
-         });
-    //找寻一个m下标，可以使得流量分配后第1~m个边缘节点的流量分配情况尽可能相等，但流量不超过第m+1个边缘节点
-    int max_bandwidth = edge_bandwidth_[connect_edge[n - 1]];
-    assert(max_bandwidth >= 0);
-    int all_dif = 0;
-    for (int i = 0; i < n; i++) {
-      all_dif += max_bandwidth - edge_bandwidth_[connect_edge[i]];
-      assert(all_dif >= 0);
-    }
-    int m = n;
-    for (int i = n - 2; i >= 0; i--) {
-      if (all_dif <= client_bandwidth) break;
-      int dif = (edge_bandwidth_[connect_edge[i + 1]] -
-                 edge_bandwidth_[connect_edge[i]]) *
-                (m - 1);
-      all_dif -= dif;
-      assert(all_dif >= 0);
-      max_bandwidth = edge_bandwidth_[connect_edge[i]];
-      m--;
-    }
-    int leave_bandwidth = 0;
-    //分配客户机流量，使得1~m这几个边缘节点的流量使用情况尽量相等，并对超出上限流量进行减法去掉
-    int all_bandwidth = max_bandwidth + (client_bandwidth - all_dif) / m;
-    int less_num = m - (client_bandwidth - all_dif) % m;
-    for (int i = 0; i < less_num; i++) {
-      std::string edge = connect_edge[i];
-      int edge_bandwidth_limit = data_->GetEdgeBandwidthLimit(edge);
-      if (all_bandwidth <= edge_bandwidth_limit) {
-        data_->AddDistribution(days_, client, edge,
-                               all_bandwidth - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = all_bandwidth;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_limit - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = edge_bandwidth_limit;
-        leave_bandwidth += all_bandwidth - edge_bandwidth_limit;
-      }
-    }
-    for (int i = less_num; i < m; i++) {
-      std::string edge = connect_edge[i];
-      int edge_bandwidth_limit = data_->GetEdgeBandwidthLimit(edge);
-      if (all_bandwidth + 1 <= edge_bandwidth_limit) {
-        data_->AddDistribution(days_, client, edge,
-                               all_bandwidth + 1 - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = all_bandwidth + 1;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_limit - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = edge_bandwidth_limit;
-        leave_bandwidth += all_bandwidth - edge_bandwidth_limit + 1;
-      }
-    }
-
-    //将边缘节点剩余流量从大到小排序
-    sort(connect_edge.begin(), connect_edge.end(),
          [&](std::string &a, std::string &b) {
-           return data_->GetEdgeBandwidthLimit(a) - edge_bandwidth_[a] >
-                  data_->GetEdgeBandwidthLimit(b) - edge_bandwidth_[b];
+           return data_->GetEdgeBandwidthLimit(a) <
+                  data_->GetEdgeBandwidthLimit(b);
          });
 
-    //对超限流量做一次尽力而为分配
-    for (int i = 0; i < n; i++) {
-      std::string edge = connect_edge[i];
-      if (leave_bandwidth == 0) break;
-      int edge_bandwidth_limit = data_->GetEdgeBandwidthLimit(edge);
-      if (edge_bandwidth_limit - edge_bandwidth_[edge] >= leave_bandwidth) {
-        edge_bandwidth_[edge] += leave_bandwidth;
-        data_->AddDistribution(days_, client, edge, leave_bandwidth);
-        leave_bandwidth = 0;
-        break;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_limit - edge_bandwidth_[edge]);
-        leave_bandwidth -= edge_bandwidth_limit - edge_bandwidth_[edge];
-        edge_bandwidth_[edge] = edge_bandwidth_limit;
-      }
+    int leave_bandwidth = client_bandwidth_[client];
+    //获取边缘节点的均衡平均值
+    int average_bandwidth =
+        GetAvangeBandwidthB(connect_edge, leave_bandwidth, days_);
+    //更新边缘节点消耗为平均值
+    for (std::string &edge : connect_edge) {
+      int occupy = std::max(
+          0, std::min(data_->GetEdgeBandwidthLimit(edge), average_bandwidth) -
+                 edge_bandwidth_[edge]);
+      if (occupy == 0) continue;
+      leave_bandwidth -= occupy;
+      edge_bandwidth_[edge] += occupy;
+      data_->AddDistribution(days_, client, edge, occupy);
     }
-    client_bandwidth_[client] = 0;
+    //更新还有容量的边缘节点消耗为平均值 + 1
+    for (std::string &edge : connect_edge) {
+      if(leave_bandwidth == 0) break;
+      int occupy = std::min(data_->GetEdgeBandwidthLimit(edge) - edge_bandwidth_[edge],1);
+      if (occupy == 0) continue;
+      leave_bandwidth -= occupy;
+      edge_bandwidth_[edge] += occupy;
+      data_->AddDistribution(days_, client, edge, occupy);
+    }
+    client_bandwidth_[client] = leave_bandwidth;
+    assert(leave_bandwidth == 0);
   }
   //更新边缘节点成本
   for (std::string &edge : edge_node_v_) {
@@ -314,90 +307,38 @@ void ClientDayDistribution::DistributeForCost() {
     if (client_bandwidth_[client] == 0) continue;
     //获得一个该客户节点连接的边缘节点序列，按照边缘节点当前流量量从小到大排序
     std::vector<std::string> connect_edge;
-    int client_bandwidth = client_bandwidth_[client];
     for (auto &p : client_edge_node_[client]) {
       connect_edge.emplace_back(p);
     }
     int n = connect_edge.size();
     sort(connect_edge.begin(), connect_edge.end(),
-         [&](const std::string a, const std::string b) {
-           return edge_bandwidth_[a] < edge_bandwidth_[b];
-         });
-    //找寻一个m下标，可以使得流量分配后第1~m个边缘节点的流量分配情况尽可能相等，但流量不超过第m+1个边缘节点
-    int max_bandwidth = edge_bandwidth_[connect_edge[n - 1]];
-    assert(max_bandwidth >= 0);
-    int all_dif = 0;
-    for (int i = 0; i < n; i++) {
-      all_dif += max_bandwidth - edge_bandwidth_[connect_edge[i]];
-      assert(all_dif >= 0);
-    }
-    int m = n;
-    for (int i = n - 2; i >= 0; i--) {
-      if (all_dif <= client_bandwidth) break;
-      int dif = (edge_bandwidth_[connect_edge[i + 1]] -
-                 edge_bandwidth_[connect_edge[i]]) *
-                (m - 1);
-      all_dif -= dif;
-      assert(all_dif >= 0);
-      max_bandwidth = edge_bandwidth_[connect_edge[i]];
-      m--;
-    }
-    int leave_bandwidth = 0;
-    //分配客户机流量，使得1~m这几个边缘节点的流量使用情况尽量相等，并对超出成本流量进行减法去掉
-    int all_bandwidth = max_bandwidth + (client_bandwidth - all_dif) / m;
-    int less_num = m - (client_bandwidth - all_dif) % m;
-    for (int i = 0; i < less_num; i++) {
-      std::string edge = connect_edge[i];
-      int edge_bandwidth_cost = data_->GetEdgeCost(edge);
-      if (all_bandwidth <= edge_bandwidth_cost) {
-        data_->AddDistribution(days_, client, edge,
-                               all_bandwidth - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = all_bandwidth;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_cost - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = edge_bandwidth_cost;
-        leave_bandwidth += all_bandwidth - edge_bandwidth_cost;
-      }
-    }
-    for (int i = less_num; i < m; i++) {
-      std::string edge = connect_edge[i];
-      int edge_bandwidth_cost = data_->GetEdgeCost(edge);
-      if (all_bandwidth + 1 <= edge_bandwidth_cost) {
-        data_->AddDistribution(days_, client, edge,
-                               all_bandwidth + 1 - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = all_bandwidth + 1;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_cost - edge_bandwidth_[edge]);
-        edge_bandwidth_[edge] = edge_bandwidth_cost;
-        leave_bandwidth += all_bandwidth - edge_bandwidth_cost + 1;
-      }
-    }
-
-    //将边缘节点剩余流量从大到小排序
-    sort(connect_edge.begin(), connect_edge.end(),
          [&](std::string &a, std::string &b) {
-           return data_->GetEdgeCost(a) - edge_bandwidth_[a] >
-                  data_->GetEdgeCost(b) - edge_bandwidth_[b];
+           return data_->GetEdgeCost(a) <
+                  data_->GetEdgeCost(b);
          });
 
-    //对超限流量做一次尽力而为分配
-    for (int i = 0; i < n; i++) {
-      std::string edge = connect_edge[i];
-      if (leave_bandwidth == 0) break;
-      int edge_bandwidth_cost = data_->GetEdgeCost(edge);
-      if (edge_bandwidth_cost - edge_bandwidth_[edge] >= leave_bandwidth) {
-        edge_bandwidth_[edge] += leave_bandwidth;
-        data_->AddDistribution(days_, client, edge, leave_bandwidth);
-        leave_bandwidth = 0;
-        break;
-      } else {
-        data_->AddDistribution(days_, client, edge,
-                               edge_bandwidth_cost - edge_bandwidth_[edge]);
-        leave_bandwidth -= edge_bandwidth_cost - edge_bandwidth_[edge];
-        edge_bandwidth_[edge] = edge_bandwidth_cost;
-      }
+    int leave_bandwidth = client_bandwidth_[client];
+    //获取边缘节点的均衡平均值
+    int average_bandwidth =
+        GetAvangeBandwidthC(connect_edge, leave_bandwidth, days_);
+    //更新边缘节点消耗为平均值
+    for (std::string &edge : connect_edge) {
+      int occupy = std::max(
+          0, std::min(data_->GetEdgeCost(edge), average_bandwidth) -
+                 edge_bandwidth_[edge]);
+      if (occupy == 0) continue;
+      leave_bandwidth -= occupy;
+      edge_bandwidth_[edge] += occupy;
+      data_->AddDistribution(days_, client, edge, occupy);
+    }
+    //更新还有容量的边缘节点消耗为平均值 + 1
+    for (std::string &edge : connect_edge) {
+      if(leave_bandwidth == 0) break;
+      int occupy = std::min(data_->GetEdgeCost(edge) - edge_bandwidth_[edge],1);
+      if (occupy == 0) continue;
+      leave_bandwidth -= occupy;
+      edge_bandwidth_[edge] += occupy;
+      data_->AddDistribution(days_, client, edge, occupy);
     }
     client_bandwidth_[client] = leave_bandwidth;
   }
@@ -405,7 +346,6 @@ void ClientDayDistribution::DistributeForCost() {
 
 void ClientDayDistribution::DistributeAverage() {
   for (int times = 0; times < 4; times++) {
-
     std::vector<std::string> client_order_ = client_node_v_;
 
     for (std::string client : client_order_) {
@@ -414,7 +354,7 @@ void ClientDayDistribution::DistributeAverage() {
       std::vector<std::string> connect_edge;
       int client_bandwidth = client_bandwidth_[client];
       for (auto &p : client_edge_node_[client]) {
-          connect_edge.emplace_back(p);
+        connect_edge.emplace_back(p);
       }
       int n = connect_edge.size();
       sort(connect_edge.begin(), connect_edge.end(),
@@ -477,23 +417,24 @@ void ClientDayDistribution::DistributeAverage() {
     //按比例将流量放回并重分配
     //将流量从小到大排序
     std::vector<std::string> edge_list = edge_node_v_;
-    sort(edge_list.begin(),edge_list.end(),[&](const std::string &a,const std::string&b){
-      return edge_bandwidth_[a] < edge_bandwidth_[b];
-    });
-    if(times == 4) continue;
+    sort(edge_list.begin(), edge_list.end(),
+         [&](const std::string &a, const std::string &b) {
+           return edge_bandwidth_[a] < edge_bandwidth_[b];
+         });
+    if (times == 4) continue;
     //取出重分配节点集合
     int redistribute_num = (int)edge_list.size() * RE_DISTRIBUTE_PROPORTION;
     int n = edge_list.size();
     std::unordered_set<std::string> re_set;
-    for(int i=0;i<redistribute_num;i++){
+    for (int i = 0; i < redistribute_num; i++) {
       re_set.emplace(edge_list[i]);
     }
-    for(int i=n-redistribute_num;i<n;i++){
+    for (int i = n - redistribute_num; i < n; i++) {
       re_set.emplace(edge_list[i]);
     }
     //修改distribution和edge_bandwidth以及client_bandwidth重分配
     two_string_key_int distribution = data_->GetDistribution(days_);
-    for(auto &p : distribution) {
+    for (auto &p : distribution) {
       std::string client = p.first;
       for (auto &pp : p.second) {
         std::string edge = pp.first;
