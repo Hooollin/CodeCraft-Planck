@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <climits>
 #include "client_node.h"
 #include "data.h"
 #include "edge_node.h"

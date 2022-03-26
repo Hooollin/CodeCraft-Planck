@@ -2,7 +2,19 @@
 #include "distrubution_strategy.h"
 
 void ClientDayDistribution::Distribute() {
-  FlowForCost();
+  std::vector<int> days_order = data_->GetDaysOrder();
+  int idx = -1;
+  for(int i=0;i<days_order.size();i++) {
+    if(days_order[i] == days_){
+      idx = i;
+      break;
+    }
+  }
+  if(idx <= days_order.size() * 0.5){
+    FlowForCost();
+  }else{
+    DistributeForCost();
+  }
   DistributeBalanced();
 }
 int ClientDayDistribution::GetAvangeBandwidthA(
@@ -635,6 +647,8 @@ void ClientDayDistribution::FlowForCost() {
     std::unordered_set<std::string> client_edge = data_->GetClientEdge(client);
     for (std::string edge : client_edge) {
       data_->AddDistribution(days_,client,edge,graph[i][mp[edge]]);
+      edge_bandwidth_[edge] += graph[i][mp[edge]];
+      client_bandwidth_[client] -= graph[i][mp[edge]];
     }
   }
 }
