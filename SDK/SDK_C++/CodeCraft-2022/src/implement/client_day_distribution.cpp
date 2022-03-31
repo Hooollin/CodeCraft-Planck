@@ -1,5 +1,7 @@
+#include "client_day_distribution.h"
 
-#include "distrubution_strategy.h"
+//将排序过后前x%和后x%的边缘节点的流量放回重分配
+const double RE_DISTRIBUTE_PROPORTION = 0.4;
 
 void ClientDayDistribution::Distribute() {
   DistributeForCost();
@@ -74,8 +76,8 @@ int ClientDayDistribution::GetAvangeBandwidthC(
   return res;
 }
 
-DayDistribution::DayDistribution(int &day, Data *data) {
-  data_ = data;
+ClientDayDistribution::ClientDayDistribution(int &day, Data *data)
+    : DayDistribution(day, data) {
   edge_client_node_.clear();
   client_edge_node_.clear();
   client_bandwidth_.clear();
@@ -130,8 +132,8 @@ DayDistribution::DayDistribution(int &day, Data *data) {
                     ? (client_bandwidth_[a] > client_bandwidth_[b])
                     : (data_->GetClientEdgeNum(a) < data_->GetClientEdgeNum(b));
        });
-  days_ = day;
 }
+
 void ClientDayDistribution::DistributeBalanced() {
   std::vector<std::string> client_order_ = client_node_v_;
 

@@ -46,8 +46,9 @@ std::string Test::OutputEDistribution(two_string_key_int &datas, int days) {
       counts += pp.second;
     }
     ssm << " total:" << counts;
-    if(counts != data_.GetClientDayDemand(days, firstkey))
-      std::cout<<data_.GetClientDayDemand(days, firstkey) - counts<<std::endl;
+    if (counts != data_.GetClientDayDemand(days, firstkey))
+      std::cout << data_.GetClientDayDemand(days, firstkey) - counts
+                << std::endl;
     assert(counts == data_.GetClientDayDemand(days, firstkey));
     ssm << std::endl;
   }
@@ -102,8 +103,8 @@ void Test::TestPreDeal() {
     for (auto &p : distribution) {
       for (auto &pp : p.second) {
         std::string name = pp.first;
-        if(available_edge_node.find(name) != available_edge_node.end()){
-          std::cout<<p.first<<" "<<name<<" "<<pp.second<<std::endl;
+        if (available_edge_node.find(name) != available_edge_node.end()) {
+          std::cout << p.first << " " << name << " " << pp.second << std::endl;
         }
         assert(available_edge_node.find(name) == available_edge_node.end());
       }
@@ -143,18 +144,21 @@ void Test::TestEverydaysDistribution() {
               });
     //输出节点占比
 
-    ofs_ <<"边缘节点流量占比："<<std::endl;
-    for(std::string &edge : edge_list){
+    ofs_ << "边缘节点流量占比：" << std::endl;
+    for (std::string &edge : edge_list) {
       assert(edge_bandwidth[edge] <= data_.GetEdgeBandwidthLimit(edge));
-      ofs_<<"("<<edge<<","<<std::fixed<<std::setprecision(2)<<(1.0 * edge_bandwidth[edge] / total_bandwidth * 100)<<"%)"<<" ";
+      ofs_ << "(" << edge << "," << std::fixed << std::setprecision(2)
+           << (1.0 * edge_bandwidth[edge] / total_bandwidth * 100) << "%)"
+           << " ";
     }
-    ofs_<<std::endl;
+    ofs_ << std::endl;
     //输出边缘节点流量
-    ofs_ <<"边缘节点流量："<<std::endl;
-    for(std::string &edge : edge_list){
-      ofs_<<"("<<edge<<","<<edge_bandwidth[edge]<<")"<<" ";
+    ofs_ << "边缘节点流量：" << std::endl;
+    for (std::string &edge : edge_list) {
+      ofs_ << "(" << edge << "," << edge_bandwidth[edge] << ")"
+           << " ";
     }
-    ofs_<<std::endl;
+    ofs_ << std::endl;
     std::unordered_set<std::string> available_edge_node =
         data_.GetAvailableEdgeNode(i);
     ofs_ << std::endl;
@@ -209,11 +213,11 @@ void Test::TestAll() {
   //定义输出类
   OutputParser output_parser(model_, &data_);
   //预处理，获得预处理分配
-  PreDistribution pre_distribution(&data_);
-  pre_distribution.Distribute();
-  pre_distribution.GetEdgeOrder();
-  pre_distribution.GetClientOrder();
-  pre_distribution.GetDaysOrder();
+  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
+  pre_distribution->Distribute();
+  // pre_distribution.GetEdgeOrder();
+  // pre_distribution.GetClientOrder();
+  // pre_distribution.GetDaysOrder();
   TestPreDeal();
 
   int allday = data_.GetAllDays();
@@ -221,8 +225,8 @@ void Test::TestAll() {
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     int nowaday = days_order[i];
-    ClientDayDistribution day_distribution(nowaday, &data_);
-    day_distribution.Distribute();
+    DayDistribution *day_distribution = new ClientDayDistribution(i, &data_);
+    day_distribution->Distribute();
   }
   TestEverydaysDistribution();
   TestFinalCost();

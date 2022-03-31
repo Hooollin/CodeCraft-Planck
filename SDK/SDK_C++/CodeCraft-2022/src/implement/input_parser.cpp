@@ -3,7 +3,7 @@
 #include "client_node.h"
 #include "edge_node.h"
 
-InputParser::InputParser(int &model, Data* data) {
+InputParser::InputParser(int &model, Data *data) {
   assert(model >= 1 && model <= 3);
   if (model == 1) {
     config_ = demand_ = qos_ = site_bandwidth_ = online_pre_;

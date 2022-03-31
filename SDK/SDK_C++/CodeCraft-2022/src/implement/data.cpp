@@ -179,10 +179,8 @@ void Data::UpdateEdgeCost(std::string &edge, int &num) {
 
 int Data::GetEdgeCost(std::string &edge) { return edge_cost_[edge]; }
 
-void Data::SetDaysOrder(std::vector<int> &days_order){
+void Data::SetDaysOrder(std::vector<int> &days_order) {
   days_order_ = days_order;
 }
 
-std::vector<int> &Data::GetDaysOrder(){
-  return days_order_;
-}
+std::vector<int> &Data::GetDaysOrder() { return days_order_; }
