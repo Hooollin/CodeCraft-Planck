@@ -1,68 +1,62 @@
 #pragma once
+#include <cassert>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
-class ClientNode;
+typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
+    two_string_key_int;
+typedef std::unordered_map<std::string, std::unordered_set<std::string> >
+    one_string_key_set;
+
 class EdgeNode {
  public:
   EdgeNode(std::string name, int bandwidth)
-      : name_(name), bandwidth_(bandwidth), remain_(bandwidth) {
-    limit_cnt_ = 0;
-  }
+      : name_(name), bandwidth_(bandwidth) {}
 
   std::string GetName() { return name_; }
 
-  void ResetRemain() { remain_ = bandwidth_; }
+  void AddServingClientNode(std::string name) {
+    serving_clientnode.insert(name);
+  }
+
+  std::unordered_set<std::string> &Getservingclientnode() {
+    return serving_clientnode;
+  }
+
+  int GetservingclientnodeNum() { return (int)serving_clientnode.size(); }
+
+  int &GetBandwidth() { return bandwidth_; }
+
+  int GetCostThreshold() { return cost_threshold_; }
+  void SetCostThreshold() {
+    cost_threshold_ = std::max(cost_threshold_, bandwidth_ - remain_);
+  }
 
   int GetRemain() { return remain_; }
-
-  int GetLimitCnt() { return limit_cnt_; }
-
-  void IncLimitCnt() { limit_cnt_++; }
-
-  void DecLimitCnt() { limit_cnt_--; }
-
-  void IncRemain(int band) { remain_ += band; }
-
   void DecRemain(int band) { remain_ -= band; }
 
-  void AddServingClientNode(std::string name, ClientNode *clientnode) {
-    serving_clientnode_map_[name] = clientnode;
+  int GetLowCostRemain() {
+    return std::max(0, cost_threshold_ - (bandwidth_ - remain_));
   }
 
-  int GetServingClientNodeCount() { return serving_clientnode_map_.size(); }
-
-  std::vector<ClientNode *> GetServingClientNode() {
-    std::vector<ClientNode *> clients;
-    for (auto [k, v] : serving_clientnode_map_) clients.push_back(v);
-    return clients;
+  void Reset() {
+    // cost_threshold_ = 0;
+    remain_ = bandwidth_;
   }
 
-  std::string ToString() {
-    std::ostringstream oss;
-    oss << "{\n"
-        << "EdgeNode: " << name_ << ", bandwitdh: " << bandwidth_
-        << ", remain: " << remain_ << ",\n";
-    oss << "Serving ClientNodes: [\n";
-
-    int count = 0;
-    for (auto it = serving_clientnode_map_.begin();
-         it != serving_clientnode_map_.end(); ++it) {
-      if (count > 0 && count % 20 == 0) oss << "\n";
-      oss << it->first << ", ";
-      ++count;
-    }
-    oss << "\n], \n}";
-    return oss.str();
-  }
+  std::string ToString();
 
  private:
-  std::string name_;
-  int bandwidth_;
-  int remain_;
-  int limit_cnt_;
-  std::map<std::string, ClientNode *> serving_clientnode_map_;
+  std::string name_;  //边缘节点名
+
+  int bandwidth_;       //边缘节点带宽上限
+  int remain_;          //剩余可用带宽
+  int cost_threshold_;  //成本阈值
+
+  std::unordered_set<std::string> serving_clientnode;  //连接的客户节点
 };

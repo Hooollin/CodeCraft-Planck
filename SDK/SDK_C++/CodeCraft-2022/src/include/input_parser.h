@@ -1,26 +1,23 @@
 #pragma once
-#include <cassert>
 #include <fstream>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "client_node.h"
+#include "data.h"
 #include "edge_node.h"
 
 class InputParser {
  public:
-  InputParser(std::string config = "/data/config.ini",
-              std::string demand = "/data/demand.csv",
-              std::string qos = "/data/qos.csv",
-              std::string site_bandwidth = "/data/site_bandwidth.csv")
-      : config_(config),
-        demand_(demand),
-        qos_(qos),
-        site_bandwidth_(site_bandwidth) {}
+  InputParser(int &model, Data *data);
 
-  std::map<std::string, EdgeNode *> &GetEdgeNodeMap();
+  InputParser(InputParser &) = delete;
 
-  std::map<std::string, ClientNode *> &GetClientNodeMap();
+  InputParser(InputParser &&) = delete;
+
+  std::unordered_map<std::string, EdgeNode *> &GetEdgeNodeMap();
+
+  std::unordered_map<std::string, ClientNode *> &GetClientNodeMap();
 
   std::vector<std::string> GetEdgeNameList();
 
@@ -30,7 +27,7 @@ class InputParser {
 
   void ResetEdgeNode();  //重置edge的remain
 
-  void Init() { Parse(); }
+  void Parse();
 
  private:
   void ParseConfigFile();
@@ -43,7 +40,13 @@ class InputParser {
 
   void SplitString(std::string &, char, std::vector<std::string> &);
 
-  void Parse();
+  std::string linux_pre_ = "..";
+  std::string windows_pre_ = "../../..";
+  std::string online_pre_ = "";
+  std::string config_suf_ = "/data/config.ini";
+  std::string demand_suf_ = "/data/demand.csv";
+  std::string qos_suf_ = "/data/qos.csv";
+  std::string site_bandwidth_suf_ = "/data/site_bandwidth.csv";
 
   std::string config_;
   std::string demand_;
@@ -53,8 +56,10 @@ class InputParser {
   std::vector<EdgeNode *> edgenode_;
   std::vector<ClientNode *> clientnode_;
 
-  std::map<std::string, EdgeNode *> edgenode_map_;
-  std::map<std::string, ClientNode *> clientnode_map_;
+  std::unordered_map<std::string, EdgeNode *> edgenode_map_;
+  std::unordered_map<std::string, ClientNode *> clientnode_map_;
 
   std::ifstream ifs_;
+
+  Data *data_;
 };
