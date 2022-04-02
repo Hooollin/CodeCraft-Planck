@@ -46,6 +46,10 @@ void Data::SetDistribution(int &day, std::string &client, std::string &edge,
 void Data::AddDistribution(int &day, std::string &client, std::string &edge,
                            std::string &stream_id, int num) {
   distribution_[day][client][edge][stream_id] += num;
+
+  if(distribution_[day][client][edge][stream_id] == 0){
+    distribution_[day][client][edge].erase(stream_id);
+  }
 }
 
 void Data::SetAvailableEdgeNode(int &day,

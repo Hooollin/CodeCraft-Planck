@@ -217,11 +217,8 @@ void Test::TestAll() {
   OutputParser output_parser(model_, &data_);
 
   //预处理，获得预处理分配
-  //PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
-  //pre_distribution->Distribute();
-  // pre_distribution.GetEdgeOrder();
-  // pre_distribution.GetClientOrder();
-  // pre_distribution.GetDaysOrder();
+  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
+  pre_distribution->Distribute();
   //TestPreDeal();
 
   int allday = data_.GetAllDays();

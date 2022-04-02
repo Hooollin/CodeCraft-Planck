@@ -8,11 +8,8 @@ void Distributor::DayDistribute() {
   //定义输出类
   OutputParser output_parser(model_, &data_);
   //预处理，获得预处理分配
-  //PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
-  //pre_distribution->Distribute();
-  // pre_distribution->GetEdgeOrder();
-  // pre_distribution->GetClientOrder();
-  // pre_distribution->GetDaysOrder();
+  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
+  pre_distribution->Distribute();
 
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
