@@ -10,6 +10,7 @@
 #include "output_parser.h"
 #include "pre_deal.h"
 #include "pre_deal_lhk.h"
+#include "test_strategy.h"
 
 class Test {
  public:

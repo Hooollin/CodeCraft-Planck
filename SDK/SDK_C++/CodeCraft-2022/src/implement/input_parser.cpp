@@ -28,6 +28,9 @@ std::unordered_map<std::string, ClientNode *> &InputParser::GetClientNodeMap() {
 }
 
 void InputParser::Parse() {
+  std::ios::sync_with_stdio(false);
+  ifs_.tie(nullptr);
+
   ParseDemandFile();
   ParseSiteBandWidthFile();
   ParseConfigFile();
@@ -46,15 +49,17 @@ void InputParser::ParseDemandFile() {
 
   ifs_ >> header_line;
   SplitString(header_line, ',', splitted_header_line);
-  for (int i = 1; i < splitted_header_line.size(); ++i) {
+  for (int i = 2; i < splitted_header_line.size(); ++i) {
     clientnode_.push_back(new ClientNode(splitted_header_line[i]));
     clientnode_map_[splitted_header_line[i]] = clientnode_.back();
   }
-
+  std::unordered_set<std::string> days;
   while (ifs_ >> normal_line) {
     SplitString(normal_line, ',', splitted_normal_line);
-    for (int i = 1; i < splitted_normal_line.size(); ++i) {
-      clientnode_[i - 1]->AddDemand(stoi(splitted_normal_line[i]));
+
+    days.insert(splitted_normal_line[0]);
+    for (int i = 2; i < splitted_normal_line.size(); ++i) {
+      clientnode_[i - 2]->AddDemand(days.size() - 1, splitted_normal_line[1], stoi(splitted_normal_line[i]));
     }
     splitted_normal_line.clear();
   }
@@ -70,15 +75,19 @@ void InputParser::ParseConfigFile() {
   ifs_.clear();
   ifs_.open(config_, std::ios::in);
   assert(ifs_.is_open());
-  std::string first_line, second_line;
+  std::string first_line, second_line, third_line;
   ifs_ >> first_line;
   ifs_ >> second_line;
-  std::vector<std::string> splitted_second_line;
+  ifs_ >> third_line;
+  std::vector<std::string> splitted_second_line, splitted_third_line;
   SplitString(second_line, '=', splitted_second_line);
+  SplitString(third_line, '=', splitted_third_line);
 
   int qos = stoi(splitted_second_line[1]);
+  int base_cost = stoi(splitted_third_line[1]);
   for (auto &node : clientnode_) {
     node->set_qos(qos);
+    node->set_base_cost(base_cost);
   }
   ifs_.close();
 }

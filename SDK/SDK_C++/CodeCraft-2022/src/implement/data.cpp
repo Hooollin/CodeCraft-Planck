@@ -20,6 +20,7 @@ Data::Data() {
   edge_order_.clear();
   edge_cost_.clear();
 };
+
 void Data::SetEdgeNode(std::unordered_map<std::string, EdgeNode *> &edge_map) {
   edge_node_ = edge_map;
 }
@@ -29,31 +30,22 @@ void Data::SetClientNode(
   client_node_ = client_map;
 }
 
-int Data::GetDistribution(int &day, std::string &client, std::string &edge) {
-  if (distribution_[day][client].find(edge) == distribution_[day][client].end())
-    return 0;
-  else
-    return distribution_[day][client][edge];
+int Data::GetDistribution(int &day, std::string &client, std::string &edge, std::string &stream_id) {
+    return distribution_[day][client][edge][stream_id];
 }
 
-std::unordered_map<std::string, int> &Data::GetDistribution(
-    int &day, std::string &client) {
+two_string_key_int &Data::GetDistribution(int &day, std::string &client) {
   return distribution_[day][client];
 }
 
 void Data::SetDistribution(int &day, std::string &client, std::string &edge,
-                           int num) {
-  if (num == 0)
-    distribution_[day][client].erase(edge);
-  else
-    distribution_[day][client][edge] = num;
+                           std::string &stream_id, int num) {
+    distribution_[day][client][edge][stream_id] = num;
 }
 
 void Data::AddDistribution(int &day, std::string &client, std::string &edge,
-                           int num) {
-  distribution_[day][client][edge] += num;
-  if (distribution_[day][client][edge] == 0)
-    distribution_[day][client].erase(edge);
+                           std::string &stream_id, int num) {
+  distribution_[day][client][edge][stream_id] += num;
 }
 
 void Data::SetAvailableEdgeNode(int &day,
@@ -89,10 +81,10 @@ int Data::GetClientEdgeNum(std::string &client) {
   return client_node_[client]->GetAvailableEdgeNodeNum();
 }
 
-int Data::GetClientDayDemand(int &day, std::string &client) {
+std::unordered_map<std::string, int> Data::GetClientDayDemand(int &day, std::string &client) {
   assert(day < alldays_);
   assert(client_node_.find(client) != client_node_.end());
-  return client_node_[client]->GetDemand(day);
+  return client_node_[client]->GetDemandByDay(day);
 }
 
 void Data::ClientToString(std::string &client) {
@@ -166,12 +158,6 @@ void Data::SetAllDays(int days) {
 EdgeNode *Data::GetEdgeNode(std::string name) { return edge_node_[name]; }
 
 ClientNode *Data::GetClientNode(std::string name) { return client_node_[name]; }
-
-void Data::ResetEdgeBand() {
-  for (auto &edgename : GetEdgeList()) {
-    GetEdgeNode(edgename)->Reset();
-  }
-}
 
 void Data::UpdateEdgeCost(std::string &edge, int &num) {
   edge_cost_[edge] = std::max(edge_cost_[edge], num);

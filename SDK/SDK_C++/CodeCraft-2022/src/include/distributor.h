@@ -5,6 +5,7 @@
 #include "input_parser.h"
 #include "output_parser.h"
 #include "pre_deal_lhk.h"
+#include "test_strategy.h"
 
 class Distributor {
  public:

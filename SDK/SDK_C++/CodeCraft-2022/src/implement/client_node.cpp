@@ -11,7 +11,11 @@ std::string ClientNode::ToString() {
   for (int i = 0; i < demand_.size(); ++i) {
     if (i != 0) oss << ", ";
     if (i > 0 && i % 20 == 0) oss << std::endl;
-    oss << demand_[i];
+    oss << " [";
+    for(auto it = demand_[i].begin(); it != demand_[i].end(); ++it){
+      oss << it->first << ": " << it->second << std::endl;
+    }
+    oss << " ]" << std::endl;
   }
   oss << "]," << std::endl;
   oss << "available EdgeNodes:" << std::endl;

@@ -16,18 +16,18 @@ class Data {
   void SetEdgeNode(std::unordered_map<std::string, EdgeNode *> &edge_map);
 
   //获得在第day天边缘节点edge分配给客户节点client的流量
-  int GetDistribution(int &day, std::string &client, std::string &edge);
+  int GetDistribution(int &day, std::string &client, std::string &edge, std::string &stream_id);
   //获得在第day天客户节点client被分配情况
-  std::unordered_map<std::string, int> &GetDistribution(int &day,
-                                                        std::string &client);
+  two_string_key_int &GetDistribution(int &day,
+                                      std::string &client);
   //获得第K天流量分配情况
-  two_string_key_int &GetDistribution(int &day) { return distribution_[day]; }
+  three_string_key_int &GetDistribution(int &day) { return distribution_[day]; }
   //设置在第day天边缘节点edge分配给客户节点client的流量为num
-  void SetDistribution(int &day, std::string &client, std::string &edge,
-                       int num);
-  //增加在第day天边缘节点edge分配给客户节点client的流量num
+  void SetDistribution(int &day, std::string &client, std::string &edge, 
+                       std::string &stream, int num);
+  //增加在第day天边缘节点edge分配给客户节点client的stream_id和流量num
   void AddDistribution(int &day, std::string &client, std::string &edge,
-                       int num);
+                       std::string &stream_id, int num);
 
   //设置第day天的可用边缘节点集合为edge
   void SetAvailableEdgeNode(int &day,
@@ -49,8 +49,10 @@ class Data {
   //获得Client客户节点连接边缘节点数量
   int GetClientEdgeNum(std::string &client);
 
-  //获得Client客户节点第day天流量需求
-  int GetClientDayDemand(int &day, std::string &client);
+
+  // 复赛接口，获得Client客户节点第day天流量需求
+  std::unordered_map<std::string, int> GetClientDayDemand(int &day, std::string &client);
+
   //返回Edge边缘节点的带宽上限
   int &GetEdgeBandwidthLimit(std::string &edge);
 
@@ -88,9 +90,6 @@ class Data {
   //获得客户节点
   ClientNode *GetClientNode(std::string name);
 
-  //重置边缘节点剩余带宽和当前成本
-  void ResetEdgeBand();
-
   //更新边缘节点成本
   void UpdateEdgeCost(std::string &edge, int &num);
   //获得边缘节点成本
@@ -106,9 +105,9 @@ class Data {
   std::unordered_map<std::string, EdgeNode *> edge_node_;
   //客户节点集合
   std::unordered_map<std::string, ClientNode *> client_node_;
-  //分配情况,distribution[day][client][edge]
+   //分配情况,distribution[day][client][edge][stream_id]
   std::vector<
-      std::unordered_map<std::string, std::unordered_map<std::string, int>>>
+      std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, int>>>>
       distribution_;
   //可用节点情况 available_edge_node_[day]
   std::vector<std::unordered_set<std::string>> available_edge_node_;

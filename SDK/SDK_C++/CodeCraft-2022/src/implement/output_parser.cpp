@@ -23,15 +23,19 @@ void OutputParser::StandradOutput() {
     for (std::string client : client_list) {
       ofs_ << client << ":";
       bool flag = false;
-      std::unordered_map<std::string, int> distributions =
+      // <edge, <stream_id, num>> 
+      two_string_key_int distributions =
           data_->GetDistribution(i, client);
-      for (auto &distribution : distributions) {
-        std::string edge = distribution.first;
-        int value = distribution.second;
-        if (value == 0) continue;
-        if (flag) ofs_ << ",";
-        ofs_ << "<" << edge << "," << value << ">";
-        flag = true;
+      for(auto it = distributions.begin(); it != distributions.end(); ++it){
+        auto edge = it->first;
+        for (auto &distribution : it->second) {
+          std::string stream_id = distribution.first;
+          int value = distribution.second;
+          if (value == 0) continue;
+          if (flag) ofs_ << ",";
+          ofs_ << "<" << edge << "," << stream_id << ">";
+          flag = true;
+        }
       }
       ofs_ << std::endl;
     }
