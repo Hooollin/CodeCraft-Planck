@@ -51,7 +51,9 @@ class Data {
 
 
   // 复赛接口，获得Client客户节点第day天流量需求
-  std::unordered_map<std::string, int> GetClientDayDemand(int &day, std::string &client);
+  std::unordered_map<std::string, int>& GetClientDayRemainingDemand(int &day, std::string &client);
+  std::unordered_map<std::string, int> GetClientDayTotalDemand(int &day, std::string &client);
+
 
   //返回Edge边缘节点的带宽上限
   int &GetEdgeBandwidthLimit(std::string &edge);
@@ -76,14 +78,14 @@ class Data {
   int &GetAllDays() { return alldays_; }
 
   //获得边缘节点列表
-  std::vector<std::string> GetEdgeList();
+  std::vector<std::string> &GetEdgeList();
   //获得客户节点列表
-  std::vector<std::string> GetClientList();
+  std::vector<std::string> &GetClientList();
 
   //获得客户节点集合
-  std::unordered_set<std::string> GetClientSet();
+  std::unordered_set<std::string> &GetClientSet();
   //获得边缘节点集合
-  std::unordered_set<std::string> GetEdgeSet();
+  std::unordered_set<std::string> &GetEdgeSet();
 
   //获得边缘节点
   EdgeNode *GetEdgeNode(std::string name);
@@ -121,6 +123,11 @@ class Data {
   int alldays_;
   //边缘节点成本（使用最大带宽量）
   std::unordered_map<std::string, int> edge_cost_;
+  //client set, edge set
+  std::unordered_set<std::string> client_set_, edge_set_;
+  std::vector<std::string> client_list_, edge_list_;
+  // 客户剩余<day, <client, <stream_id, int>>>
+  std::vector<std::unordered_map<std::string, std::unordered_map<std::string, int>>> remaining_demand_;
 };
 
 void OutputTwoStringKeyInt(two_string_key_int &data);

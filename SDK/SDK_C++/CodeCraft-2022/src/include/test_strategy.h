@@ -11,13 +11,13 @@ class TestStrategy : public DayDistribution{
         edge_node_remain_[edge] = data_->GetEdgeBandwidthLimit(edge);
       }
 
-      auto clients = data_->GetClientList();
+      auto &clients = data_->GetClientList();
       sort(clients.begin(), clients.end(), [&](std::string &a, std::string &b){
         return data_->GetClientEdgeNum(a) < data_->GetClientEdgeNum(b);
       });
 
       for(auto &client : clients){
-        auto edges = data_->GetClientEdge(client);
+        auto &edges = data_->GetClientEdge(client);
         std::vector<std::string> sorted_edges;
         for(auto &edge : edges){
           sorted_edges.push_back(edge);
@@ -25,17 +25,21 @@ class TestStrategy : public DayDistribution{
         sort(sorted_edges.begin(), sorted_edges.end(), [&](std::string &a, std::string &b){
           return data_->GetEdgeBandwidthLimit(a) > data_->GetEdgeBandwidthLimit(b);
         });
-        auto streams = data_->GetClientDayDemand(days_, client);
+        auto &streams = data_->GetClientDayRemainingDemand(days_, client);
         for(auto &stream : streams){
           auto stream_id = stream.first;
           int cost = stream.second;
+          if(cost == 0) continue;
+          bool inside = false;
           for(std::string edge : sorted_edges){
             if(edge_node_remain_[edge] >= cost){
               edge_node_remain_[edge] -= cost;
               data_->AddDistribution(days_, client, edge, stream_id, cost);
+              inside = true;
               break;
             }
           }
+          assert(inside);
         }
       }
     }

@@ -51,7 +51,7 @@ void LHKPreDistribution::LHLDistribute() {
   std::vector<std::unordered_map<std::string, int>> days_client_deal_nums(l);
   for (int i = 0; i < allday_; i++) {
     for (std::string &client : client_node_) {
-      auto streams = data_->GetClientDayDemand(i, client);
+      auto streams = data_->GetClientDayRemainingDemand(i, client);
       int demand = 0;
       for(auto it = streams.begin(); it != streams.end(); ++it){
         demand += it->second;
@@ -64,8 +64,6 @@ void LHKPreDistribution::LHLDistribute() {
   std::vector<std::vector<std::string>> used_edge(l,
                                                   std::vector<std::string>(0));
 
-  // 已经分配出去的流量， <day, set<{client_name, stream_id}>>
-  std::map<int, std::set<std::pair<std::string, std::string>>> distributed_stream;
   //获得每日的95%节点集合，但是没有真正的分配
   for (int i = 0; i < n; i++) {
     long long max_perfent_five = 0, max_bandwidth = 0,
@@ -141,7 +139,7 @@ void LHKPreDistribution::LHLDistribute() {
     std::string max_edge = available_edge_node[available_edge_node.size() - 1];
     available_edge_node.resize(n - i - 1);
 
-    std::unordered_set<std::string> edge_client =
+    std::unordered_set<std::string> &edge_client =
         data_->GetEdgeClient(max_edge);
     std::vector<std::string> client_lists;
     //按照客户端连边数对客户节点排序
@@ -159,26 +157,25 @@ void LHKPreDistribution::LHLDistribute() {
       assert(leave_bandwidth >= 0);
 
       //按照客户端节点连边数从小到大更新
-      for (std::string client : client_lists) {
+      for (std::string &client : client_lists) {
         if (leave_bandwidth == 0) break;
-        if (days_client_bandwidth_[deal_day][client] == 0) continue;
         
-        auto streams = data_->GetClientDayDemand(deal_day, client);
+        auto &streams = data_->GetClientDayRemainingDemand(deal_day, client);
         for(auto &stream : streams){
-            std::string stream_id = stream.first;
-            int stream_cost = stream.second;
+          std::string stream_id = stream.first;
+          int stream_cost = stream.second;
 
-            if(distributed_stream[deal_day].find({client, stream_id}) == distributed_stream[deal_day].end()) continue;
+          if(stream_cost == 0) continue;
 
-            if (leave_bandwidth >= stream_cost) {
-              distributed_stream[deal_day].insert({client, stream_id});
-              data_->AddDistribution(deal_day, client, max_edge,
-                                  stream_id, stream_cost);
-              days_client_bandwidth_[deal_day][client] -= stream_cost;
-              leave_bandwidth -= stream_cost;
-              assert(days_client_bandwidth_[deal_day][client] >= 0);
-              assert(leave_bandwidth >= 0);
-            } 
+          if (leave_bandwidth >= stream_cost) {
+            data_->AddDistribution(deal_day, client, max_edge,
+                                stream_id, stream_cost);
+            days_client_bandwidth_[deal_day][client] -= stream_cost;
+            leave_bandwidth -= stream_cost;
+            assert(days_client_bandwidth_[deal_day][client] >= 0);
+            assert(streams[stream_id] == 0);
+            assert(leave_bandwidth >= 0);
+          } 
         }
       }
       data_->DelAvailableEdgeNode(deal_day, max_edge);

@@ -23,11 +23,19 @@ Data::Data() {
 
 void Data::SetEdgeNode(std::unordered_map<std::string, EdgeNode *> &edge_map) {
   edge_node_ = edge_map;
+  for (auto &p : edge_node_) {
+    edge_set_.emplace(p.first);
+    edge_list_.emplace_back(p.first);
+  }
 }
 
 void Data::SetClientNode(
     std::unordered_map<std::string, ClientNode *> &client_map) {
   client_node_ = client_map;
+  for (auto &p : client_node_) {
+    client_set_.emplace(p.first);
+    client_list_.emplace_back(p.first);
+  }
 }
 
 int Data::GetDistribution(int &day, std::string &client, std::string &edge, std::string &stream_id) {
@@ -46,10 +54,8 @@ void Data::SetDistribution(int &day, std::string &client, std::string &edge,
 void Data::AddDistribution(int &day, std::string &client, std::string &edge,
                            std::string &stream_id, int num) {
   distribution_[day][client][edge][stream_id] += num;
-
-  if(distribution_[day][client][edge][stream_id] == 0){
-    distribution_[day][client][edge].erase(stream_id);
-  }
+  remaining_demand_[day][client][stream_id] -= num;
+  assert(remaining_demand_[day][client][stream_id] == 0);
 }
 
 void Data::SetAvailableEdgeNode(int &day,
@@ -85,7 +91,13 @@ int Data::GetClientEdgeNum(std::string &client) {
   return client_node_[client]->GetAvailableEdgeNodeNum();
 }
 
-std::unordered_map<std::string, int> Data::GetClientDayDemand(int &day, std::string &client) {
+std::unordered_map<std::string, int>& Data::GetClientDayRemainingDemand(int &day, std::string &client) {
+  assert(day < alldays_);
+  assert(client_node_.find(client) != client_node_.end());
+  return remaining_demand_[day][client];
+}
+
+std::unordered_map<std::string, int> Data::GetClientDayTotalDemand(int &day, std::string &client){
   assert(day < alldays_);
   assert(client_node_.find(client) != client_node_.end());
   return client_node_[client]->GetDemandByDay(day);
@@ -101,38 +113,20 @@ int &Data::GetEdgeBandwidthLimit(std::string &edge) {
   return edge_node_[edge]->GetBandwidth();
 }
 
-std::vector<std::string> Data::GetClientList() {
-  std::vector<std::string> client(0);
-  client.reserve(client_node_.size());
-  for (auto &p : client_node_) {
-    client.emplace_back(p.first);
-  }
-  return client;
+std::vector<std::string>& Data::GetClientList() {
+  return client_list_;
 }
 
-std::vector<std::string> Data::GetEdgeList() {
-  std::vector<std::string> edge(0);
-  edge.reserve(edge_node_.size());
-  for (auto &p : edge_node_) {
-    edge.emplace_back(p.first);
-  }
-  return edge;
+std::vector<std::string>& Data::GetEdgeList() {
+  return edge_list_;
 }
 
-std::unordered_set<std::string> Data::GetClientSet() {
-  std::unordered_set<std::string> client;
-  for (auto &p : client_node_) {
-    client.emplace(p.first);
-  }
-  return client;
+std::unordered_set<std::string>& Data::GetClientSet() {
+  return client_set_;
 }
 
-std::unordered_set<std::string> Data::GetEdgeSet() {
-  std::unordered_set<std::string> edge;
-  for (auto &p : edge_node_) {
-    edge.emplace(p.first);
-  }
-  return edge;
+std::unordered_set<std::string>& Data::GetEdgeSet() {
+  return edge_set_;
 }
 
 void Data::SetEdgeNodeOrder(std::string &edge, int &order) {
@@ -153,10 +147,18 @@ void Data::SetAllDays(int days) {
   alldays_ = days;
   distribution_.clear();
   distribution_.resize(alldays_);
+  remaining_demand_.clear();
+  remaining_demand_.resize(alldays_);
+
   available_edge_node_.clear();
   available_edge_node_.resize(alldays_);
   std::unordered_set<std::string> edge_set = GetEdgeSet();
-  for (int i = 0; i < days; i++) available_edge_node_[i] = edge_set;
+  for (int i = 0; i < days; ++i) available_edge_node_[i] = edge_set;
+  for (int i = 0; i < days; ++i){
+    for(auto &client : client_list_){
+      remaining_demand_[i][client] = GetClientNode(client)->GetDemandByDay(i);
+    }
+  }
 }
 
 EdgeNode *Data::GetEdgeNode(std::string name) { return edge_node_[name]; }
