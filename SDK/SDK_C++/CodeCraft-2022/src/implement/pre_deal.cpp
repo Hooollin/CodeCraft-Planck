@@ -130,21 +130,23 @@ void PreDistribution::LHLDistribute() {
 
     std::unordered_set<std::string> edge_client =
         data_->GetEdgeClient(max_edge);
-    std::vector<std::string> client_lists;
-    //按照客户端连边数对客户节点排序
-    for (std::string client : edge_client) client_lists.emplace_back(client);
-    sort(client_lists.begin(), client_lists.end(),
-         [&](const std::string &a, const std::string &b) {
-           return client_edge_num[a] < client_edge_num[b];
-         });
     //对每天做处理
     for (int deal_day : percent_days[max_edge]) {
       //剩余流量
       int leave_bandwidth = data_->GetEdgeBandwidthLimit(max_edge);
 
       assert(leave_bandwidth >= 0);
-
-      //按照客户端节点连边数从小到大更新
+      std::vector<std::string> client_lists;
+      //按照客户端连边数对客户节点排序
+      for (std::string client : edge_client) client_lists.emplace_back(client);
+      sort(client_lists.begin(), client_lists.end(),
+           [&](const std::string &a, const std::string &b) {
+             return (client_edge_num[a] == client_edge_num[b])
+                        ? (days_client_bandwidth_[deal_day][a] >
+                           days_client_bandwidth_[deal_day][b])
+                        : (client_edge_num[a] < client_edge_num[b]);
+           });
+      //按照客户端节点顺序更新
       for (std::string client : client_lists) {
         if (leave_bandwidth == 0) break;
         if (days_client_bandwidth_[deal_day][client] == 0) continue;
@@ -275,7 +277,7 @@ void PreDistribution::BalancedDistribute() {
     //对每天做处理
     for (int deal_day : percent_days[max_edge]) {
       used_edge[deal_day].emplace_back(max_edge);
-      data_->DelAvailableEdgeNode(deal_day,max_edge);
+      data_->DelAvailableEdgeNode(deal_day, max_edge);
       //剩余流量
       int leave_bandwidth = data_->GetEdgeBandwidthLimit(max_edge);
       std::vector<std::string> client_lists;
@@ -304,9 +306,8 @@ void PreDistribution::BalancedDistribute() {
         days_client_deal_nums[deal_day][client]++;
       }
       for (std::string &client : client_lists) {
-        if(leave_bandwidth == 0) break;
-        int occupy =
-            std::min(days_client_bandwidth_[i][client], 1);
+        if (leave_bandwidth == 0) break;
+        int occupy = std::min(days_client_bandwidth_[i][client], 1);
         days_client_bandwidth_[i][client] -= occupy;
         leave_bandwidth -= occupy;
         assert(leave_bandwidth >= 0);
@@ -378,9 +379,8 @@ void PreDistribution::BalancedDistribute() {
         assert(leave_bandwidth >= 0);
       }
       for (std::string &client : client_lists) {
-        if(leave_bandwidth == 0) break;
-        int occupy =
-            std::min(days_client_bandwidth_[i][client], 1);
+        if (leave_bandwidth == 0) break;
+        int occupy = std::min(days_client_bandwidth_[i][client], 1);
         days_client_bandwidth_[i][client] -= occupy;
         data_->AddDistribution(i, client, edge, occupy);
         leave_bandwidth -= occupy;
@@ -605,7 +605,6 @@ void PreDistribution::GetClientOrder() {
 }
 
 void PreDistribution::GetDaysOrder() {
-  std::vector<int> client_bandwidth;
   //获取每日流量和
   std::vector<long long> days_bandwidth(allday_, 0);
   for (int i = 0; i < allday_; i++) {
@@ -613,27 +612,14 @@ void PreDistribution::GetDaysOrder() {
       std::string client = p.first;
       int bandwidth = p.second;
       days_bandwidth[i] += bandwidth;
-      client_bandwidth.emplace_back(bandwidth);
-    }
-  }
-  //获取大流量下限
-  int up_value = client_bandwidth[std::max(
-      (int)(client_bandwidth.size() * 0.5 - 1), 0)];
-  //统计每日大流量需求数
-  std::vector<int> days_big(allday_, 0);
-  for(int i=0;i<allday_;i++){
-    for (auto &p : days_client_bandwidth_[i]) {
-      std::string client = p.first;
-      int bandwidth = p.second;
-      if(bandwidth >= up_value) days_big[i] ++;
     }
   }
   std::vector<int> days_order(allday_);
-  //先按大流量需求数排序，若需求相同按流量和排序
+  //按每日流量排序
   for (int i = 0; i < allday_; i++) days_order[i] = i;
   std::sort(days_order.begin(), days_order.end(),
             [&](const int &a, const int &b) {
-              return (days_big[a] == days_big[b]) ? (days_bandwidth[a] < days_bandwidth[b]) : (days_big[a] < days_big[b]);
+              return days_bandwidth[a] < days_bandwidth[b];
             });
   data_->SetDaysOrder(days_order);
   return;

@@ -1,4 +1,3 @@
-
 #include "distrubution_strategy.h"
 
 void ClientDayDistribution::Distribute() {
