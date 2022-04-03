@@ -217,15 +217,15 @@ void Test::TestAll() {
   OutputParser output_parser(model_, &data_);
 
   //预处理，获得预处理分配
-  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
-  pre_distribution->Distribute();
+//  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
+//  pre_distribution->Distribute();
   //TestPreDeal();
 
   int allday = data_.GetAllDays();
   //std::vector<int> days_order = data_.GetDaysOrder();
   //进行每日处理
   for (int i = 0; i < allday; i++) {
-    DayDistribution *day_distribution = new TestStrategy(i, &data_);
+    DayDistribution *day_distribution = new LHLStrategy(i, &data_);
     day_distribution->Distribute();
   }
   //TestEverydaysDistribution();

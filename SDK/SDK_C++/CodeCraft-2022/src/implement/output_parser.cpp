@@ -27,15 +27,19 @@ void OutputParser::StandradOutput() {
       two_string_key_int distributions =
           data_->GetDistribution(i, client);
       for(auto it = distributions.begin(); it != distributions.end(); ++it){
+        if (flag) ofs_ << ",";
         auto edge = it->first;
+        if(it->second.size() > 0){
+          ofs_ << "<" << edge;
+        }
         for (auto &distribution : it->second) {
           std::string stream_id = distribution.first;
           int value = distribution.second;
           if (value == 0) continue;
-          if (flag) ofs_ << ",";
-          ofs_ << "<" << edge << "," << stream_id << ">";
-          flag = true;
+          ofs_ << "," << stream_id;
         }
+        ofs_ << ">";
+        flag = true;
       }
       ofs_ << std::endl;
     }

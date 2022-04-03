@@ -55,6 +55,9 @@ void Data::AddDistribution(int &day, std::string &client, std::string &edge,
                            std::string &stream_id, int num) {
   distribution_[day][client][edge][stream_id] += num;
   remaining_demand_[day][client][stream_id] -= num;
+  if(remaining_demand_[day][client][stream_id] != 0){
+    std::cout << day << " " << client << " " << stream_id << " " << num << " " << remaining_demand_[day][client][stream_id] << std::endl;
+  }
   assert(remaining_demand_[day][client][stream_id] == 0);
 }
 
