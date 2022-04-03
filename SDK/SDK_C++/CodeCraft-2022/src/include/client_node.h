@@ -1,11 +1,11 @@
 #pragma once
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <cassert>
 typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
     two_string_key_int;
 typedef std::unordered_map<std::string, std::unordered_set<std::string> >
@@ -25,7 +25,8 @@ class ClientNode {
 
   int GetDemand(int &day) {
     assert(day < demand_.size());
-    return demand_[day]; }
+    return demand_[day];
+  }
 
   int GetDays() { return demand_.size(); }
 
@@ -37,9 +38,7 @@ class ClientNode {
     return available_edgenode;
   };
 
-  int GetAvailableEdgeNodeNum() {
-    return (int) available_edgenode.size();
-  };
+  int GetAvailableEdgeNodeNum() { return (int)available_edgenode.size(); };
 
   std::string ToString();
 

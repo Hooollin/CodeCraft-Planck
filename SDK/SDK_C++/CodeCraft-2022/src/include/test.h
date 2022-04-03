@@ -1,13 +1,15 @@
 #pragma once
-#include <map>
 #include <iomanip>
+#include <map>
+#include "client_day_distribution.h"
 #include "client_node.h"
 #include "data.h"
-#include "distrubution_strategy.h"
+#include "distribution_strategy.h"
 #include "edge_node.h"
 #include "input_parser.h"
 #include "output_parser.h"
 #include "pre_deal.h"
+#include "pre_deal_lhk.h"
 
 class Test {
  public:
@@ -19,7 +21,7 @@ class Test {
   void TestAll();
 
   std::string OutputPDistribution(two_string_key_int &datas, int days);
-  std::string OutputEDistribution(two_string_key_int  &datas, int days);
+  std::string OutputEDistribution(two_string_key_int &datas, int days);
 
  private:
   std::string linux_pre_ = "..";

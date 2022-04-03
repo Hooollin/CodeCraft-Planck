@@ -1,14 +1,14 @@
 #pragma once
-#include "distrubution_strategy.h"
+#include "client_day_distribution.h"
+#include "data.h"
+#include "distribution_strategy.h"
 #include "input_parser.h"
 #include "output_parser.h"
-#include "pre_deal.h"
-#include "data.h"
+#include "pre_deal_lhk.h"
 
 class Distributor {
  public:
-
-  Distributor(int model = 1) : model_(model){data_ = *(new Data);}
+  Distributor(int model = 1) : model_(model) {}
 
   void DayDistribute();
 

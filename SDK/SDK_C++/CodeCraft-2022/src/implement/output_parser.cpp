@@ -1,7 +1,7 @@
 
 #include "output_parser.h"
 
-OutputParser::OutputParser(int &model,Data* data) {
+OutputParser::OutputParser(int &model, Data *data) {
   assert(model >= 1 && model <= 3);
   if (model == 1) {
     solution_ = online_pre_ + solution_suf_;
@@ -23,7 +23,8 @@ void OutputParser::StandradOutput() {
     for (std::string client : client_list) {
       ofs_ << client << ":";
       bool flag = false;
-      std::unordered_map<std::string,int> distributions = data_->GetDistribution(i,client);
+      std::unordered_map<std::string, int> distributions =
+          data_->GetDistribution(i, client);
       for (auto &distribution : distributions) {
         std::string edge = distribution.first;
         int value = distribution.second;

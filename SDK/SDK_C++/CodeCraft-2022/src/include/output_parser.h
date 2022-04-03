@@ -16,12 +16,11 @@ typedef std::unordered_map<std::string, std::unordered_set<std::string> >
 
 class OutputParser {
  public:
-  OutputParser(int &model,Data *data);
+  OutputParser(int &model, Data *data);
 
   void StandradOutput();
 
  private:
-
   std::string linux_pre_ = "..";
   std::string windows_pre_ = "../../..";
   std::string online_pre_ = "";
@@ -31,5 +30,4 @@ class OutputParser {
   Data *data_;
   int day_;
   std::ofstream ofs_;
-
 };

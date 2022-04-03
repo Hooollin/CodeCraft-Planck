@@ -4,12 +4,12 @@
 #include <unordered_map>
 #include <vector>
 #include "client_node.h"
-#include "edge_node.h"
 #include "data.h"
+#include "edge_node.h"
 
 class InputParser {
  public:
-  InputParser(int &model,Data* data);
+  InputParser(int &model, Data *data);
 
   InputParser(InputParser &) = delete;
 
@@ -53,5 +53,5 @@ class InputParser {
 
   std::ifstream ifs_;
 
-  Data* data_;
+  Data *data_;
 };
