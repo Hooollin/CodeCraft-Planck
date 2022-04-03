@@ -10,6 +10,20 @@ class TestStrategy : public DayDistribution{
       for(auto &edge : data_->GetEdgeList()){
         edge_node_remain_[edge] = data_->GetEdgeBandwidthLimit(edge);
       }
+      
+      // 减去已经分配的流量
+      for(auto &client : data_->GetClientList()){
+        auto distributions = data_->GetDistribution(days_, client);
+        for(auto &p : distributions){
+          std::string edge = p.first;
+          auto streams = p.second;
+          for(auto &pp : streams){
+            std::string stream_id = pp.first;
+            int cost = pp.second;
+            edge_node_remain_[edge] -= cost;
+          }
+        }
+      }
 
       auto &clients = data_->GetClientList();
       sort(clients.begin(), clients.end(), [&](std::string &a, std::string &b){

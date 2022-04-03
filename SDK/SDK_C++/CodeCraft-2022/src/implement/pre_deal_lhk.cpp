@@ -146,7 +146,7 @@ void LHKPreDistribution::LHLDistribute() {
     for (std::string client : edge_client) client_lists.emplace_back(client);
     sort(client_lists.begin(), client_lists.end(),
          [&](const std::string &a, const std::string &b) {
-           return client_edge_num[a] < client_edge_num[b];
+          return client_edge_num[a] < client_edge_num[b];
          });
     
     //对每天做处理
@@ -161,9 +161,17 @@ void LHKPreDistribution::LHLDistribute() {
         if (leave_bandwidth == 0) break;
         
         auto &streams = data_->GetClientDayRemainingDemand(deal_day, client);
-        for(auto &stream : streams){
-          std::string stream_id = stream.first;
-          int stream_cost = stream.second;
+        std::vector<std::string> ordered_stream_id;
+        for(auto &p : streams){
+          ordered_stream_id.push_back(p.first);
+        }
+
+        std::sort(ordered_stream_id.begin(), ordered_stream_id.end(), [&](std::string &a, std::string &b){
+          return streams[a] > streams[b];
+        });
+
+        for(auto &stream_id : ordered_stream_id){
+          int stream_cost = streams[stream_id];
 
           if(stream_cost == 0) continue;
 

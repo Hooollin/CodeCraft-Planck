@@ -16,7 +16,7 @@ void Distributor::DayDistribute() {
 
   //进行每日处理
   for (int i = 0; i < allday; i++) {
-    int nowaday = days_order[i];
+    //int nowaday = days_order[i];
     DayDistribution *strategy = new TestStrategy(i, &data_);
     strategy->Distribute();
   }
