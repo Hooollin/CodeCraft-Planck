@@ -24,4 +24,4 @@ aux_source_directory(. DIR_SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/implement IMPL_DIR_SRCS)
 
 # 指定生成目标
-add_executable(CodeCraft-2022 ${DIR_SRCS} ${IMPL_DIR_SRCS} implement/data.cpp include/data.h)
+add_executable(CodeCraft-2022 ${DIR_SRCS} ${IMPL_DIR_SRCS})

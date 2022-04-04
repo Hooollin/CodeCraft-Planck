@@ -23,20 +23,22 @@ void OutputParser::StandradOutput() {
     for (std::string client : client_list) {
       ofs_ << client << ":";
       bool flag = false;
-      // <edge, <stream_id, num>> 
-      two_string_key_int distributions =
+      // 输出每个client的分配
+      std::unordered_map<std::string, std::string> distributions =
           data_->GetDistribution(i, client);
-      for(auto it = distributions.begin(); it != distributions.end(); ++it){
+      //存储每个边缘节点满足的流
+      std::unordered_map<std::string,std::vector<std::string> > final_distribution;
+      for (auto &p : distributions) {
+        final_distribution[p.second].emplace_back(p.first);
+      }
+      //输出每个边缘节点满足的流
+      for(auto &p : final_distribution){
+        std::string edge = p.first;
         if (flag) ofs_ << ",";
-        auto edge = it->first;
-        if(it->second.size() > 0){
-          ofs_ << "<" << edge;
-        }
-        for (auto &distribution : it->second) {
-          std::string stream_id = distribution.first;
-          int value = distribution.second;
-          if (value == 0) continue;
-          ofs_ << "," << stream_id;
+        ofs_ << "<" << edge ;
+        std::vector<std::string> all_stream = p.second;
+        for(std::string &stream : all_stream){
+          ofs_ <<"," << stream;
         }
         ofs_ << ">";
         flag = true;

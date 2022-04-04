@@ -7,20 +7,17 @@ void Distributor::DayDistribute() {
   input_parser.Parse();
   //定义输出类
   OutputParser output_parser(model_, &data_);
-  //预处理，获得预处理分配
-//  PreDistribution *pre_distribution = new LHKPreDistribution(&data_);
-//  pre_distribution->Distribute();
-
+  //预处理
+  LHLPreDistribution pre_distribution(&data_);
+  pre_distribution.Distribute();
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
-
   //进行每日处理
   for (int i = 0; i < allday; i++) {
-    //int nowaday = days_order[i];
-    DayDistribution *strategy = new LHLStrategy(i, &data_);
-    strategy->Distribute();
+    int nowaday = days_order[i];
+    LHLStrategy strategy(nowaday, &data_);
+    strategy.Distribute();
   }
-
   output_parser.StandradOutput();
   return;
 }

@@ -1,4 +1,3 @@
-
 #include "input_parser.h"
 #include "client_node.h"
 #include "edge_node.h"
@@ -38,6 +37,7 @@ void InputParser::Parse() {
   data_->SetEdgeNode(edgenode_map_);
   data_->SetClientNode(clientnode_map_);
   data_->SetAllDays(clientnode_map_.begin()->second->GetDays());
+  auto pp = data_->GetEdgeList();
 }
 
 void InputParser::ParseDemandFile() {

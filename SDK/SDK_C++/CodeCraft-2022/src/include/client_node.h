@@ -13,12 +13,13 @@ typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
     two_string_key_int;
 typedef std::unordered_map<std::string, std::unordered_set<std::string> >
     one_string_key_set;
-
+typedef std::unordered_map<std::string,std::unordered_map<std::string,std::string>>
+    two_string_key_string;
 class ClientNode {
  public:
   ClientNode(std::string name) : name_(name) {}
 
-  void AddDemand(int day, std::string stream_id, int demand) { 
+  void AddDemand(int day, std::string stream_id, int demand) {
     while(demand_.size() <= day){
       demand_.push_back({});
     }
@@ -40,7 +41,12 @@ class ClientNode {
     assert(day < demand_.size());
     return demand_[day];
   }
-
+  //返回该节点某一天某个流的流量
+  int GetDemandByDayStream(int &day,std::string &stream) {
+    assert(day < demand_.size());
+    assert(demand_[day].find(stream) != demand_[day].end());
+    return demand_[day][stream];
+  }
   int GetDays() { return demand_.size(); }
 
   void AddAvailableEdgeNode(std::string name) {
@@ -57,7 +63,7 @@ class ClientNode {
 
  private:
   std::string name_;                                   //客户节点名
-  std::vector<std::unordered_map<std::string, int>> demand_;                            //每天带宽需求
+  std::vector<std::unordered_map<std::string, int>> demand_;//每天带宽需求
   std::unordered_set<std::string> available_edgenode;  //可用边缘节点集
   int qos_;                                            //延迟上限
   int base_cost_;                                      //基础成本

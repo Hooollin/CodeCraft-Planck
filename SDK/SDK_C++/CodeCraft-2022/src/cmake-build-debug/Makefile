@@ -224,30 +224,6 @@ implement/distributor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.s
 .PHONY : implement/distributor.cpp.s
 
-implement/distrubution_strategy.obj: implement/distrubution_strategy.cpp.obj
-.PHONY : implement/distrubution_strategy.obj
-
-# target to build an object file
-implement/distrubution_strategy.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj
-.PHONY : implement/distrubution_strategy.cpp.obj
-
-implement/distrubution_strategy.i: implement/distrubution_strategy.cpp.i
-.PHONY : implement/distrubution_strategy.i
-
-# target to preprocess a source file
-implement/distrubution_strategy.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.i
-.PHONY : implement/distrubution_strategy.cpp.i
-
-implement/distrubution_strategy.s: implement/distrubution_strategy.cpp.s
-.PHONY : implement/distrubution_strategy.s
-
-# target to generate assembly for a file
-implement/distrubution_strategy.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.s
-.PHONY : implement/distrubution_strategy.cpp.s
-
 implement/edge_node.obj: implement/edge_node.cpp.obj
 .PHONY : implement/edge_node.obj
 
@@ -296,6 +272,54 @@ implement/input_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.s
 .PHONY : implement/input_parser.cpp.s
 
+implement/lhl_pre_deal.obj: implement/lhl_pre_deal.cpp.obj
+.PHONY : implement/lhl_pre_deal.obj
+
+# target to build an object file
+implement/lhl_pre_deal.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj
+.PHONY : implement/lhl_pre_deal.cpp.obj
+
+implement/lhl_pre_deal.i: implement/lhl_pre_deal.cpp.i
+.PHONY : implement/lhl_pre_deal.i
+
+# target to preprocess a source file
+implement/lhl_pre_deal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.i
+.PHONY : implement/lhl_pre_deal.cpp.i
+
+implement/lhl_pre_deal.s: implement/lhl_pre_deal.cpp.s
+.PHONY : implement/lhl_pre_deal.s
+
+# target to generate assembly for a file
+implement/lhl_pre_deal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.s
+.PHONY : implement/lhl_pre_deal.cpp.s
+
+implement/lhl_strategy.obj: implement/lhl_strategy.cpp.obj
+.PHONY : implement/lhl_strategy.obj
+
+# target to build an object file
+implement/lhl_strategy.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj
+.PHONY : implement/lhl_strategy.cpp.obj
+
+implement/lhl_strategy.i: implement/lhl_strategy.cpp.i
+.PHONY : implement/lhl_strategy.i
+
+# target to preprocess a source file
+implement/lhl_strategy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.i
+.PHONY : implement/lhl_strategy.cpp.i
+
+implement/lhl_strategy.s: implement/lhl_strategy.cpp.s
+.PHONY : implement/lhl_strategy.s
+
+# target to generate assembly for a file
+implement/lhl_strategy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.s
+.PHONY : implement/lhl_strategy.cpp.s
+
 implement/output_parser.obj: implement/output_parser.cpp.obj
 .PHONY : implement/output_parser.obj
 
@@ -320,54 +344,6 @@ implement/output_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.s
 .PHONY : implement/output_parser.cpp.s
 
-implement/pre_deal.obj: implement/pre_deal.cpp.obj
-.PHONY : implement/pre_deal.obj
-
-# target to build an object file
-implement/pre_deal.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.obj
-.PHONY : implement/pre_deal.cpp.obj
-
-implement/pre_deal.i: implement/pre_deal.cpp.i
-.PHONY : implement/pre_deal.i
-
-# target to preprocess a source file
-implement/pre_deal.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.i
-.PHONY : implement/pre_deal.cpp.i
-
-implement/pre_deal.s: implement/pre_deal.cpp.s
-.PHONY : implement/pre_deal.s
-
-# target to generate assembly for a file
-implement/pre_deal.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.s
-.PHONY : implement/pre_deal.cpp.s
-
-implement/test.obj: implement/test.cpp.obj
-.PHONY : implement/test.obj
-
-# target to build an object file
-implement/test.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj
-.PHONY : implement/test.cpp.obj
-
-implement/test.i: implement/test.cpp.i
-.PHONY : implement/test.i
-
-# target to preprocess a source file
-implement/test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.i
-.PHONY : implement/test.cpp.i
-
-implement/test.s: implement/test.cpp.s
-.PHONY : implement/test.s
-
-# target to generate assembly for a file
-implement/test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.s
-.PHONY : implement/test.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -389,24 +365,21 @@ help:
 	@echo ... implement/distributor.obj
 	@echo ... implement/distributor.i
 	@echo ... implement/distributor.s
-	@echo ... implement/distrubution_strategy.obj
-	@echo ... implement/distrubution_strategy.i
-	@echo ... implement/distrubution_strategy.s
 	@echo ... implement/edge_node.obj
 	@echo ... implement/edge_node.i
 	@echo ... implement/edge_node.s
 	@echo ... implement/input_parser.obj
 	@echo ... implement/input_parser.i
 	@echo ... implement/input_parser.s
+	@echo ... implement/lhl_pre_deal.obj
+	@echo ... implement/lhl_pre_deal.i
+	@echo ... implement/lhl_pre_deal.s
+	@echo ... implement/lhl_strategy.obj
+	@echo ... implement/lhl_strategy.i
+	@echo ... implement/lhl_strategy.s
 	@echo ... implement/output_parser.obj
 	@echo ... implement/output_parser.i
 	@echo ... implement/output_parser.s
-	@echo ... implement/pre_deal.obj
-	@echo ... implement/pre_deal.i
-	@echo ... implement/pre_deal.s
-	@echo ... implement/test.obj
-	@echo ... implement/test.i
-	@echo ... implement/test.s
 .PHONY : help
 
 

@@ -4,13 +4,14 @@
 CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj: \
  ../include/client_node.h \
  ../include/data.h \
+ ../include/distribution_strategy.h \
  ../include/distributor.h \
- ../include/distrubution_strategy.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
+ ../include/lhl_pre_deal.h \
+ ../include/lhl_strategy.h \
  ../include/output_parser.h \
  ../include/pre_deal.h \
- ../include/test.h \
  ../CodeCraft-2022.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/client_node.cpp.obj: \
  ../include/client_node.h \
@@ -23,19 +24,15 @@ CMakeFiles/CodeCraft-2022.dir/implement/data.cpp.obj: \
 CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj: \
  ../include/client_node.h \
  ../include/data.h \
+ ../include/distribution_strategy.h \
  ../include/distributor.h \
- ../include/distrubution_strategy.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
+ ../include/lhl_pre_deal.h \
+ ../include/lhl_strategy.h \
  ../include/output_parser.h \
  ../include/pre_deal.h \
  ../implement/distributor.cpp
-CMakeFiles/CodeCraft-2022.dir/implement/distrubution_strategy.cpp.obj: \
- ../include/client_node.h \
- ../include/data.h \
- ../include/distrubution_strategy.h \
- ../include/edge_node.h \
- ../implement/distrubution_strategy.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj: \
  ../include/edge_node.h \
  ../implement/edge_node.cpp
@@ -45,25 +42,23 @@ CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj: \
  ../include/edge_node.h \
  ../include/input_parser.h \
  ../implement/input_parser.cpp
+CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj: \
+ ../include/client_node.h \
+ ../include/data.h \
+ ../include/edge_node.h \
+ ../include/lhl_pre_deal.h \
+ ../include/pre_deal.h \
+ ../implement/lhl_pre_deal.cpp
+CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj: \
+ ../include/client_node.h \
+ ../include/data.h \
+ ../include/distribution_strategy.h \
+ ../include/edge_node.h \
+ ../include/lhl_strategy.h \
+ ../implement/lhl_strategy.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj: \
  ../include/client_node.h \
  ../include/data.h \
  ../include/edge_node.h \
  ../include/output_parser.h \
  ../implement/output_parser.cpp
-CMakeFiles/CodeCraft-2022.dir/implement/pre_deal.cpp.obj: \
- ../include/client_node.h \
- ../include/data.h \
- ../include/edge_node.h \
- ../include/pre_deal.h \
- ../implement/pre_deal.cpp
-CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: \
- ../include/client_node.h \
- ../include/data.h \
- ../include/distrubution_strategy.h \
- ../include/edge_node.h \
- ../include/input_parser.h \
- ../include/output_parser.h \
- ../include/pre_deal.h \
- ../include/test.h \
- ../implement/test.cpp

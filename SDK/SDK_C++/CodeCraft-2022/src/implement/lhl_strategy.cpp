@@ -10,13 +10,10 @@ void LHLStrategy::Init(){
   for(auto &client : data_->GetClientList()){
     auto distributions = data_->GetDistribution(days_, client);
     for(auto &p : distributions){
-      std::string edge = p.first;
-      auto streams = p.second;
-      for(auto &pp : streams){
-        std::string stream_id = pp.first;
-        int cost = pp.second;
-        edge_node_remain_[edge] -= cost;
-      }
+      std::string stream = p.first;
+      std::string edge = p.second;
+      int cost = data_->GetClientStreamDemand(days_,client,stream);
+      edge_node_remain_[edge] -= cost;
     }
   }
 }
@@ -37,6 +34,7 @@ void LHLStrategy::AverageStrategy(){
     auto &edges = data_->GetClientEdge(client);
     int total_demand = 0;
     std::vector<std::pair<std::string, int>> all_streams;
+
     {
       auto &streams = data_->GetClientDayRemainingDemand(days_, client);
       for(auto p : streams){
@@ -46,6 +44,7 @@ void LHLStrategy::AverageStrategy(){
         }
       }
     }
+
     int stream_size = all_streams.size(), edge_size = edges.size();
     // 将M个stream分成N组
     // 从大到小排序，然后依次分配到 M 组中，每次往当前和最小的组最后添加
@@ -85,7 +84,7 @@ void LHLStrategy::AverageStrategy(){
           if(edge_node_remain_[edge] >= stream_demand){
             assert(handled.find(stream_id) == handled.end());
             edge_node_remain_[edge] -= stream_demand;
-            data_->AddDistribution(days_, client, edge, stream_id, stream_demand);
+            data_->SetDistribution(days_, client,stream_id,edge);
             handled.insert(stream_id);
           }else{
             // j及j以后的还未被处理
@@ -110,7 +109,7 @@ void LHLStrategy::AverageStrategy(){
         if(edge_node_remain_[edge] >= stream_demand){
           assert(handled.find(stream_id) == handled.end());
           edge_node_remain_[edge] -= stream_demand;
-          data_->AddDistribution(days_, client, edge, stream_id, stream_demand);
+          data_->SetDistribution(days_, client,stream_id,edge);
           handled.insert(stream_id);
           break;
         }
@@ -145,7 +144,7 @@ void LHLStrategy::BaselineStrategy(){
       for(std::string edge : sorted_edges){
         if(edge_node_remain_[edge] >= cost){
           edge_node_remain_[edge] -= cost;
-          data_->AddDistribution(days_, client, edge, stream_id, cost);
+          data_->SetDistribution(days_, client,stream_id,edge);
           inside = true;
           break;
         }

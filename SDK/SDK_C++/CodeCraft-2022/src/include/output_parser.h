@@ -9,13 +9,6 @@
 #include <vector>
 #include "data.h"
 
-typedef std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, int>>>
-    three_string_key_int;
-typedef std::unordered_map<std::string, std::unordered_map<std::string, int> >
-    two_string_key_int;
-typedef std::unordered_map<std::string, std::unordered_set<std::string> >
-    one_string_key_set;
-
 class OutputParser {
  public:
   OutputParser(int &model, Data *data);

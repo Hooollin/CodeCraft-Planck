@@ -1,11 +1,9 @@
 #pragma once
-#include "client_day_distribution.h"
 #include "data.h"
-#include "distribution_strategy.h"
 #include "input_parser.h"
-#include "output_parser.h"
-#include "pre_deal_lhk.h"
+#include "lhl_pre_deal.h"
 #include "lhl_strategy.h"
+#include "output_parser.h"
 
 class Distributor {
  public:
