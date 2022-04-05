@@ -77,6 +77,7 @@ void LHKStrategy::DistributeBalanced() {
   }
   return ;
 }
+
 void LHKStrategy::Distribute(){
   //BaseCostDistribute();
   //DistributeForCost();
