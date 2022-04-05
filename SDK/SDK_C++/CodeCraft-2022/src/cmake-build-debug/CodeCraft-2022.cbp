@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="CodeCraft-2022"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CodeCraft-2022">
+				<Option output="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/bin/CodeCraft-2022.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/../bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/lib"/>
+					<Add directory="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/include"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/../../../../i686-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 CodeCraft-2022"/>
+					<CompileFile command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CodeCraft-2022/fast">
+				<Option output="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/bin/CodeCraft-2022.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/../bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/lib"/>
+					<Add directory="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/include"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++/i686-w64-mingw32"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="D:/mingw/bin/../lib/gcc/i686-w64-mingw32/8.1.0/../../../../i686-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 CodeCraft-2022/fast"/>
+					<CompileFile command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/codeblocks/MinGW/bin/mingw32-make.exe -f &quot;F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CodeCraft-2022.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/client_node.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/data.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/distributor.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/edge_node.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/input_parser.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/lhk_strategy.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/lhl_pre_deal.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/lhl_strategy.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/output_parser.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

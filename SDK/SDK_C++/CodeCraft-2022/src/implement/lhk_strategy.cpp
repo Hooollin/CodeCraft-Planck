@@ -62,6 +62,7 @@ void LHKStrategy::DistributeBalanced() {
       int edge_bandwidth = edge_bandwidth_heap.top().first;
       std::string edge = edge_bandwidth_heap.top().second;
       int demand_bandwidth = client_day_stream[stream];
+      if(demand_bandwidth == 0) continue;
       assert(demand_bandwidth <= edge_bandwidth);
       edge_bandwidth_heap.pop();
       data_->SetDistribution(days_,client,stream,edge);
