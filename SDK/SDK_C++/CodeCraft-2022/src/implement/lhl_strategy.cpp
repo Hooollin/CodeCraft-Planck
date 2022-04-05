@@ -13,8 +13,8 @@ void LHLStrategy::Init() {
 void LHLStrategy::Distribute() {
   Init();
   // AverageStrategy();
-   BaselineStrategy();
-  // ModifiedBaselineStrategy();
+  // BaselineStrategy();
+  ModifiedBaselineStrategy();
 }
 
 std::vector<std::pair<std::string, int>> LHLStrategy::ApplyStreamsToEdge(std::vector<std::pair<std::string, int>> all_streams, std::string client, std::vector<std::string> edges){
@@ -162,12 +162,30 @@ void LHLStrategy::AverageStrategy() {
 }
 
 void LHLStrategy::BaselineStrategy() {
+  std::unordered_set<std::string> available_edge_node = data_->GetAvailableEdgeNode(days_);
   std::vector<std::string> &clients = data_->GetClientList();
+  std::unordered_map<std::string, long long> client_demand, connect_number;
+  for (std::string &client : clients) {
+    std::unordered_map<std::string, int> demand =
+        data_->GetClientDayRemainingDemand(days_, client);
+    for (auto &p : demand) {
+      client_demand[client] += p.second;
+    }
+    std::unordered_set<std::string> &connected_edge =
+        data_->GetClientEdge(client);
+    for (std::string edge : connected_edge) {
+      if (available_edge_node.find(edge) != available_edge_node.end()) {
+        connect_number[client]++;
+      }
+    }
+  }
+
   sort(clients.begin(), clients.end(), [&](std::string &a, std::string &b) {
-    return data_->GetClientEdgeNum(a) < data_->GetClientEdgeNum(b);
+              return connect_number[a] == connect_number[b]
+                         ? client_demand[a] > client_demand[b]
+                         : connect_number[a] < connect_number[b];
   });
-  std::unordered_set<std::string> available_edge_node =
-      data_->GetAvailableEdgeNode(days_);
+
   for (auto &client : clients) {
     auto &edges = data_->GetClientEdge(client);
     std::priority_queue<std::pair<int, std::string> > remain_edge;
@@ -194,10 +212,24 @@ void LHLStrategy::BaselineStrategy() {
 }
 
 void LHLStrategy::ModifiedBaselineStrategy() {
-  auto &clients = data_->GetClientList();
-  sort(clients.begin(), clients.end(), [&](std::string &a, std::string &b){
-    return data_->GetClientEdgeNum(a) < data_->GetClientEdgeNum(b);
-  });
+  std::unordered_set<std::string> available_edge_node = data_->GetAvailableEdgeNode(days_);
+  std::vector<std::string> &clients = data_->GetClientList();
+
+  std::unordered_map<std::string, long long> client_demand, connect_number;
+  for (std::string &client : clients) {
+    std::unordered_map<std::string, int> demand =
+        data_->GetClientDayRemainingDemand(days_, client);
+    for (auto &p : demand) {
+      client_demand[client] += p.second;
+    }
+    std::unordered_set<std::string> &connected_edge =
+        data_->GetClientEdge(client);
+    for (std::string edge : connected_edge) {
+      if (available_edge_node.find(edge) != available_edge_node.end()) {
+        connect_number[client]++;
+      }
+    }
+  }
 
   for(auto &client : clients){
     auto &edges = data_->GetClientEdge(client);

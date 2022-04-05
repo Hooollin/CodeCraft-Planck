@@ -44,7 +44,7 @@ void LHKStrategy::DistributeBalanced() {
     //堆中加入可用连接的边缘节点
     for(std::string edge : connected_edge){
       if(available_edge_node.find(edge) != available_edge_node.end()){
-        edge_bandwidth_heap.emplace(edge_node_remain_[edge],edge);
+        edge_bandwidth_heap.emplace(edge_node_remain_[edge], edge);
       }
     }
     //对客户节点的流带宽需求从大到小排序,获得分配流的遍历顺序
