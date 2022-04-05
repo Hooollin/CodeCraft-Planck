@@ -44,6 +44,9 @@ std::unordered_map<std::string, std::string> &Data::GetDistribution(
 
 void Data::SetDistribution(int &day, std::string &client, std::string &stream,
                            std::string &edge) {
+  // if(remaining_demand_[day][client].find(stream) ==
+  //        remaining_demand_[day][client].end())
+  //   std::cout << day << "," << stream << "," << client << std::endl; 
   assert(distribution_[day][client].find(stream) ==
          distribution_[day][client].end());
   assert(remaining_demand_[day][client].find(stream) !=

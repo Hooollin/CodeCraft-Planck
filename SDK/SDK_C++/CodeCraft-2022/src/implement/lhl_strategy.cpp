@@ -12,8 +12,8 @@ void LHLStrategy::Init() {
 
 void LHLStrategy::Distribute() {
   Init();
-  // AverageStrategy();
-  BaselineStrategy();
+  AverageStrategy();
+  // BaselineStrategy();
 }
 
 void LHLStrategy::AverageStrategy() {
@@ -26,7 +26,6 @@ void LHLStrategy::AverageStrategy() {
     auto &edges = data_->GetClientEdge(client);
     int total_demand = 0;
     std::vector<std::pair<std::string, int>> all_streams;
-
     {
       auto &streams = data_->GetClientDayRemainingDemand(days_, client);
       for (auto p : streams) {
@@ -36,7 +35,7 @@ void LHLStrategy::AverageStrategy() {
         }
       }
     }
-
+    
     int stream_size = all_streams.size(), edge_size = edges.size();
     // 将M个stream分成N组
     // 从大到小排序，然后依次分配到 M 组中，每次往当前和最小的组最后添加
@@ -71,7 +70,6 @@ void LHLStrategy::AverageStrategy() {
     for (int i = 0; i < buckets.size(); ++i) {
       beyond.push_back(buckets[i].size());
     }
-    std::unordered_set<std::string> extra = edges;
     {
       int i = 0;
       for (auto edge : edges) {
@@ -83,39 +81,44 @@ void LHLStrategy::AverageStrategy() {
             edge_node_remain_[edge] -= stream_demand;
             data_->SetDistribution(days_, client, stream_id, edge);
             handled.insert(stream_id);
+            total_demand -= stream_demand;
           } else {
             // j及j以后的还未被处理
             beyond[i] = j;
-            extra.erase(edge);
             break;
           }
         }
         ++i;
       }
     }
-    std::vector<std::string> extra_load_edges;
-    for (auto &edge : extra) {
-      extra_load_edges.push_back(edge);
-    }
+    int k = 0;
+    auto edge_list = data_->GetEdgeList();
     // 处理还未被处理的流量
     for (int i = 0; i < beyond.size(); ++i) {
-      for (int j = beyond[i], k = 0; j < buckets[i].size(); ++j, ++k) {
-        std::string &edge = extra_load_edges[k % (int)extra_load_edges.size()];
+      for (int j = beyond[i]; j < buckets[i].size(); ++j) {
         std::string stream_id = buckets[i][j].first;
         int stream_demand = buckets[i][j].second;
-        if (edge_node_remain_[edge] >= stream_demand) {
-          assert(handled.find(stream_id) == handled.end());
-          edge_node_remain_[edge] -= stream_demand;
-          data_->SetDistribution(days_, client, stream_id, edge);
-          handled.insert(stream_id);
-          break;
+        while(true){
+          std::string &edge = edge_list[k % (int)edge_list.size()];
+          bool good = false;
+          if(edge_node_remain_[edge] >= stream_demand) {
+            assert(handled.find(stream_id) == handled.end());
+            edge_node_remain_[edge] -= stream_demand;
+            data_->SetDistribution(days_, client, stream_id, edge);
+            handled.insert(stream_id);
+            total_demand -= stream_demand;
+            good = true;
+          }
+          ++k;
+          if(good) break;
         }
       }
-      unsigned seed =
-          std::chrono::system_clock::now().time_since_epoch().count();
-      shuffle(extra_load_edges.begin(), extra_load_edges.end(),
-              std::default_random_engine(seed));
+      //unsigned seed =
+      //    std::chrono::system_clock::now().time_since_epoch().count();
+      //shuffle(extra_load_edges.begin(), extra_load_edges.end(),
+      //        std::default_random_engine(seed));
     }
+    assert(total_demand == 0);
   }
   return;
 }
@@ -136,7 +139,6 @@ void LHLStrategy::BaselineStrategy() {
     }
 
     auto streams = data_->GetClientDayRemainingDemand(days_, client);
-
     for (auto &stream : streams) {
       auto stream_id = stream.first;
       int cost = stream.second;
