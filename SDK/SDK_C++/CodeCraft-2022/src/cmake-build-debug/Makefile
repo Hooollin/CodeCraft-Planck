@@ -272,6 +272,30 @@ implement/input_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.s
 .PHONY : implement/input_parser.cpp.s
 
+implement/lhk_strategy.obj: implement/lhk_strategy.cpp.obj
+.PHONY : implement/lhk_strategy.obj
+
+# target to build an object file
+implement/lhk_strategy.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj
+.PHONY : implement/lhk_strategy.cpp.obj
+
+implement/lhk_strategy.i: implement/lhk_strategy.cpp.i
+.PHONY : implement/lhk_strategy.i
+
+# target to preprocess a source file
+implement/lhk_strategy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.i
+.PHONY : implement/lhk_strategy.cpp.i
+
+implement/lhk_strategy.s: implement/lhk_strategy.cpp.s
+.PHONY : implement/lhk_strategy.s
+
+# target to generate assembly for a file
+implement/lhk_strategy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.s
+.PHONY : implement/lhk_strategy.cpp.s
+
 implement/lhl_pre_deal.obj: implement/lhl_pre_deal.cpp.obj
 .PHONY : implement/lhl_pre_deal.obj
 
@@ -395,6 +419,9 @@ help:
 	@echo ... implement/input_parser.obj
 	@echo ... implement/input_parser.i
 	@echo ... implement/input_parser.s
+	@echo ... implement/lhk_strategy.obj
+	@echo ... implement/lhk_strategy.i
+	@echo ... implement/lhk_strategy.s
 	@echo ... implement/lhl_pre_deal.obj
 	@echo ... implement/lhl_pre_deal.i
 	@echo ... implement/lhl_pre_deal.s

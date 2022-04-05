@@ -15,7 +15,7 @@ void Distributor::DayDistribute() {
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     int nowaday = days_order[i];
-    LHLStrategy strategy(nowaday, &data_);
+    LHKStrategy strategy(nowaday, &data_);
     strategy.Distribute();
   }
   output_parser.StandradOutput();

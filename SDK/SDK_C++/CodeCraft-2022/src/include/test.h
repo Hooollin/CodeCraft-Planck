@@ -8,6 +8,7 @@
 #include "output_parser.h"
 #include "lhl_pre_deal.h"
 #include "lhl_strategy.h"
+#include "lhk_strategy.h"
 
 class Test {
  public:

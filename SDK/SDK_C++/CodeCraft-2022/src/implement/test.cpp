@@ -1,5 +1,33 @@
 #include "test.h"
 
+void Test::TestAll() {
+  //定义并处理处理输入
+  InputParser input_parser(model_, &data_);
+  input_parser.Parse();
+  TestEdgeAndClient();
+
+  //定义输出类
+  OutputParser output_parser(model_, &data_);
+
+  //预处理，获得预处理分配
+  LHLPreDistribution pre_deal(&data_);
+  pre_deal.Distribute();
+  TestPreDeal();
+
+  int allday = data_.GetAllDays();
+  std::vector<int> days_order = data_.GetDaysOrder();
+  //进行每日处理
+  for (int i = 0; i < allday; i++) {
+    int nowaday = days_order[i];
+    LHKStrategy day_strategy(nowaday, &data_);
+    day_strategy.Distribute();
+  }
+
+  TestEverydaysDistribution();
+  TestFinalCost();
+  output_parser.StandradOutput();
+}
+
 Test::Test(int model) : model_(model) {
   data_ = *(new Data);
   assert(model >= 1 && model <= 3);
@@ -253,32 +281,4 @@ void Test::TestFinalCost() {
   ofs_ << "边缘节点成本总和:" << (long long)(total + 0.5 + 1e-6) << std::endl;
   ofs_ << std::endl;
   ofs_.close();
-}
-
-void Test::TestAll() {
-  //定义并处理处理输入
-  InputParser input_parser(model_, &data_);
-  input_parser.Parse();
-  TestEdgeAndClient();
-
-  //定义输出类
-  OutputParser output_parser(model_, &data_);
-
-  //预处理，获得预处理分配
-  LHLPreDistribution pre_deal(&data_);
-  pre_deal.Distribute();
-  TestPreDeal();
-
-  int allday = data_.GetAllDays();
-  std::vector<int> days_order = data_.GetDaysOrder();
-  //进行每日处理
-  for (int i = 0; i < allday; i++) {
-    int nowaday = days_order[i];
-    LHLStrategy day_strategy(nowaday, &data_);
-    day_strategy.Distribute();
-  }
-
-  TestEverydaysDistribution();
-  TestFinalCost();
-  output_parser.StandradOutput();
 }
