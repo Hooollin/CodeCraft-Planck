@@ -43,7 +43,7 @@ class ClientNode {
   }
   //返回该节点某一天某个流的流量
   int GetDemandByDayStream(int &day,std::string &stream) {
-    assert(day < demand_.size());
+    assert(day < (int)demand_.size());
     assert(demand_[day].find(stream) != demand_[day].end());
     return demand_[day][stream];
   }
