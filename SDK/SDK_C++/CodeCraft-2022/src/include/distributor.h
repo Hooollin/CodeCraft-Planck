@@ -4,6 +4,7 @@
 #include "lhl_pre_deal.h"
 #include "lhl_strategy.h"
 #include "output_parser.h"
+#include "lhk_strategy.h"
 
 class Distributor {
  public:

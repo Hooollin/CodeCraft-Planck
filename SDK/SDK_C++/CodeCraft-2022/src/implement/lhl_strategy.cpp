@@ -135,7 +135,7 @@ void LHLStrategy::BaselineStrategy() {
         remain_edge.emplace(edge_node_remain_[edge], edge);
     }
 
-    auto &streams = data_->GetClientDayRemainingDemand(days_, client);
+    auto streams = data_->GetClientDayRemainingDemand(days_, client);
 
     for (auto &stream : streams) {
       auto stream_id = stream.first;

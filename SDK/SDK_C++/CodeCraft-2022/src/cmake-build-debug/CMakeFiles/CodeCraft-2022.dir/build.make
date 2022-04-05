@@ -149,10 +149,24 @@ CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.s"
 	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\input_parser.cpp -o CMakeFiles\CodeCraft-2022.dir\implement\input_parser.cpp.s
 
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj: CMakeFiles/CodeCraft-2022.dir/flags.make
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj: CMakeFiles/CodeCraft-2022.dir/includes_CXX.rsp
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj: ../implement/lhk_strategy.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj"
+	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\CodeCraft-2022.dir\implement\lhk_strategy.cpp.obj -c F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\lhk_strategy.cpp
+
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.i"
+	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\lhk_strategy.cpp > CMakeFiles\CodeCraft-2022.dir\implement\lhk_strategy.cpp.i
+
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.s"
+	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\lhk_strategy.cpp -o CMakeFiles\CodeCraft-2022.dir\implement\lhk_strategy.cpp.s
+
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj: CMakeFiles/CodeCraft-2022.dir/flags.make
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj: CMakeFiles/CodeCraft-2022.dir/includes_CXX.rsp
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj: ../implement/lhl_pre_deal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj"
 	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\CodeCraft-2022.dir\implement\lhl_pre_deal.cpp.obj -c F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\lhl_pre_deal.cpp
 
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.i: cmake_force
@@ -166,7 +180,7 @@ CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.s: cmake_force
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj: CMakeFiles/CodeCraft-2022.dir/flags.make
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj: CMakeFiles/CodeCraft-2022.dir/includes_CXX.rsp
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj: ../implement/lhl_strategy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj"
 	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\CodeCraft-2022.dir\implement\lhl_strategy.cpp.obj -c F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\lhl_strategy.cpp
 
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.i: cmake_force
@@ -180,7 +194,7 @@ CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.s: cmake_force
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj: CMakeFiles/CodeCraft-2022.dir/flags.make
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj: CMakeFiles/CodeCraft-2022.dir/includes_CXX.rsp
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj: ../implement/output_parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj"
 	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\CodeCraft-2022.dir\implement\output_parser.cpp.obj -c F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\output_parser.cpp
 
 CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.i: cmake_force
@@ -194,7 +208,7 @@ CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.s: cmake_force
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: CMakeFiles/CodeCraft-2022.dir/flags.make
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: CMakeFiles/CodeCraft-2022.dir/includes_CXX.rsp
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: ../implement/test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj"
 	D:\mingw\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\CodeCraft-2022.dir\implement\test.cpp.obj -c F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\implement\test.cpp
 
 CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.i: cmake_force
@@ -213,6 +227,7 @@ CodeCraft__2022_OBJECTS = \
 "CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj" \
 "CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj" \
 "CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj" \
+"CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj" \
 "CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj" \
 "CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj" \
 "CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj" \
@@ -227,6 +242,7 @@ CodeCraft__2022_EXTERNAL_OBJECTS =
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/edge_node.cpp.obj
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj
+../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj
@@ -235,7 +251,7 @@ CodeCraft__2022_EXTERNAL_OBJECTS =
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/linklibs.rsp
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/objects1.rsp
 ../bin/CodeCraft-2022.exe: CMakeFiles/CodeCraft-2022.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable ..\bin\CodeCraft-2022.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=F:\CodeCraft-Planck\SDK\SDK_C++\CodeCraft-2022\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable ..\bin\CodeCraft-2022.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\CodeCraft-2022.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -8,6 +8,7 @@ CMakeFiles/CodeCraft-2022.dir/CodeCraft-2022.cpp.obj: \
  ../include/distributor.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
+ ../include/lhk_strategy.h \
  ../include/lhl_pre_deal.h \
  ../include/lhl_strategy.h \
  ../include/output_parser.h \
@@ -29,6 +30,7 @@ CMakeFiles/CodeCraft-2022.dir/implement/distributor.cpp.obj: \
  ../include/distributor.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
+ ../include/lhk_strategy.h \
  ../include/lhl_pre_deal.h \
  ../include/lhl_strategy.h \
  ../include/output_parser.h \
@@ -43,6 +45,13 @@ CMakeFiles/CodeCraft-2022.dir/implement/input_parser.cpp.obj: \
  ../include/edge_node.h \
  ../include/input_parser.h \
  ../implement/input_parser.cpp
+CMakeFiles/CodeCraft-2022.dir/implement/lhk_strategy.cpp.obj: \
+ ../include/client_node.h \
+ ../include/data.h \
+ ../include/distribution_strategy.h \
+ ../include/edge_node.h \
+ ../include/lhk_strategy.h \
+ ../implement/lhk_strategy.cpp
 CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj: \
  ../include/client_node.h \
  ../include/data.h \
@@ -69,6 +78,7 @@ CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj: \
  ../include/distribution_strategy.h \
  ../include/edge_node.h \
  ../include/input_parser.h \
+ ../include/lhk_strategy.h \
  ../include/lhl_pre_deal.h \
  ../include/lhl_strategy.h \
  ../include/output_parser.h \

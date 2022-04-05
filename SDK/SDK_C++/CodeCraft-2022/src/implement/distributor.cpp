@@ -9,13 +9,13 @@ void Distributor::DayDistribute() {
   OutputParser output_parser(model_, &data_);
   //预处理
   LHLPreDistribution pre_distribution(&data_);
-//  pre_distribution.Distribute();
+  pre_distribution.Distribute();
   int allday = data_.GetAllDays();
-//  std::vector<int> days_order = data_.GetDaysOrder();
+  std::vector<int> days_order = data_.GetDaysOrder();
   //进行每日处理
   for (int i = 0; i < allday; i++) {
-//    int nowaday = days_order[i];
-    LHLStrategy strategy(i, &data_);
+    int nowaday = days_order[i];
+    LHKStrategy strategy(nowaday, &data_);
     strategy.Distribute();
   }
   output_parser.StandradOutput();

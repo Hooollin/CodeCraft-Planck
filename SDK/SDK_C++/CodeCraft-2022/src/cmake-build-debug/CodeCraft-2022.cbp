@@ -102,6 +102,9 @@
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/input_parser.cpp">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/lhk_strategy.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/lhl_pre_deal.cpp">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
@@ -112,9 +115,6 @@
 			<Option target="CodeCraft-2022"/>
 		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp">
-			<Option target="CodeCraft-2022"/>
-		</Unit>
-		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/include/test.h">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CMakeLists.txt">
