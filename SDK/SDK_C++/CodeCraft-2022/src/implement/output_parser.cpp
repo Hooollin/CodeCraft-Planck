@@ -27,17 +27,15 @@ void OutputParser::StandradOutput() {
       std::unordered_map<std::string, std::string> distributions =
           data_->GetDistribution(i, client);
       //存储每个边缘节点满足的流
-      std::unordered_map<std::string,std::vector<std::string> > final_distribution;
+      std::unordered_map<std::string,std::unordered_set<std::string> > final_distribution;
       for (auto &p : distributions) {
-        final_distribution[p.second].emplace_back(p.first);
+        final_distribution[p.second].emplace(p.first);
       }
       //输出每个边缘节点满足的流
       for(auto &p : final_distribution){
-        std::string edge = p.first;
         if (flag) ofs_ << ",";
-        ofs_ << "<" << edge ;
-        std::vector<std::string> all_stream = p.second;
-        for(std::string &stream : all_stream){
+        ofs_ << "<" << p.first ;
+        for(std::string stream : p.second){
           ofs_ <<"," << stream;
         }
         ofs_ << ">";
@@ -47,4 +45,5 @@ void OutputParser::StandradOutput() {
     }
   }
   ofs_.close();
+  return ;
 }

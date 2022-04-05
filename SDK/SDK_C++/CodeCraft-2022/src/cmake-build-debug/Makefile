@@ -344,6 +344,30 @@ implement/output_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.s
 .PHONY : implement/output_parser.cpp.s
 
+implement/test.obj: implement/test.cpp.obj
+.PHONY : implement/test.obj
+
+# target to build an object file
+implement/test.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj
+.PHONY : implement/test.cpp.obj
+
+implement/test.i: implement/test.cpp.i
+.PHONY : implement/test.i
+
+# target to preprocess a source file
+implement/test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.i
+.PHONY : implement/test.cpp.i
+
+implement/test.s: implement/test.cpp.s
+.PHONY : implement/test.s
+
+# target to generate assembly for a file
+implement/test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CodeCraft-2022.dir\build.make CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.s
+.PHONY : implement/test.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -380,6 +404,9 @@ help:
 	@echo ... implement/output_parser.obj
 	@echo ... implement/output_parser.i
 	@echo ... implement/output_parser.s
+	@echo ... implement/test.obj
+	@echo ... implement/test.i
+	@echo ... implement/test.s
 .PHONY : help
 
 

@@ -111,6 +111,12 @@
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/output_parser.cpp">
 			<Option target="CodeCraft-2022"/>
 		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/implement/test.cpp">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
+		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/include/test.h">
+			<Option target="CodeCraft-2022"/>
+		</Unit>
 		<Unit filename="F:/CodeCraft-Planck/SDK/SDK_C++/CodeCraft-2022/src/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

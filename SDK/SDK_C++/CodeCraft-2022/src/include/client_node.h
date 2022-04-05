@@ -55,9 +55,9 @@ class ClientNode {
 
   std::unordered_set<std::string> &GetAvailableEdgeNode() {
     return available_edgenode;
-  };
+  }
 
-  int GetAvailableEdgeNodeNum() { return (int)available_edgenode.size(); };
+  int GetAvailableEdgeNodeNum() { return (int)available_edgenode.size(); }
 
   std::string ToString();
 

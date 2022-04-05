@@ -1,17 +1,5 @@
 #include "data.h"
 
-void OutputTwoStringKeyInt(two_string_key_int &data) {
-  for (auto &p : data) {
-    std::string fistkey = p.first;
-    std::cout << fistkey << ":";
-    auto &sucmap = p.second;
-    for (auto &pp : sucmap) {
-      std::cout << "<" << pp.first << "," << pp.second << ">,";
-    }
-    std::cout << std::endl;
-  }
-}
-
 Data::Data() {
   alldays_ = 0;
   distribution_.clear();
@@ -27,6 +15,7 @@ void Data::SetEdgeNode(std::unordered_map<std::string, EdgeNode *> &edge_map) {
     edge_set_.emplace(p.first);
     edge_list_.emplace_back(p.first);
   }
+  return ;
 }
 
 void Data::SetClientNode(
@@ -38,6 +27,7 @@ void Data::SetClientNode(
     client_set_.emplace(p.first);
     client_list_.emplace_back(p.first);
   }
+  return ;
 }
 
 std::string Data::GetDistribution(int &day, std::string &client,

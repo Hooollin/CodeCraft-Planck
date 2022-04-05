@@ -37,7 +37,7 @@ void InputParser::Parse() {
   data_->SetEdgeNode(edgenode_map_);
   data_->SetClientNode(clientnode_map_);
   data_->SetAllDays(clientnode_map_.begin()->second->GetDays());
-  auto pp = data_->GetEdgeList();
+  return ;
 }
 
 void InputParser::ParseDemandFile() {
@@ -69,6 +69,7 @@ void InputParser::ParseDemandFile() {
   }
 
   ifs_.close();
+  return ;
 }
 
 void InputParser::ParseConfigFile() {
@@ -90,6 +91,7 @@ void InputParser::ParseConfigFile() {
     node->set_base_cost(base_cost);
   }
   ifs_.close();
+  return ;
 }
 
 void InputParser::ParseQosFile() {
@@ -124,6 +126,7 @@ void InputParser::ParseQosFile() {
     splitted_normal_line.clear();
   }
   ifs_.close();
+  return ;
 }
 
 void InputParser::ParseSiteBandWidthFile() {
@@ -148,6 +151,7 @@ void InputParser::ParseSiteBandWidthFile() {
   }
 
   ifs_.close();
+  return ;
 }
 
 void InputParser::SplitString(std::string &str, char splitter,

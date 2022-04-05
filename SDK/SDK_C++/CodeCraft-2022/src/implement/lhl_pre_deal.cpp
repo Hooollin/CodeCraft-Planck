@@ -6,6 +6,7 @@ void LHLPreDistribution::Distribute() {
 
   // update data
   GetDaysOrder();
+  return ;
 }
 
 void LHLPreDistribution::LHLDistribute() {
@@ -23,8 +24,7 @@ void LHLPreDistribution::LHLDistribute() {
   }
   //获得每日流量总需求
   days_client_bandwidth_ = std::vector<std::unordered_map<std::string, int>>(l);
-  //每日客户节点连接边缘节点已被处理数
-  std::vector<std::unordered_map<std::string, int>> days_client_deal_nums(l);
+
   for (int i = 0; i < allday_; i++) {
     for (std::string &client : client_node_) {
       std::unordered_map<std::string,int> streams = data_->GetClientDayRemainingDemand(i, client);
@@ -36,9 +36,6 @@ void LHLPreDistribution::LHLDistribute() {
       assert(demand >= 0);
     }
   }
-  //每日使用的边缘节点列表
-  std::vector<std::vector<std::string>> used_edge(l,
-                                                  std::vector<std::string>(0));
 
   //获得每日的95%节点集合,并分配
   for (int i = 0; i < n; i++) {
@@ -147,7 +144,7 @@ void LHLPreDistribution::LHLDistribute() {
         });
 
         for(auto &stream_id : ordered_stream_id){
-          int stream_cost = streams[stream_id];
+          int &stream_cost = streams[stream_id];
 
           if(stream_cost == 0) continue;
 

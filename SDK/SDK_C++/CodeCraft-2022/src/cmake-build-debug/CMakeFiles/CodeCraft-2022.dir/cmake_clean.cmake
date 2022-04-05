@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/CodeCraft-2022.dir/implement/lhl_pre_deal.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/lhl_strategy.cpp.obj"
   "CMakeFiles/CodeCraft-2022.dir/implement/output_parser.cpp.obj"
+  "CMakeFiles/CodeCraft-2022.dir/implement/test.cpp.obj"
 )
 
 # Per-language clean rules from dependency scanning.

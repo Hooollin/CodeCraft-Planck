@@ -58,8 +58,7 @@ class Data {
   std::unordered_map<std::string, int> GetClientDayTotalDemand(
       int &day, std::string &client);
   //获得Client客户节点第day天stream流的流量
-  int GetClientStreamDemand(int &day, std::string &client,
-                             std::string &stream);
+  int GetClientStreamDemand(int &day, std::string &client, std::string &stream);
 
   //返回Edge边缘节点的带宽上限
   int &GetEdgeBandwidthLimit(std::string &edge);
@@ -98,6 +97,9 @@ class Data {
   void SetDaysOrder(std::vector<int> &days_order);
   //获得每日处理顺序
   std::vector<int> &GetDaysOrder();
+
+  //获得边缘节点base_cost
+  int GetBaseCost() { return client_node_.begin()->second->GetBaseCost(); }
 
  private:
   //边缘节点集合
