@@ -12,8 +12,8 @@ void LHLStrategy::Init() {
 
 void LHLStrategy::Distribute() {
   Init();
-  // AverageStrategy();
-  BaselineStrategy();
+  AverageStrategy();
+  // BaselineStrategy();
 }
 
 void LHLStrategy::AverageStrategy() {
@@ -135,8 +135,7 @@ void LHLStrategy::BaselineStrategy() {
         remain_edge.emplace(edge_node_remain_[edge], edge);
     }
 
-    auto &streams = data_->GetClientDayRemainingDemand(days_, client);
-
+    auto streams = data_->GetClientDayRemainingDemand(days_, client);
     for (auto &stream : streams) {
       auto stream_id = stream.first;
       int cost = stream.second;
