@@ -45,6 +45,7 @@ void AdaptiveCost::DoAdaptiveUpdate() {
                 }
             }
         }//已经找到最大的流
+        if(target_day == -1) continue;
         //更新成本，并删除该流
         data_->UpdateEdgeCost(edge, max_stream);
         client_stream[target_day].erase(stream_id);
