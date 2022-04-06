@@ -5,6 +5,7 @@
 #include "lhl_strategy.h"
 #include "output_parser.h"
 #include "lhk_strategy.h"
+#include "lh_adaptive_cost.h"
 
 class Distributor {
  public:

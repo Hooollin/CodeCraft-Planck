@@ -12,6 +12,10 @@ void Distributor::DayDistribute() {
   pre_distribution.Distribute();
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
+
+  //更新边缘节点成本
+  AdaptiveCost ada(&data_);
+  ada.Distribute();
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     int nowaday = days_order[i];
