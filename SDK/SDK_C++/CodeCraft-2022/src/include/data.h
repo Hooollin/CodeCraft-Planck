@@ -100,6 +100,8 @@ class Data {
 
   //获得边缘节点base_cost
   int GetBaseCost() { return client_node_.begin()->second->GetBaseCost(); }
+  //设置边缘节点的成本为basecost
+  void SetBaseCostForCost();
 
  private:
   //边缘节点集合

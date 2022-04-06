@@ -34,10 +34,12 @@ void InputParser::Parse() {
   ParseSiteBandWidthFile();
   ParseConfigFile();
   ParseQosFile();
+
   data_->SetEdgeNode(edgenode_map_);
   data_->SetClientNode(clientnode_map_);
   data_->SetAllDays(clientnode_map_.begin()->second->GetDays());
-  return ;
+  data_->SetBaseCostForCost();
+  return;
 }
 
 void InputParser::ParseDemandFile() {
@@ -59,7 +61,9 @@ void InputParser::ParseDemandFile() {
 
     days.insert(splitted_normal_line[0]);
     for (int i = 2; i < splitted_normal_line.size(); ++i) {
-      clientnode_[i - 2]->AddDemand(days.size() - 1, splitted_normal_line[1], stoi(splitted_normal_line[i]));
+      if (stoi(splitted_normal_line[i]) != 0)
+        clientnode_[i - 2]->AddDemand(days.size() - 1, splitted_normal_line[1],
+                                      stoi(splitted_normal_line[i]));
     }
     splitted_normal_line.clear();
   }
@@ -69,7 +73,7 @@ void InputParser::ParseDemandFile() {
   }
 
   ifs_.close();
-  return ;
+  return;
 }
 
 void InputParser::ParseConfigFile() {
@@ -91,7 +95,7 @@ void InputParser::ParseConfigFile() {
     node->set_base_cost(base_cost);
   }
   ifs_.close();
-  return ;
+  return;
 }
 
 void InputParser::ParseQosFile() {
@@ -126,7 +130,7 @@ void InputParser::ParseQosFile() {
     splitted_normal_line.clear();
   }
   ifs_.close();
-  return ;
+  return;
 }
 
 void InputParser::ParseSiteBandWidthFile() {
@@ -151,7 +155,7 @@ void InputParser::ParseSiteBandWidthFile() {
   }
 
   ifs_.close();
-  return ;
+  return;
 }
 
 void InputParser::SplitString(std::string &str, char splitter,

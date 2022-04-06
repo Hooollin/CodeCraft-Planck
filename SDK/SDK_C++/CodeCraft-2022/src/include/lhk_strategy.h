@@ -13,7 +13,6 @@ class LHKStrategy : public DayDistribution{
 
  private:
 
-  void BaseCostDistribute();
   void DistributeForCost();
   void DistributeBalanced();
 

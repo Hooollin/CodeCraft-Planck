@@ -169,3 +169,10 @@ void Data::SetDaysOrder(std::vector<int> &days_order) {
 }
 
 std::vector<int> &Data::GetDaysOrder() { return days_order_; }
+
+void Data::SetBaseCostForCost(){
+  int base_cost = GetBaseCost();
+  for(std::string edge : edge_list_){
+    UpdateEdgeCost(edge,base_cost);
+  }
+}
