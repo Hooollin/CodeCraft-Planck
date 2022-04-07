@@ -96,7 +96,7 @@ void LHLPreDistribution::LHLDistribute() {
     // 304w: 0.02, 1.0, 0.1
     // 298w: 0.01, 1.0, 0.1 (minus)
     // loading : bandwidth : servingcount
-    double w1 = 0.01, w2 = 1.0, w3 = 0.1;
+    double w1 = 0.03, w2 = 1.0, w3 = 0.05;
     std::unordered_map<std::string, double> f;
     for (std::string edge : available_edge_node) {
       f[edge] = w1 * percent_five[edge][0] / max_perfent_five +

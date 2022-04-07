@@ -8,14 +8,15 @@ void Distributor::DayDistribute() {
   //定义输出类
   OutputParser output_parser(model_, &data_);
   //预处理
-  LHLPreDistribution pre_distribution(&data_);
+  // LHLPreDistribution pre_distribution(&data_);
+  // pre_distribution.Distribute();
+  LHPreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
-
   //更新边缘节点成本
-  AdaptiveCost ada(&data_);
-  ada.Distribute();
+  // AdaptiveCost ada(&data_);
+  // ada.Distribute();
   //进行每日处理
   for (int i = 0; i < allday; i++) {
     int nowaday = days_order[i];

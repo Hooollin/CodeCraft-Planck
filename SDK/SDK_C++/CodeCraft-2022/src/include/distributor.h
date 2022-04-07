@@ -6,6 +6,7 @@
 #include "output_parser.h"
 #include "lhk_strategy.h"
 #include "lh_adaptive_cost.h"
+#include "lh_pre_deal.h"
 
 class Distributor {
  public:

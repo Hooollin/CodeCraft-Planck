@@ -9,6 +9,8 @@
 #include "lhl_pre_deal.h"
 #include "lhl_strategy.h"
 #include "lhk_strategy.h"
+#include "lh_adaptive_cost.h"
+#include "lh_pre_deal.h"
 
 class Test {
  public:
