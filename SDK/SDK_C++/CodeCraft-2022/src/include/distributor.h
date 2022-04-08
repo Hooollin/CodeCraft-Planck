@@ -5,14 +5,15 @@
 #include "lhl_strategy.h"
 #include "output_parser.h"
 #include "lhk_strategy.h"
-#include "lh_adaptive_cost.h"
-#include "lh_pre_deal.h"
+//#include "lh_adaptive_cost.h"
+#include "lhl_pre_deal.h"
 
 class Distributor {
  public:
   Distributor(int model = 1) : model_(model) {}
 
   void DayDistribute();
+  long long CalFinalCost();
 
  private:
   Data data_;

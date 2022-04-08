@@ -9,8 +9,8 @@
 #include "lhl_pre_deal.h"
 #include "lhl_strategy.h"
 #include "lhk_strategy.h"
-#include "lh_adaptive_cost.h"
-#include "lh_pre_deal.h"
+//#include "lh_adaptive_cost.h"
+//#include "lh_pre_deal.h"
 
 class Test {
  public:
@@ -20,6 +20,7 @@ class Test {
   void TestEverydaysDistribution();
   void TestFinalCost();
   void TestAll();
+  long long CalFinalCost();
 
   std::string OutputPDistribution(two_string_key_int &datas, int days);
   std::string OutputEDistribution(two_string_key_int &datas, int days);
