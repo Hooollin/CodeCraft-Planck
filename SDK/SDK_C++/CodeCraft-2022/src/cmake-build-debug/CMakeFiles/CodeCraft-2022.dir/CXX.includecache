@@ -53,6 +53,8 @@ output_parser.h
 ../include/output_parser.h
 lhk_strategy.h
 ../include/lhk_strategy.h
+lhl_pre_deal.h
+../include/lhl_pre_deal.h
 
 ../include/edge_node.h
 cassert

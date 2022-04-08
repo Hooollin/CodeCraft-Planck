@@ -10,7 +10,7 @@ void Distributor::DayDistribute() {
   //预处理
   // LHLPreDistribution pre_distribution(&data_);
   // pre_distribution.Distribute();
-  LHPreDistribution pre_distribution(&data_);
+  LHLPreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
