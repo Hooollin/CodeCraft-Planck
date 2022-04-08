@@ -11,7 +11,6 @@ void LHPreDistribution::Distribute() {
 void LHPreDistribution::LHDistribute() {
     int percent_five_day = std::max((int)(1.0 * (data_->GetAllDays()) * 0.05), 0);
     std::vector<std::string> available_edge_node = edge_node_;
-    int n = available_edge_node.size();
     //客户机连边数
     std::unordered_map<std::string, int> client_edge_num;
     for (std::string &client : client_node_) {
@@ -73,31 +72,20 @@ void LHPreDistribution::LHDistribute() {
     };
     // double w1 = 0.2, w2 = 1, w3 = 0.2;
     //每次选取一个结点的五天
-    int m = 1;//m个节点一分组
-    int cnt = n / m;
-    cnt += (cnt%m) != 0;
-    for(int i = 0; i < cnt; i ++){
-        std::unordered_map<std::string, int> picked_cnt;
+    for(auto picked_edge: available_edge_node) {
+        //(edge, day, weight)
         std::priority_queue<std::tuple<std::string, int, double>,
                             std::vector<std::tuple<std::string, int, double>>,
                             decltype(cmp) > priority_edges(cmp);
-        int num = std::min(i*m+m, n) - i * m;
-        num = num * percent_five_day;
-        for(int j = i*m; j < std::min(i*m+m, n); j ++) {
-            auto e = available_edge_node[j];
-            picked_cnt[e] = 0;
-            for(int d = 0; d < allday_; d ++) {
-                long long lo = edge_day_weights[e][d];
-                long long serv = edge_servering_count[e];
-                double weight = 1.0 * lo / max_loading - 1.0 * serv / max_serving_count;
-                priority_edges.emplace(e, d, weight);
-            }
+        for(int d = 0; d < allday_; d ++) {
+            long long lo = edge_day_weights[picked_edge][d];
+            double weight = 1.0 * lo / max_loading;
+            priority_edges.emplace(picked_edge, d, weight);
         }
-        while(num --) {
+        for(int i = 0; i < percent_five_day; i ++){
             auto e_d_w = priority_edges.top();
             priority_edges.pop();
-            std::string picked_edge = std::get<0>(e_d_w);
-            if(picked_cnt[picked_edge] >= percent_five_day) continue;
+            std::string e = std::get<0>(e_d_w);
             int picked_day = std::get<1>(e_d_w);
             //已经找出边缘节点， 开始处理分配
             int leave_bandwidth = data_->GetEdgeBandwidthLimit(picked_edge);

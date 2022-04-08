@@ -11,17 +11,17 @@ void Test::TestAll() {
   OutputParser output_parser(model_, &data_);
 
   //预处理，获得预处理分配
-  LHLPreDistribution pre_deal(&data_);
+  // LHLPreDistribution pre_deal1(&data_);
+  // pre_deal1.Distribute();
+  LHPreDistribution pre_deal(&data_);
   pre_deal.Distribute();
-  // LHPreDistribution pre_deal(&data_);
-  // pre_deal.Distribute();
   TestPreDeal();
 
   int allday = data_.GetAllDays();
   std::vector<int> days_order = data_.GetDaysOrder();
   //进行每日处理
-  // AdaptiveCost ada(&data_);
-  // ada.Distribute();
+  AdaptiveCost ada(&data_);
+  ada.Distribute();
 
   for (int i = 0; i < allday; i++) {
     int nowaday = days_order[i];

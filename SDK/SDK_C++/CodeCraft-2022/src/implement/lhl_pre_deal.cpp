@@ -11,7 +11,7 @@ void LHLPreDistribution::Distribute() {
 
 void LHLPreDistribution::LHLDistribute() {
   //前5%的天数
-  int percent_five_day = std::max((int)(1.0 * (data_->GetAllDays()) * 0.05), 0);
+  int percent_five_day = std::max((int)(1.0 * (data_->GetAllDays()) * 0.04), 0);
 
   std::vector<std::string> available_edge_node = edge_node_;
   int n = available_edge_node.size();
