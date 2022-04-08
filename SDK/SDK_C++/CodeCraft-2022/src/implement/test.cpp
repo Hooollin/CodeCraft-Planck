@@ -25,8 +25,8 @@ void Test::TestAll() {
   std::shuffle(days_order.begin(), days_order.end(), std::default_random_engine(seed));
 
   //进行每日处理
-  AdaptiveCost ada(&data_);
-  ada.Distribute();
+  // AdaptiveCost ada(&data_);
+  // ada.Distribute();
 
 //  for (int i = 0; i < allday; i++) {
 //    int nowaday = days_order[i];
