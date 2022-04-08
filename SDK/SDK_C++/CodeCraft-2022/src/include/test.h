@@ -20,6 +20,7 @@ class Test {
   void TestEverydaysDistribution();
   void TestFinalCost();
   void TestAll();
+  long long CalFinalCost();
 
   std::string OutputPDistribution(two_string_key_int &datas, int days);
   std::string OutputEDistribution(two_string_key_int &datas, int days);

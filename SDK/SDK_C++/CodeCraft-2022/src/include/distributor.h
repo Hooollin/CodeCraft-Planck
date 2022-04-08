@@ -13,6 +13,7 @@ class Distributor {
   Distributor(int model = 1) : model_(model) {}
 
   void DayDistribute();
+  long long CalFinalCost();
 
  private:
   Data data_;

@@ -3,9 +3,9 @@
 void LHKStrategy::Distribute() {
   DistributeForCost();
 //  DistributeFormula();
-  if(!DistributeBalancedStream()){
-    DistributeBalanced();
-  }
+  //if(!DistributeBalancedStream()){
+  DistributeBalanced();
+  //}
 }
 
 LHKStrategy::LHKStrategy(int days, Data *data) : DayDistribution(days, data) {
@@ -216,18 +216,17 @@ bool LHKStrategy::DistributeBalancedStream() {
   std::unordered_map<std::string, int> copy_edge_node_remain_ = edge_node_remain_;
   std::unordered_map<std::string, std::unordered_map<std::string, std::string>> distribution;
 
-  std::priority_queue<isspr> stream_heap;
+  std::vector<isspr> stream_order;
   for (std::string &client : client_order_) {
     std::unordered_map<std::string, int> streams =
         data_->GetClientDayRemainingDemand(days_, client);
     for (auto &p : streams) {
-      stream_heap.emplace(
+      stream_order.emplace_back(
           std::make_pair(p.second, std::make_pair(client, p.first)));
     }
   }
-
-  while(!stream_heap.empty()){
-    isspr current_stream = stream_heap.top(); stream_heap.pop();
+  std::sort(stream_order.begin(),stream_order.end(),std::greater<isspr>());
+  for(auto &current_stream : stream_order){
     int load = current_stream.first;
     std::string client = current_stream.second.first, stream_id = current_stream.second.second;
     std::unordered_set<std::string> connected_edge = data_->GetClientEdge(client);
@@ -255,6 +254,6 @@ bool LHKStrategy::DistributeBalancedStream() {
       data_->SetDistribution(days_, client, stream_id, edge);
     }
   }
-  edge_node_remain_ = copy_edge_node_remain_;
+  edge_node_remain_ = std::move(copy_edge_node_remain_);
   return true;
 }
