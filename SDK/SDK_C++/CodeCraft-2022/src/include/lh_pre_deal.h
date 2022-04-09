@@ -19,7 +19,6 @@ class LHPreDistribution : public PreDistribution {
   void LHDistribute();
   //获得每天处理顺序
   void GetDaysOrder();
-
  private:
   //总天数
   int allday_;

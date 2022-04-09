@@ -17,30 +17,13 @@ void Distributor::DayDistribute() {
   int allday = data_.GetAllDays();
 
   std::vector<int> days_order = data_.GetDaysOrder();
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::shuffle(days_order.begin(), days_order.end(), std::default_random_engine(seed));
 
-  Data best_data, copy_data = data_;
-  int counter = 0;
-  long long best_cost = (long long)1e9;
-  while(counter < 4) {
-    data_ = copy_data;
-    //更新边缘节点成本
-    // AdaptiveCost ada(&data_);
-    // ada.Distribute();
-    //进行每日处理
-    for (int i = 0; i < allday; i++) {
-      int nowaday = days_order[i];
-      LHKStrategy strategy(nowaday, &data_);
-      // LHLStrategy strategy(nowaday, &data_);
-      strategy.Distribute();
-    }
-    if(CalFinalCost() <= best_cost) {
-      best_data = data_;
-    }
-    ++counter;
+  for (int i = 0; i < allday; i++) {
+    int nowaday = days_order[i];
+    LHKStrategy day_strategy(nowaday, &data_);
+    day_strategy.Distribute();
   }
-  data_ = best_data;
+
   output_parser.StandradOutput();
   return;
 }

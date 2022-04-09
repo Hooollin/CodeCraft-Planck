@@ -19,7 +19,10 @@ class LHLPreDistribution : public PreDistribution {
   void LHLDistribute();
   //获得每天处理顺序
   void GetDaysOrder();
-
+  //按照小连边客户节点流量得出每天处理顺序
+  void GetDaysOrderByMinNode();
+  //按照每日流量和得出每天处理顺序
+  void GetDaysOrderByBandwidth();
  private:
   //总天数
   int allday_;

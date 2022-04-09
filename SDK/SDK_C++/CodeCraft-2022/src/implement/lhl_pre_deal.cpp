@@ -6,7 +6,7 @@ void LHLPreDistribution::Distribute() {
 
   // update data
   GetDaysOrder();
-  return ;
+  return;
 }
 
 void LHLPreDistribution::LHLDistribute() {
@@ -27,9 +27,10 @@ void LHLPreDistribution::LHLDistribute() {
 
   for (int i = 0; i < allday_; i++) {
     for (std::string &client : client_node_) {
-      std::unordered_map<std::string,int> streams = data_->GetClientDayRemainingDemand(i, client);
+      std::unordered_map<std::string, int> streams =
+          data_->GetClientDayRemainingDemand(i, client);
       int demand = 0;
-      for(auto it = streams.begin(); it != streams.end(); ++it){
+      for (auto it = streams.begin(); it != streams.end(); ++it) {
         demand += it->second;
       }
       days_client_bandwidth_[i][client] = demand;
@@ -66,7 +67,6 @@ void LHLPreDistribution::LHLDistribute() {
       std::vector<long long> edge_bandwidth(l, 0);
 
       std::vector<int> seq(l);
-
       for (int k = 0; k < l; k++) seq[k] = k;
 
       std::unordered_set<std::string> edge_client = data_->GetEdgeClient(edge);
@@ -77,7 +77,6 @@ void LHLPreDistribution::LHLDistribute() {
           assert(edge_bandwidth[k] >= 0);
         }
       }
-
       std::sort(seq.begin(), seq.end(), [&](const int &a, const int &b) {
         return edge_bandwidth[a] > edge_bandwidth[b];
       });
@@ -87,6 +86,7 @@ void LHLPreDistribution::LHLDistribute() {
         total += edge_bandwidth[seq[k]];
         percent_days[edge].emplace_back(seq[k]);
       }
+
       percent_five[edge][0] = total;
       max_perfent_five = std::max(total, max_perfent_five);
     }
@@ -96,7 +96,7 @@ void LHLPreDistribution::LHLDistribute() {
     // 304w: 0.02, 1.0, 0.1
     // 298w: 0.01, 1.0, 0.1 (minus)
     // loading : bandwidth : servingcount
-    double w1 = 0.02, w2 = 0.8, w3 = 0.05;
+    double w1 = 0.03, w2 = 0.8, w3 = 0.05;
     std::unordered_map<std::string, double> f;
     for (std::string edge : available_edge_node) {
       f[edge] = w1 * percent_five[edge][0] / max_perfent_five +
@@ -119,9 +119,9 @@ void LHLPreDistribution::LHLDistribute() {
     for (std::string client : edge_client) client_lists.emplace_back(client);
     sort(client_lists.begin(), client_lists.end(),
          [&](const std::string &a, const std::string &b) {
-          return client_edge_num[a] < client_edge_num[b];
+           return client_edge_num[a] < client_edge_num[b];
          });
-    
+
     //对每天做处理
     for (int deal_day : percent_days[max_edge]) {
       //剩余流量
@@ -132,39 +132,79 @@ void LHLPreDistribution::LHLDistribute() {
       //按照客户端节点连边数从小到大更新
       for (std::string &client : client_lists) {
         if (leave_bandwidth == 0) break;
-        
-        std::unordered_map<std::string,int> streams = data_->GetClientDayRemainingDemand(deal_day, client);
+
+        std::unordered_map<std::string, int> streams =
+            data_->GetClientDayRemainingDemand(deal_day, client);
         std::vector<std::string> ordered_stream_id;
-        for(auto &p : streams){
+        for (auto &p : streams) {
           ordered_stream_id.emplace_back(p.first);
         }
 
-        std::sort(ordered_stream_id.begin(), ordered_stream_id.end(), [&](std::string &a, std::string &b){
-          return streams[a] > streams[b];
-        });
+        std::sort(ordered_stream_id.begin(), ordered_stream_id.end(),
+                  [&](std::string &a, std::string &b) {
+                    return streams[a] > streams[b];
+                  });
 
-        for(auto &stream_id : ordered_stream_id){
+        for (auto &stream_id : ordered_stream_id) {
           int &stream_cost = streams[stream_id];
 
-          if(stream_cost == 0) continue;
+          if (stream_cost == 0) continue;
 
           if (leave_bandwidth >= stream_cost) {
-            data_->SetDistribution(deal_day,client,stream_id,max_edge);
+            data_->SetDistribution(deal_day, client, stream_id, max_edge);
             days_client_bandwidth_[deal_day][client] -= stream_cost;
             leave_bandwidth -= stream_cost;
             assert(days_client_bandwidth_[deal_day][client] >= 0);
             assert(leave_bandwidth >= 0);
-          } 
+          }
         }
       }
       data_->DelAvailableEdgeNode(deal_day, max_edge);
     }
   }
-  return ;
+  return;
 }
 
-
 void LHLPreDistribution::GetDaysOrder() {
+  GetDaysOrderByMinNode();
+}
+
+void LHLPreDistribution::GetDaysOrderByMinNode() {
+  //小连边节点连边数
+  int link_max = std::max(5,(int)(edge_node_.size() * 0.1));
+
+  std::vector<int> client_bandwidth;
+  //获取每日小连边客户节点的流量和
+  std::vector<long long> days_bandwidth(allday_, 0);
+  for (int i = 0; i < allday_; i++) {
+    std::unordered_set<std::string> available_edge = data_->GetAvailableEdgeNode(i);
+    for (auto &p : days_client_bandwidth_[i]) {
+      std::string client = p.first;
+      int bandwidth = p.second;
+      int link_num = data_->GetClientEdgeNum(client);
+      //只统计实际连边数小于等于link_max的客户节点
+      if(link_num > link_max) continue;
+      link_num = 0;
+      std::unordered_set<std::string> connect_edge = data_->GetClientEdge(client);
+      for(std::string edge : connect_edge){
+        if(available_edge.find(edge) != available_edge.end()) link_num ++;
+      }
+      if(link_num > link_max) continue;
+      days_bandwidth[i] += bandwidth;
+    }
+  }
+  std::vector<int> days_order(allday_);
+  //先按大流量需求数排序，若需求相同按流量和排序
+  for (int i = 0; i < allday_; i++) days_order[i] = i;
+  std::sort(days_order.begin(), days_order.end(),
+            [&](const int &a, const int &b) {
+              return days_bandwidth[a] < days_bandwidth[b];
+            });
+  data_->SetDaysOrder(days_order);
+  return;
+}
+
+void LHLPreDistribution::GetDaysOrderByBandwidth() {
   std::vector<int> client_bandwidth;
   //获取每日流量和
   std::vector<long long> days_bandwidth(allday_, 0);
@@ -198,5 +238,5 @@ void LHLPreDistribution::GetDaysOrder() {
                          : (days_big[a] < days_big[b]);
             });
   data_->SetDaysOrder(days_order);
-  return ;
+  return;
 }
