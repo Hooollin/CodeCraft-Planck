@@ -10,14 +10,8 @@ void LHPreDistribution::Distribute() {
 
 void LHPreDistribution::LHDistribute() {
     int percent_five_day = std::max((int)(1.0 * (data_->GetAllDays()) * 0.05), 0);
-    std::unordered_map<std::string, int> picked_edge_cnt;//节点已经预处理节点数
-    std::unordered_map<std::string, std::unordered_set<int> > vis_edge_day;//结点天数已经被处理
     std::vector<std::string> available_edge_node = edge_node_;
     int n = available_edge_node.size();
-    int all_picked_num = n * percent_five_day;//一共需要选出的
-    for(std::string& edge: available_edge_node) {
-        picked_edge_cnt[edge] = 0;
-    }
     //客户机连边数
     std::unordered_map<std::string, int> client_edge_num;
     for (std::string &client : client_node_) {
@@ -37,7 +31,13 @@ void LHPreDistribution::LHDistribute() {
         edge_servering_count[edge] = data_->GetEdgeClientNum(edge);
         max_serving_count = std::max(edge_servering_count[edge], max_serving_count);
     }
-    
+    double w1 = 1, w2 = 0;
+    sort(available_edge_node.begin(), available_edge_node.end(), [&](std::string&a, std::string&b){
+        double fa = w1 * edge_bandwidth[a] / max_bandwith + w2 * edge_servering_count[a] / max_serving_count;
+        double fb = w1 * edge_bandwidth[b] / max_bandwith + w2 * edge_servering_count[b] / max_serving_count;
+        return fa > fb;
+    });
+
     //获得每日流量总需求
     days_client_bandwidth_ = std::vector<std::unordered_map<std::string, int>>(allday_);
 
@@ -52,7 +52,6 @@ void LHPreDistribution::LHDistribute() {
             assert(demand >= 0);
         }
     }
-
     //负载
     std::unordered_map<std::string, std::unordered_map<int, long long>> edge_day_weights;
     long long max_loading = 0;
@@ -70,53 +69,47 @@ void LHPreDistribution::LHDistribute() {
     }
 
     auto cmp = [&](std::tuple<std::string, int, double>&a, std::tuple<std::string, int, double>&b) {
-        return std::get<2>(a) < std::get<2>(b);
+        return std::get<2>(a) <= std::get<2>(b);
     };
-    double w1 = 0.2, w2 = 0.8, w3 = -0.03;
-    //每次选取一个节点的一个时刻
-    while(all_picked_num) {
-        // std::cout << all_picked_num << std::endl;
-        //(edge, day, weight)
+    // double w1 = 0.2, w2 = 1, w3 = 0.2;
+    //每次选取一个结点的五天
+    int m = 1;//m个节点一分组
+    int cnt = n / m;
+    cnt += (cnt%m) != 0;
+    for(int i = 0; i < cnt; i ++){
+        std::unordered_map<std::string, int> picked_cnt;
         std::priority_queue<std::tuple<std::string, int, double>,
                             std::vector<std::tuple<std::string, int, double>>,
                             decltype(cmp) > priority_edges(cmp);
-        
-        for(auto& e: available_edge_node) {
+        int num = std::min(i*m+m, n) - i * m;
+        num = num * percent_five_day;
+        for(int j = i*m; j < std::min(i*m+m, n); j ++) {
+            auto e = available_edge_node[j];
+            picked_cnt[e] = 0;
             for(int d = 0; d < allday_; d ++) {
-                if(vis_edge_day[e].count(d)) continue;//这个点已经被处理
                 long long lo = edge_day_weights[e][d];
-                long long band = edge_bandwidth[e];
-                long long serc = edge_servering_count[e];
-                double weight = w1 * lo / max_loading + w2 * band / max_bandwith + w3 * serc / max_serving_count;
+                long long serv = edge_servering_count[e];
+                double weight = 1.0 * lo / max_loading - 1.0 * serv / max_serving_count;
                 priority_edges.emplace(e, d, weight);
-            }         
+            }
         }
-        std::string picked_edge = "";
-        int picked_day = -1;
-        std::unordered_set<std::string> vis_edge;
-        std::vector<int> vis_day(allday_);
-        while(!priority_edges.empty() && all_picked_num) {
+        while(num --) {
             auto e_d_w = priority_edges.top();
             priority_edges.pop();
-            std::string e = std::get<0>(e_d_w);
-            int d = std::get<1>(e_d_w);
-            if(vis_edge_day[e].count(d) || picked_edge_cnt[e] >= percent_five_day) continue;
-            if(vis_edge.count(e) || vis_day[d]) continue;
-            vis_edge.emplace(e);
-            vis_day[d] = 1;
-            picked_edge = e;
-            picked_day = d;
-            all_picked_num --;
+            std::string picked_edge = std::get<0>(e_d_w);
+            if(picked_cnt[picked_edge] >= percent_five_day) continue;
+            int picked_day = std::get<1>(e_d_w);
             //已经找出边缘节点， 开始处理分配
             int leave_bandwidth = data_->GetEdgeBandwidthLimit(picked_edge);
             assert (leave_bandwidth >= 0);
             std::vector<std::string> client_lists;
-            for(std::string client: data_->GetEdgeClient(picked_edge))
+            for(std::string client: data_->GetEdgeClient(picked_edge)) {
                 client_lists.emplace_back(client);
+            }
             //按照客户端节点连边数从小到大更新
             sort(client_lists.begin(), client_lists.end(),
-            [&](const std::string &a, const std::string &b) {
-            return client_edge_num[a] < client_edge_num[b];
+                [&](const std::string &a, const std::string &b) {
+                return client_edge_num[a] < client_edge_num[b];
             });
             //按照客户端节点连边数从小到大更新
             for (std::string &client : client_lists) {
@@ -134,7 +127,7 @@ void LHPreDistribution::LHDistribute() {
                     int &stream_cost = streams[stream_id];
                     if(stream_cost == 0) continue;
                     if (leave_bandwidth >= stream_cost) {
-                        data_->SetDistribution(picked_day, client,stream_id, picked_edge);
+                        data_->SetDistribution(picked_day, client, stream_id, picked_edge);
                         days_client_bandwidth_[picked_day][client] -= stream_cost;
                         leave_bandwidth -= stream_cost;
                         alloced += stream_cost;
@@ -142,15 +135,14 @@ void LHPreDistribution::LHDistribute() {
                         assert(leave_bandwidth >= 0);
                     } 
                 }
-                for(auto& e: data_->GetClientEdge(client)) {
-                    edge_day_weights[e][picked_day] -= alloced;
+                for(auto& ee: data_->GetClientEdge(client)) {
+                    edge_day_weights[ee][picked_day] -= alloced;
                 }
             }
             data_->DelAvailableEdgeNode(picked_day, picked_edge);
-            vis_edge_day[picked_edge].emplace(picked_day);
-            picked_edge_cnt[picked_edge] += 1;
         }
     }
+        
     return ;
 }
 

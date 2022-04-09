@@ -1,7 +1,7 @@
 #include "distributor.h"
 #include "test.h"
 int main() {
-// Test test(3);
+// Test test(2);
 // test.TestAll();
 
    Distributor distributor(1);
