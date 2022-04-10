@@ -1,4 +1,3 @@
-
 #include "lhl_pre_deal.h"
 
 void LHLPreDistribution::Distribute() {
@@ -166,7 +165,7 @@ void LHLPreDistribution::LHLDistribute() {
 }
 
 void LHLPreDistribution::GetDaysOrder() {
-  GetDaysOrderByMinNode();
+  GetDaysOrderByBandwidth();
 }
 
 void LHLPreDistribution::GetDaysOrderByMinNode() {
@@ -216,26 +215,27 @@ void LHLPreDistribution::GetDaysOrderByBandwidth() {
       client_bandwidth.emplace_back(bandwidth);
     }
   }
-  //获取大流量下限
-  int up_value =
-      client_bandwidth[std::max((int)(client_bandwidth.size() * 0.5 - 1), 0)];
-  //统计每日大流量需求数
-  std::vector<int> days_big(allday_, 0);
-  for (int i = 0; i < allday_; i++) {
-    for (auto &p : days_client_bandwidth_[i]) {
-      std::string client = p.first;
-      int bandwidth = p.second;
-      if (bandwidth >= up_value) days_big[i]++;
-    }
-  }
+//  //获取大流量下限
+//  int up_value =
+//      client_bandwidth[std::max((int)(client_bandwidth.size() * 0.5 - 1), 0)];
+//  //统计每日大流量需求数
+//  std::vector<int> days_big(allday_, 0);
+//  for (int i = 0; i < allday_; i++) {
+//    for (auto &p : days_client_bandwidth_[i]) {
+//      std::string client = p.first;
+//      int bandwidth = p.second;
+//      if (bandwidth >= up_value) days_big[i]++;
+//    }
+//  }
   std::vector<int> days_order(allday_);
   //先按大流量需求数排序，若需求相同按流量和排序
   for (int i = 0; i < allday_; i++) days_order[i] = i;
   std::sort(days_order.begin(), days_order.end(),
             [&](const int &a, const int &b) {
-              return (days_big[a] == days_big[b])
-                         ? (days_bandwidth[a] < days_bandwidth[b])
-                         : (days_big[a] < days_big[b]);
+//              return (days_big[a] == days_big[b])
+//                         ? (days_bandwidth[a] < days_bandwidth[b])
+//                         : (days_big[a] < days_big[b]);
+              return days_bandwidth[a] < days_bandwidth[b];
             });
   data_->SetDaysOrder(days_order);
   return;

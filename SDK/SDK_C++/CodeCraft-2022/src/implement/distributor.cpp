@@ -1,7 +1,5 @@
 
 #include "distributor.h"
-#include <random>       // std::default_random_engine
-#include <chrono>       // std::chrono::system_clock
 
 void Distributor::DayDistribute() {
   //定义并处理处理输入
@@ -10,8 +8,7 @@ void Distributor::DayDistribute() {
   //定义输出类
   OutputParser output_parser(model_, &data_);
   //预处理
-  // LHLPreDistribution pre_distribution(&data_);
-  // pre_distribution.Distribute();
+
   LHLPreDistribution pre_distribution(&data_);
   pre_distribution.Distribute();
   int allday = data_.GetAllDays();

@@ -38,7 +38,6 @@ void InputParser::Parse() {
   data_->SetEdgeNode(edgenode_map_);
   data_->SetClientNode(clientnode_map_);
   data_->SetAllDays(clientnode_map_.begin()->second->GetDays());
-  data_->SetBaseCostForCost();
   return;
 }
 

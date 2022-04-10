@@ -2,10 +2,8 @@
 
 void LHKStrategy::Distribute() {
   DistributeForCost();
-//  DistributeFormula();
-  //if(!DistributeBalancedStream()){
+  DistributeForBaseCost();
   DistributeBalanced();
-  //}
 }
 
 LHKStrategy::LHKStrategy(int days, Data *data) : DayDistribution(days, data) {
@@ -48,7 +46,7 @@ void LHKStrategy::DistributeBalanced() {
       data_->GetAvailableEdgeNode(days_);
   for (std::string &client : client_order_) {
     //该客户节点连接的可用边缘节点堆，堆顶是剩余流量最大的边缘节点
-    std::priority_queue<std::pair<int, std::string> > edge_bandwidth_heap;
+    std::priority_queue<std::pair<int, std::string>> edge_bandwidth_heap;
     std::unordered_set<std::string> connected_edge =
         data_->GetClientEdge(client);
     //堆中加入可用连接的边缘节点
@@ -84,10 +82,14 @@ void LHKStrategy::DistributeBalanced() {
         edge_bandwidth_heap.emplace(edge_node_remain_[edge], edge);
     }
   }
+  int base_cost = data_->GetBaseCost();
   //更新今日边缘节点成本
   for (auto &p : edge_node_remain_) {
     std::string edge = p.first;
-    int cost = data_->GetEdgeBandwidthLimit(edge) - p.second;
+    if (data_->GetEdgeBandwidthLimit(edge) == p.second) continue;
+    int cost =
+        std::max(data_->GetEdgeBandwidthLimit(edge) - p.second, base_cost);
+//    int cost = data_->GetEdgeBandwidthLimit(edge) - p.second;
     data_->UpdateEdgeCost(edge, cost);
   }
 
@@ -106,7 +108,7 @@ void LHKStrategy::DistributeForCost() {
   }
   for (std::string &client : client_order_) {
     //该客户节点连接的可用边缘节点堆，堆顶是剩余成本流量最大的边缘节点
-    std::priority_queue<std::pair<int, std::string> > edge_bandwidth_heap;
+    std::priority_queue<std::pair<int, std::string>> edge_bandwidth_heap;
     std::unordered_set<std::string> connected_edge =
         data_->GetClientEdge(client);
     //堆中加入可用连接的边缘节点
@@ -201,9 +203,12 @@ void LHKStrategy::DistributeFormula() {
     }
   }
   //更新今日边缘节点成本
+  int base_cost = data_->GetBaseCost();
   for (auto &p : edge_node_remain_) {
     std::string edge = p.first;
-    int cost = data_->GetEdgeBandwidthLimit(edge) - p.second;
+    if (data_->GetEdgeBandwidthLimit(edge) == p.second) continue;
+    int cost =
+        std::max(data_->GetEdgeBandwidthLimit(edge) - p.second, base_cost);
     data_->UpdateEdgeCost(edge, cost);
   }
 
@@ -213,8 +218,10 @@ void LHKStrategy::DistributeFormula() {
 bool LHKStrategy::DistributeBalancedStream() {
   std::unordered_set<std::string> available_edge_node =
       data_->GetAvailableEdgeNode(days_);
-  std::unordered_map<std::string, int> copy_edge_node_remain_ = edge_node_remain_;
-  std::unordered_map<std::string, std::unordered_map<std::string, std::string>> distribution;
+  std::unordered_map<std::string, int> copy_edge_node_remain_ =
+      edge_node_remain_;
+  std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
+      distribution;
 
   std::vector<isspr> stream_order;
   for (std::string &client : client_order_) {
@@ -225,35 +232,98 @@ bool LHKStrategy::DistributeBalancedStream() {
           std::make_pair(p.second, std::make_pair(client, p.first)));
     }
   }
-  std::sort(stream_order.begin(),stream_order.end(),std::greater<isspr>());
-  for(auto &current_stream : stream_order){
+  std::sort(stream_order.begin(), stream_order.end(), std::greater<isspr>());
+  for (auto &current_stream : stream_order) {
     int load = current_stream.first;
-    std::string client = current_stream.second.first, stream_id = current_stream.second.second;
-    std::unordered_set<std::string> connected_edge = data_->GetClientEdge(client);
+    std::string client = current_stream.second.first,
+                stream_id = current_stream.second.second;
+    std::unordered_set<std::string> connected_edge =
+        data_->GetClientEdge(client);
     std::string max_remain_edge;
     int max_remain = -1;
-    for(std::string edge : connected_edge){
-      if(available_edge_node.find(edge) == available_edge_node.end()) continue;
-      if(copy_edge_node_remain_[edge] < load) continue;
+    for (std::string edge : connected_edge) {
+      if (available_edge_node.find(edge) == available_edge_node.end()) continue;
+      if (copy_edge_node_remain_[edge] < load) continue;
 
-      if(max_remain < copy_edge_node_remain_[edge]){
+      if (max_remain < copy_edge_node_remain_[edge]) {
         max_remain = copy_edge_node_remain_[edge];
         max_remain_edge = edge;
       }
     }
-    if(max_remain == -1){
+    if (max_remain == -1) {
       return false;
     }
     distribution[client][stream_id] = max_remain_edge;
     copy_edge_node_remain_[max_remain_edge] -= load;
   }
-  for(auto &p : distribution){
+  for (auto &p : distribution) {
     std::string client = p.first;
-    for(auto &pp : p.second) {
+    for (auto &pp : p.second) {
       std::string stream_id = pp.first, edge = pp.second;
       data_->SetDistribution(days_, client, stream_id, edge);
     }
   }
   edge_node_remain_ = std::move(copy_edge_node_remain_);
   return true;
+}
+
+void LHKStrategy::DistributeForBaseCost() {
+  int base_cost = data_->GetBaseCost();
+  std::unordered_set<std::string> available_edge_node =
+      data_->GetAvailableEdgeNode(days_);
+  std::unordered_map<std::string, int> edge_leave_base_cost;
+  std::vector<std::string> edge_list = data_->GetEdgeList();
+  for (std::string &edge : edge_list) {
+    if (edge_node_remain_.find(edge) != edge_node_remain_.end() &&
+        edge_node_remain_[edge] != data_->GetEdgeBandwidthLimit(edge)) {
+      available_edge_node.erase(edge);
+    }
+  }
+  for (std::string edge : available_edge_node)
+    edge_leave_base_cost[edge] = base_cost;
+  for (std::string &client : client_order_) {
+    std::unordered_set<std::string> connected_edge =
+        data_->GetClientEdge(client);
+    std::vector<std::string> edge_order;
+    for (std::string edge : connected_edge) {
+      if (available_edge_node.find(edge) != available_edge_node.end())
+        edge_order.emplace_back(edge);
+    }
+    std::sort(edge_order.begin(), edge_order.end(),
+              [&](std::string &a, std::string &b) {
+                return edge_leave_base_cost[a] == edge_leave_base_cost[b]
+                           ? data_->GetEdgeBandwidthLimit(a) >
+                                 data_->GetEdgeBandwidthLimit(b)
+                           : edge_leave_base_cost[a] < edge_leave_base_cost[b];
+              });
+    //对客户节点的流带宽需求从大到小排序,获得分配流的遍历顺序
+    std::unordered_map<std::string, int> client_day_stream =
+        data_->GetClientDayRemainingDemand(days_, client);
+    std::vector<std::string> stream_order;
+    for (auto &p : client_day_stream) {
+      stream_order.emplace_back(p.first);
+    }
+    std::sort(stream_order.begin(), stream_order.end(),
+              [&](const std::string &a, const std::string &b) {
+                return client_day_stream[a] > client_day_stream[b];
+              });
+    //分配流
+    for (std::string &stream : stream_order) {
+      int demand_bandwidth = client_day_stream[stream];
+      if (demand_bandwidth == 0) continue;
+      int min_leave = INT_MAX;
+      std::string min_edge = "";
+      for(std::string &edge : edge_order){
+        if(edge_leave_base_cost[edge] >= demand_bandwidth){
+          if(edge_leave_base_cost[edge] - demand_bandwidth < min_leave){
+            min_leave = edge_leave_base_cost[edge] - demand_bandwidth;
+            min_edge = edge;
+          }
+        }
+      }
+      if(min_leave == INT_MAX) continue;
+      data_->SetDistribution(days_,client,stream,min_edge);
+      edge_leave_base_cost[min_edge] -= demand_bandwidth;
+    }
+  }
 }

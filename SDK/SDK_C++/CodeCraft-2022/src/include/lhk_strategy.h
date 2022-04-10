@@ -20,7 +20,7 @@ class LHKStrategy : public DayDistribution{
   void DistributeBalanced();
   void DistributeFormula();
   bool DistributeBalancedStream();
-
+  void DistributeForBaseCost();
   std::unordered_map<std::string, int> edge_node_remain_;
   std::vector<std::string> client_order_;
 };

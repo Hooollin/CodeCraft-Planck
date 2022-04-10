@@ -9,10 +9,7 @@ void Test::TestAll() {
   //定义输出类
   OutputParser output_parser(model_, &data_);
 
-  //预处理，获得预处理分配
-  // LHLPreDistribution pre_deal1(&data_);
-  // pre_deal1.Distribute();
-  LHPreDistribution pre_deal(&data_);
+  LHLPreDistribution pre_deal(&data_);
   pre_deal.Distribute();
   TestPreDeal();
 
